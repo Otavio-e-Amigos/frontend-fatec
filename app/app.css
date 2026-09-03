@@ -1,8 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+    --color-cancelled-outline: #F95B4D;
+    --color-cancelled: #D32719;
+    --color-cancelled-light: #FDD5D1;
+    --color-cancelled-pressed: #D32719;
+
+    --color-progress-outline: #DFB77B;
+    --color-progress: #B78718;
+    --color-progress-light: #FFF5EA;
+    --color-progress-pressed: #B78718;
+
+    --color-sucess-outline: #80E96D;
+    --color-sucess: #3ACF1F;
+    --color-sucess-light: #E8FBE4;
+    --color-sucess-pressed: #3ACF1F;
 }
 
 html,
@@ -12,4 +26,39 @@ body {
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+.bg-cps {
+    background-image: url("/public/01.svg");
+    background-size: 100%;
+    background-repeat: repeat-y;
+    /*background-color: #ffffff;*/
+}
+
+.btn {
+    @apply rounded-xl p-2 w-fit px-3.5;
+
+    &.btn-normal {
+        @apply bg-blue-500 hover:bg-blue-700 active:bg-blue-800;
+    }
+
+    &.btn-cancel {
+        @apply bg-cancelled hover:bg-cancelled-light active:bg-cancelled-pressed;
+    }
+
+    &.btn-success {
+        @apply bg-sucess hover:bg-sucess-light active:bg-sucess-pressed;
+    }
+
+    &.btn-inactive {
+        @apply bg-slate-700 text-slate-500 cursor-not-allowed;
+    }
+}
+
+.form-input {
+    @apply bg-slate-400 rounded-xl px-3 h-8;
+
+    &.input-checkbox {
+        @apply w-4 h-4 focus:ring-red-600 focus:ring-2;
+    }
 }
