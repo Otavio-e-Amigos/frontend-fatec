@@ -21,11 +21,16 @@
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+	@apply bg-white dark:bg-gray-950;
+  /*@apply bg-white;*/
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
+}
+
+body {
+	@apply flex flex-col min-h-screen;
 }
 
 .bg-cps {
@@ -61,4 +66,8 @@ body {
     &.input-checkbox {
         @apply w-4 h-4 focus:ring-red-600 focus:ring-2;
     }
+}
+
+.surface {
+	@apply bg-slate-300;
 }
