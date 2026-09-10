@@ -1,8 +1,3 @@
-import { Form, Link } from "react-router";
-import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
-import ComplexTableModelView from "~/components/tables/ComplexTableView";
-import SimpleTableModelView from "~/components/tables/SimpleTableView";
-import Divider from "~/layouts/Divider.layout";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 
