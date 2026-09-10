@@ -3,7 +3,7 @@ import Index from "~/pages";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Attender" },
+    { title: "Appointer" },
     { name: "description", content: "Projeto PI 3º Semestre." },
   ];
 }
