@@ -16,7 +16,8 @@ export default function Header() {
 
       </section>
       <nav className="flex flex-row gap-2">
-        {links.map(({ label, href }, idx) => { return <Link key={idx} to={href}>{ label }</Link>})}
+				{process.env.NODE_ENV === 'development' && <Link to={"/dev-area"}>dev-area</Link>}
+				{links.map(({ label, href }, idx) => { return <Link key={idx} to={href}>{label}</Link> })}
       </nav>
     </header>
   )
