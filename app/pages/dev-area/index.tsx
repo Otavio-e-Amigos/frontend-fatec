@@ -24,7 +24,7 @@ export default function Page() {
   return (
   // <main className="bg-cps min-h-full">
     <main>
-      <Header/>
+      <Header activeItem="dev-area"/>
 			<section className="mt-5 flex flex-col mx-5">
         <PageSection name="Dynamic table layouts with same table model"/>
 
@@ -54,13 +54,16 @@ export default function Page() {
         <br />
 
         <p className="mb-3">Forms</p>
-        <section className="flex flex-col gap-1 w-fit">
+        <section className="flex flex-col gap-1 w-fit bg-gray-500 p-3">
           <Form className="flex flex-col gap-2">
-            <FormInput name={"textField"} label="Text Field" type={"text"} />
+            <FormInput name={"textField"} label="Text Field" type={"text"} placeholder="" />
 
             <FormInput name={"timeRangeField"} label="Period Range Field" type={"time-range"} />
 
             <FormInput name={"numberField"} label="Number Field" labelAlign="left" type={"number"} />
+
+            <FormInput name={"searchField"} placeholder="Search..." labelAlign="left" type={"search"} />
+
 
             <FormInput name={"checkboxField"} label="Check?" type={"checkbox"} />
           </Form>
