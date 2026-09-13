@@ -4,11 +4,22 @@ type FormInputProps = {
   label?: string,
   type?: FormInputTypesSupported,
   disabled?: boolean,
-  labelAlign?: "top" | "left"
+	labelAlign?: "top" | "left",
+	placeholder?: string
 }
-export default function FormInput({ name, label, type = "text", disabled, labelAlign = "top" }: FormInputProps) {
-  const DefaultInputElement = <input name={name} type={type} disabled={disabled} className="form-input"/>
-  let SelectedInputElement = DefaultInputElement
+
+// TODO optimize and refactor component returnings
+export default function FormInput({ name, label, type = "text", disabled, labelAlign = "top", placeholder }: FormInputProps) {
+
+	const basicInputParameters = {
+		name: name,
+		disabled: disabled,
+		placeholder: placeholder
+	}
+
+  const DefaultInputElement = <input {...basicInputParameters} type={type} className="form-input"/>
+	let SelectedInputElement = DefaultInputElement
+
 
   const labelAlignLookup = {
     top: "flex-col",
@@ -27,8 +38,8 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
     case 'time-range': {
       SelectedInputElement = (
         <div className="form-input flex flex-row justify-between w-fit gap-5">
-          <input name={name} type="time" disabled={disabled} />
-          <input name={name} type="time" disabled={disabled} />
+          <input {...basicInputParameters} type="time"/>
+          <input {...basicInputParameters} type="time"/>
         </div>
       )
       break
@@ -36,20 +47,29 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
 
     case "checkbox": {
       SelectedInputElement = (
-        <input name={name} type={"checkbox"} disabled={disabled} className="form-input input-checkbox"/>
+        <input {...basicInputParameters} type={"checkbox"} className="form-input input-checkbox"/>
       )
       DefaultWrapper = (
-        <div className={`flex flex-row gap-2 items-center justify-center}`}>
+        <div className={`flex flex-row gap-2 items-center`}>
           {SelectedInputElement}
           {label && <label htmlFor={name}>{label}</label>}
         </div>
       )
       break
-    }
-  }
+		}
+
+		case "search": {
+			DefaultWrapper = (
+				<div className="form-input flex flex-row gap-3 items-center">
+					<img src="/favicon.ico" className="size-5"/>
+					<input {...basicInputParameters} type="search" className="w-full" />
+
+				</div>
+			)
+			break
+		}
+	}
 
 
-  return (
-    <>{DefaultWrapper}</>
-  )
+  return DefaultWrapper
 }
