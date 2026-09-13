@@ -46,12 +46,27 @@ export default function ComplexTableModelView({ data }: { data: AbstractTableMod
       </thead>
       <tbody>
         {rows.map((row, idx) => {
-          console.log(row)
+					console.log(row)
+					function Wrapper(data:any) {
+						return <>{data}</>
+          }
           return (
               <tr key={idx} className={`${idx % 2 == 0 ? "bg-slate-500" : "bg-slate-600"}`}>
-              {/*<td key={idx} className="px-2 text-left">{data}</td>*/}
+              	{/*<td key={idx} className="px-2 text-left">{data}</td>*/}
+
                 {
-                row.map((data, idx) => isComplexRow(data) ? <td key={idx} className="px-2 text-left">{data.display}</td> :<td key={idx} className="px-2 text-left">{data}</td>)
+								row.map(
+									(data, idx) =>
+										isComplexRow(data)
+											?
+											<td key={idx} className="px-2 text-left">
+												{typeof data.display !== "object" ? data.display : data.display}
+											</td>
+
+											: <td key={idx} className="px-2 text-left">{data}</td>
+											// : undefined
+								)
+								// row.map((data, idx) => isComplexRow(data) ? <td key={idx} className="px-2 text-left">{data.display}</td> :<td key={idx} className="px-2 text-left">{data}</td>)
                 }
             </tr>
             )
