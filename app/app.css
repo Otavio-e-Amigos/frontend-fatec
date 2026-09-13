@@ -61,7 +61,7 @@ body {
 }
 
 .form-input {
-    @apply bg-slate-400 rounded-xl px-3 h-8;
+    @apply rounded-lg px-3 h-8 bg-slate-700 border-1 border-gray-800;
 
     &.input-checkbox {
         @apply w-4 h-4 focus:ring-red-600 focus:ring-2;
@@ -70,4 +70,12 @@ body {
 
 .surface {
 	@apply bg-slate-300;
+}
+
+.link {
+	@apply text-cyan-500 underline;
+}
+
+.header {
+	@apply bg-linear-to-b from-gray-700 from-70% to-gray-800;
 }
