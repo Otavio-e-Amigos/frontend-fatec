@@ -1,6 +1,6 @@
 export default function PageSection({ name }: {name:string}) {
   return (
-    <div className="flex flex-1 flex-col my-3">
+    <div className="flex flex-col my-3">
       <h1 className="text-3xl">{name}</h1>
       {/*<div className="flex flex-1 flex-row justify-center">
         <span className="flex flex-1 rounded-4xl min-h-2 bg-amber-500" />
