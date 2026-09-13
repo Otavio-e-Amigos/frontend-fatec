@@ -5,6 +5,11 @@ export default [
 
 	route("dev-area", 'routes/dev-area/router.outlet.tsx', [
 		index('routes/dev-area/index.tsx')
+	]),
+
+	route("professor", 'routes/professor/router.outlet.tsx', [
+		index('routes/professor/index.tsx'),
+		route(":id", "routes/professor/[id].tsx")
 	])
 
 ] satisfies RouteConfig;
