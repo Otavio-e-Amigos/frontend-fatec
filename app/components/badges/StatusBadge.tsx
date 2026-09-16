@@ -1,9 +1,9 @@
 export default function StatusBadge({value, status}: {value:string, status: "green" | "yellow" | "red" | "gray"}) {
   const badgeColors = {
-    green: "bg-green-400 border-green-300/75",
-    yellow: "bg-amber-400 border-amber-300/75",
-    red: "bg-rose-400 border-rose-300/75",
-    gray: "bg-gray-400 border-gray-300/75"
+    green: "bg-hint-success border-green-900/30",
+    yellow: "bg-hint-progress border-orange-800/30",
+    red: "bg-hint-warning border-rose-900/70",
+    gray: "bg-hint-unknown border-gray-900/30"
   }
 
   return (

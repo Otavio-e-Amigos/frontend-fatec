@@ -6,15 +6,18 @@ type FormInputProps = {
   disabled?: boolean,
 	labelAlign?: "top" | "left",
 	placeholder?: string
+
+	onChange?: any
 }
 
 // TODO optimize and refactor component returnings
-export default function FormInput({ name, label, type = "text", disabled, labelAlign = "top", placeholder }: FormInputProps) {
+export default function FormInput({ name, label, type = "text", disabled, labelAlign = "top", placeholder, onChange }: FormInputProps) {
 
 	const basicInputParameters = {
 		name: name,
 		disabled: disabled,
-		placeholder: placeholder
+		placeholder: placeholder,
+		onChange: onChange,
 	}
 
   const DefaultInputElement = <input {...basicInputParameters} type={type} className="form-input"/>

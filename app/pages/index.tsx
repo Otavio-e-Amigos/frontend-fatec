@@ -26,6 +26,24 @@ export default function Page() {
 		{label: 'Folha de Ponto', href: "/"},
 	]
 
+	const notifications = [
+		{
+			state: "info",
+			description: "Notificações importantes do sistema ficam aqui, clique abaixo para saber mais.",
+			action: <Link to={"/"} className="link">Saiba mais</Link>
+		},
+		{
+			state: "alert",
+			description: "Faltam 7 dias para renovar as grades dos professores para as folhas de ponto. Aproveite o tempo para renová-las e previnir futuros imprevistos.",
+			action: <Link to={"/"} className="link">Vamos lá! -&gt;</Link>
+		},
+		{
+			state: "info",
+			description: "O professor [INSIRA NOME] não está completamente configurado para possuir sua folha de ponto gerada automaticamente",
+			action: <Link to={"/"} className="link">Vamos lá! -&gt;</Link>
+		},
+	]
+
 	// function ProfessorLink(name: any):React.ReactElement {
 	// 	return <span className="text-indigo-500">{ name }</span>
 	// }
@@ -63,22 +81,7 @@ export default function Page() {
 						<PageSection name="Resumo do dia" />
 
 						<section className="flex flex-1 flex-col max-h-full gap-2 overflow-y-scroll">
-							{/* TODO swap with real notifications from API or from here for some reason. */}
-							<NotificationBadge
-								state={"alert"}
-								description={"Faltam 7 dias para renovar as grades dos professores para as folhas de ponto. Aproveite o tempo para renová-las e previnir futuros imprevistos."}
-								action={<Link to={"/"} className="link">Vamos lá! -&gt;</Link>}
-							/>
-							<NotificationBadge
-								state={"info"}
-								description={"O professor [INSIRA NOME] não está completamente configurado para possuir sua folha de ponto gerada automaticamente"}
-								action={<Link to={"/"} className="link">Vamos lá! -&gt;</Link>}
-							/>
-							<NotificationBadge
-								state={"alert"}
-								description={"Faltam 7 dias para renovar as grades dos professores para as folhas de ponto. Aproveite o tempo para renová-las e previnir futuros imprevistos."}
-								action={<Link to={"/"} className="link">Vamos lá! -&gt;</Link>}
-							/>
+							{notifications.map(notification => <NotificationBadge {...notification} />)}
 						</section>
 					</section>
 

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
 import Header from "~/layouts/Header";
+import PageSection from "~/layouts/PageSection.layout";
 import type Professor from "~/modules/professor/professor.class";
 
 function ProfessorInfo({professor}: {professor?:Professor}) {
@@ -57,8 +58,23 @@ export default function About() {
 					<ProfessorInfo professor={undefined} />
 				</section>
 
-				<section className="px-10 py-3">
-					CONTAINER HERE
+				<section className="flex flex-col px-10 py-3 pt-6 gap-5">
+					<div className="flex flex-row gap-3">
+						<button className="btn btn-inactive">Geral</button>
+						<button className="btn btn-inactive">Grades</button>
+						<button className="btn btn-inactive">Folhas de Ponto</button>
+					</div>
+					<section className="surface rounded-lg px-3 py-1 text-black flex flex-col">
+						<PageSection name={"Informações Gerais"} />
+						<p>NOME</p>
+						<p>MATRÍCULA</p>
+						<p>CPF</p>
+						<p>CURSOS MINISTRADOS</p>
+						<p>STATUS GRADE ATUAL</p>
+						<p></p>
+						<p></p>
+						<p></p>
+					</section>
 				</section>
 			</main>
 		</>

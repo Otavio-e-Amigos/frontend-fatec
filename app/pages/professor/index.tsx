@@ -18,14 +18,21 @@ export default function Page() {
 		]
 	)
 
+	function searchItem(value: string) {
+		console.log(value)
+	}
+
 	return (
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Professores" />
 
 			<main className="mx-5 flex flex-1 flex-col">
-				<PageSection name={"Professores"} />
+				<section className="flex flex-row justify-between items-center">
+					<PageSection name={"Professores"} />
+					<button className="btn btn-success h-fit">+ Adicionar</button>
+				</section>
 				<section className="flex flex-row my-4 justify-end">
-					<FormInput type="search" name={"search"}/>
+					<FormInput type="search" name={"search"} onChange={a => {searchItem(a.currentTarget.value)}}/>
 				</section>
 				<ComplexTableModelView data={professorsTable}/>
 			</main>
