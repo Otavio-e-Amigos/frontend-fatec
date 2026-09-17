@@ -6,12 +6,13 @@ type FormInputProps = {
   disabled?: boolean,
 	labelAlign?: "top" | "left",
 	placeholder?: string
+  required?: boolean
 
 	onChange?: any
 }
 
 // TODO optimize and refactor component returnings
-export default function FormInput({ name, label, type = "text", disabled, labelAlign = "top", placeholder, onChange }: FormInputProps) {
+export default function FormInput({ name, label, type = "text", disabled, labelAlign = "top", placeholder, onChange, required }: FormInputProps) {
 
 	const basicInputParameters = {
 		name: name,
@@ -23,6 +24,8 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
   const DefaultInputElement = <input {...basicInputParameters} type={type} className="form-input"/>
 	let SelectedInputElement = DefaultInputElement
 
+  const DefaultControllerLabel = <p className="text-sm text-hint-warning">Controller warning message here</p>
+  const DefaultLabelElement = label && <label htmlFor={name}>{label} {required && <span className="text-hint-warning">*</span>}</label>
 
   const labelAlignLookup = {
     top: "flex-col",
@@ -32,8 +35,9 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
 
   let DefaultWrapper = (
     <div className={`flex ${labelAlignLookup[labelAlign]}`}>
-      {label && <label htmlFor={name}>{label}</label>}
+      {DefaultLabelElement}
       {SelectedInputElement}
+      {DefaultControllerLabel}
     </div>
   )
 
@@ -55,7 +59,7 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
       return (
         <div className={`flex flex-row gap-2 items-center`}>
           {SelectedInputElement}
-          {label && <label htmlFor={name}>{label}</label>}
+          {DefaultLabelElement}
         </div>
       )
       break
