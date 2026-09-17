@@ -36,9 +36,9 @@
     /* -= items (buttons, links, etc) =- */
     --color-item-button: #374FA6;
     --color-item-button-inactive: #374FA6;
-    --color-item-button-pressed: #374FA6;
-    --color-item-button-disabled: #374FA6;
-    --color-item-button-hover: #374FA6;
+    --color-item-button-pressed: #16119E;
+    --color-item-button-disabled: #384470;
+    --color-item-button-hover: #427DE3;
     --color-item-button-text: #FFFFFF;
     --color-item-button-text-dark: #000000;
 
@@ -61,8 +61,8 @@
     --color-hint-alert: #FFCC00;
 
     --color-hint-warning: #FF0033;
-    --color-hint-warning-hover: #000000;
-    --color-hint-warning-pressed: #000000;
+    --color-hint-warning-hover: #F5587D;
+    --color-hint-warning-pressed: #AD0003;
     /*--color-hint-warning-active: #000000;*/
     --color-hint-warning-inactive: #000000;
 
@@ -72,8 +72,8 @@
 
 
     --color-hint-success: #00FF33;
-    --color-hint-success-hover: #000000;
-    --color-hint-success-pressed: #000000;
+    --color-hint-success-hover: #5CFF98;
+    --color-hint-success-pressed: #14A603;
     /*--color-hint-success-active: #000000;*/
     --color-hint-success-inactive: #0B591A;
     /* -=					    =- */
@@ -147,7 +147,7 @@ body {
     }
 
     &.btn-cancel {
-        @apply bg-hint-warning hover:bg-hint-warning active:bg-hint-warning;
+        @apply bg-hint-warning hover:bg-hint-warning-hover active:bg-hint-warning-pressed;
     }
 
     &.btn-success {
@@ -156,6 +156,10 @@ body {
 
     &.btn-inactive {
         @apply bg-item-button-inactive cursor-not-allowed;
+    }
+
+    &.btn-disabled {
+        @apply bg-item-button-disabled text-slate-400 cursor-not-allowed;
     }
 }
 
