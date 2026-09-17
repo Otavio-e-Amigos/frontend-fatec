@@ -71,7 +71,9 @@ export default function Page() {
         </section>
         <br />
 
-        <p className="mb-3">Forms</p>
+				<PageSection name={"Forms"} />
+
+				<h1 className="mb-2">Random</h1>
         <section className="flex flex-col gap-1 w-fit">
           <Form className="flex flex-col gap-2">
             <FormInput name={"textField"} label="Text Field" type={"text"} placeholder="" />
@@ -90,7 +92,7 @@ export default function Page() {
 
         <PageSection name={"Random Tests Area"} />
 
-        <p>as components</p>
+        {/*<p>as components</p>
 				<section className="flex flex-row items-start gap-2 mb-5">
 					<StepBadge step={1} description={'undefinedasdiojasiojiasdjioasdjasdiojasdiojasdjioisddjsidsoosjiosiojsiosiojd'} concluded />
 					<StepBadge step={2} description={'undefined'} active />
@@ -99,7 +101,6 @@ export default function Page() {
 
 				<p>as pure HTML and using grid system</p>
 				<section className="grid grid-cols-5 grid-rows-1 items-center w-fit gap-2 my-3">
-					{/*<div className="flex flex-row gap-2 items-center">*/}
 						<div className="rounded-full bg-green-500 size-15 flex items-center justify-center">
 							1
 						</div>
@@ -114,8 +115,7 @@ export default function Page() {
 						<p className="w-min overflow-hidden wrap-break-word text-wrap">descriptionopsfdokpopskdopfkdfopkfopksdfopksfdoppdposkapko</p>
 						<span />
 
-					{/*</div>*/}
-				</section>
+				</section>*/}
       </section>
     </main>
   )

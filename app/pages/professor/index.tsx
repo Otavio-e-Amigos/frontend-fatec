@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
@@ -29,7 +30,7 @@ export default function Page() {
 			<main className="mx-5 flex flex-1 flex-col">
 				<section className="flex flex-row justify-between items-center">
 					<PageSection name={"Professores"} />
-					<button className="btn btn-success h-fit">+ Adicionar</button>
+					<Link to="add" className="btn btn-success h-fit">+ Adicionar</Link>
 				</section>
 				<section className="flex flex-row my-4 justify-end">
 					<FormInput type="search" name={"search"} onChange={a => {searchItem(a.currentTarget.value)}}/>

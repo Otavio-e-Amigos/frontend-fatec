@@ -52,7 +52,7 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
       SelectedInputElement = (
         <input {...basicInputParameters} type={"checkbox"} className="form-input input-checkbox"/>
       )
-      DefaultWrapper = (
+      return (
         <div className={`flex flex-row gap-2 items-center`}>
           {SelectedInputElement}
           {label && <label htmlFor={name}>{label}</label>}
@@ -62,14 +62,13 @@ export default function FormInput({ name, label, type = "text", disabled, labelA
 		}
 
 		case "search": {
-			DefaultWrapper = (
+			return (
 				<div className="form-input flex flex-row gap-3 items-center">
 					<img src="/favicon.ico" className="size-5"/>
 					<input {...basicInputParameters} type="search" className="w-full" />
 
 				</div>
 			)
-			break
 		}
 	}
 

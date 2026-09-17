@@ -9,7 +9,8 @@ export default [
 
 	route("professor", 'routes/professor/router.outlet.tsx', [
 		index('routes/professor/index.tsx'),
-		route(":id", "routes/professor/[id].tsx")
+		route(":id", "routes/professor/[id].tsx"),
+		route("add", 'routes/professor/add.tsx')
 	])
 
 ] satisfies RouteConfig;

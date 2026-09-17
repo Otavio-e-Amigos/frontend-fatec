@@ -27,13 +27,13 @@ export default function ComplexTableModelView({ data }: { data: AbstractTableMod
   }
 
   return (
-    <table>
+    <table className="border border-table-column-outline">
       <thead>
-        <tr className="bg-slate-600">
+        <tr className="bg-table-column">
           {
             columns.map((column, idx) => (
               <th key={idx}>
-                <button className={`px-2 flex flex-row gap-1 ${idx == 0 ? "justify-start" : "justify-center"} w-full hover:bg-slate-700`} onClick={() => { TriggerTableSort(idx) }}>
+                <button className={`px-2 flex flex-row gap-1 ${idx == 0 ? "justify-start" : "justify-center"} w-full hover:bg-table-column-hover text-table-column-text`} onClick={() => { TriggerTableSort(idx) }}>
                   {column}
                   <span className={`${columnData.currentColumn != idx && "text-transparent"}`}>
                     {arrows[columnData.order]}
@@ -47,11 +47,11 @@ export default function ComplexTableModelView({ data }: { data: AbstractTableMod
       <tbody>
         {rows.map((row, idx) => {
 					console.log(row)
-					function Wrapper(data:any) {
-						return <>{data}</>
-          }
+					// function Wrapper(data:any) {
+					// 	return <>{data}</>
+					//}
           return (
-              <tr key={idx} className={`${idx % 2 == 0 ? "bg-slate-500" : "bg-slate-600"}`}>
+              <tr key={idx} className={`${idx % 2 == 0 ? "bg-table-row" : "bg-table-row-odd"}`}>
               	{/*<td key={idx} className="px-2 text-left">{data}</td>*/}
 
                 {
