@@ -3,8 +3,14 @@
 @theme {
     --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
+    /* -= header =- */
+    --color-header-bg: #B3002D;
+    --color-header-bg-shade: #821800;
+    /* -= 		 =- */
+
+
     /* -= main background colors =- */
-    --color-floor: #BBBBBB;
+    --color-floor: #EBEBEB;
     --color-floor-outline: #000000;
     --color-floor-outline-shade: #000000;
 
@@ -13,7 +19,7 @@
     --color-floor-alt-outline-shade: #000000;
 
 
-    --color-surface: #D5D9E0;
+    --color-surface: #E0DCDD;
     --color-surface-outline: #000000;
     --color-surface-outline-shade: #000000;
 
@@ -37,9 +43,9 @@
     --color-item-button-text-dark: #000000;
 
 
-    --color-item-hyperlink: #000000;
-    --color-item-hyperlink-pressed: #000000;
-    --color-item-hyperlink-hover: #000000;
+    --color-item-hyperlink: #1DADF5;
+    --color-item-hyperlink-pressed: #0871CC;
+    --color-item-hyperlink-hover: #66B5FA;
     --color-item-hyperlink-inactive: #000000;
 
     /*--color-item-inactive: #000000;
@@ -84,22 +90,33 @@
 
     /* -= tables =-*/
 
-    --color-table-column: #000000;
-    --color-table-column-hover: #000000;
-    --color-table-column-outline: #000000;
+    --color-table-column: #B3002D;
+    --color-table-column-hover: #CF172C;
+    --color-table-column-pressed: #CF172C;
+    --color-table-column-outline: #420000;
+    --color-table-column-text: #DEDEDE;
 
     --color-table-column-alt: #000000;
     --color-table-column-alt-hover: #000000;
     --color-table-column-alt-outline: #000000;
 
 
-    --color-table-row: #000000;
+    --color-table-row: #F5F5F5;
     --color-table-row-hover: #000000;
     --color-table-row-pressed: #000000;
+
+    --color-table-row-odd: #FCCFD4;
+    --color-table-row-odd-hover: #000000;
+    --color-table-row-odd-pressed: #000000;
+
 
     --color-table-row-alt: #000000;
     --color-table-row-alt-hover: #000000;
     --color-table-row-alt-pressed: #000000;
+
+    --color-table-row-alt-odd: #F5F5F5;
+	--color-table-row-alt-odd-hover: #000000;
+	--color-table-row-alt-odd-pressed: #000000;
     /* -= 		 =-*/
 }
 
@@ -151,9 +168,15 @@ body {
 }
 
 .link {
-	@apply text-item-hyperlink hover:text-item-hyperlink-hover active:text-item-hyperlink-pressed;
+	@apply underline text-item-hyperlink hover:text-item-hyperlink-hover active:text-item-hyperlink-pressed;
 }
 
 .header {
-	@apply bg-linear-to-b from-gray-700 from-70% to-gray-800;
+	/*@apply bg-linear-to-b from-gray-700 from-70% to-gray-800;*/
+	@apply bg-header-bg;
+
+}
+
+.header-link {
+	@apply py-1 px-1.5 rounded-lg bg-rose-600 text-white;
 }
