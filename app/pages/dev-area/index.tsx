@@ -19,7 +19,7 @@ const defaultTableTest = new DefaultTableModel(
   ["column01", "column02", "column03"]
 )
 
-function StepBadge({step, description, final, concluded, active }: {step, description?: string, final?: boolean, concluded?: boolean, active?:boolean }) {
+function StepBadge({step, description, final, concluded, active }: {step: number, description?: string, final?: boolean, concluded?: boolean, active?:boolean }) {
 	const concludedColor = concluded ? "bg-hint-success" : "bg-hint-success-inactive"
 	const activeColor = concluded ? "bg-hint-success" : active ? "bg-hint-success" : "bg-hint-success-inactive"
 	return (
@@ -58,7 +58,7 @@ export default function Page() {
           <button className="btn btn-normal">Normal button</button>
           <button className="btn btn-cancel">Cancel button</button>
           <button className="btn btn-success">Create</button>
-          <button className="btn btn-inactive" disabled>Inactive</button>
+          <button className="btn btn-disabled" disabled>Inactive</button>
         </section>
         <br />
 
@@ -77,6 +77,8 @@ export default function Page() {
         <section className="flex flex-col gap-1 w-fit">
           <Form className="flex flex-col gap-2">
             <FormInput name={"textField"} label="Text Field" type={"text"} placeholder="" />
+            
+            <FormInput required name={"requiredField"} label="Requirement Field" type={"text"} placeholder="" />
 
             <FormInput name={"timeRangeField"} label="Period Range Field" type={"time-range"} />
 
