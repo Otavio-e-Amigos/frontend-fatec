@@ -77,15 +77,14 @@ export default function Page() {
         <section className="flex flex-col gap-1 w-fit">
           <Form className="flex flex-col gap-2">
             <FormInput name={"textField"} label="Text Field" type={"text"} placeholder="" />
-            
-            <FormInput required name={"requiredField"} label="Requirement Field" type={"text"} placeholder="" />
+
+            <FormInput name={"requiredField"} label="Requirement Field" type={"text"} placeholder="" required/>
 
             <FormInput name={"timeRangeField"} label="Period Range Field" type={"time-range"} />
 
             <FormInput name={"numberField"} label="Number Field" labelAlign="left" type={"number"} />
 
             <FormInput name={"searchField"} placeholder="Search..." labelAlign="left" type={"search"} />
-
 
             <FormInput name={"checkboxField"} label="Check?" type={"checkbox"} />
           </Form>
