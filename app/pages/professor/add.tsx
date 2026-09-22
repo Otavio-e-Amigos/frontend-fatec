@@ -3,7 +3,7 @@ import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
 import Header from "~/layouts/Header";
 import Professor from "~/modules/professor/professor.class";
-import FormController from "./FormController";
+import FormController, { InputValidator } from "../../components/forms/FormController";
 
 function FormSection({
 	section,
@@ -83,6 +83,12 @@ function LegalNameFormatter(value: string) {
 	return { newValue, displayValue: newValue };
 }
 
+class PhoneNumberValidator extends InputValidator {
+	constructor() {
+		super(/^\d{11}$/);
+	}
+}
+
 export default function Page() {
 	const decoy = new FormController();
 
@@ -101,8 +107,8 @@ export default function Page() {
 	decoy.setFieldError("formControllerField03", {
 		message: "Error! #03's value not correct!",
 	});
-	// console.log("decoy")
-	// console.log(decoy)
+	console.log("decoy")
+	console.log(decoy)
 
 	return (
 		<main className="flex flex-1 flex-col">
@@ -120,6 +126,7 @@ export default function Page() {
 				<FormInput
 					type="text"
 					InputFormatter={PhoneFormatter}
+					validator={new PhoneNumberValidator()}
 					name={"formControllerField02"}
 					label="FormController Field #02"
 				/>

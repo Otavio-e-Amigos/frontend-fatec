@@ -1,13 +1,13 @@
-import { useContext, useEffect } from "react";
-import FormContext from "./form.context";
-import { InputValidator } from "~/pages/professor/FormController";
+import { useContext, useEffect, useState } from "react";
+import {FormControllerContext, FormDispatcherContext} from "./form.context";
+import { InputValidator } from "~/components/forms/FormController";
 
 type FormInputTypesSupported = React.HTMLInputTypeAttribute | "time-range";
 type FormInputProps = {
 	name: string;
 	label?: string;
 	value?: any;
-	validator: InputValidator;
+	validator?: InputValidator;
 	type?: FormInputTypesSupported;
 	disabled?: boolean;
 	labelAlign?: "top" | "left";
@@ -38,11 +38,22 @@ export default function FormInput({
 	onChange,
 	required,
 }: FormInputProps) {
-	const controller = useContext(FormContext);
-	let formValue = value ?? controller.getFieldValue(name);
+	const controller = useContext(FormControllerContext);
+	const controllerAction = useContext(FormDispatcherContext)
+	// const {error} = useState(controller && controller.getFieldErrorMessage(name))
 
-	if (!controller.fieldExists(name)) controller.addField(name, value);
-	if (validator) controller.setFieldValidator(name, validator);
+	// useEffect(() => {
+	// 	console.log("controller changed!")
+	// 	console.log(controller)
+	// }, [controller])
+	
+	if (controller) {
+		var formValue = value ?? controller.getFieldValue(name);
+	
+		// if (!controller.fieldExists(name)) controller.addField(name, value);
+		if (!controller.fieldExists(name)) controllerAction({action: "addField", fieldName: name});
+		if (validator) controller.setFieldValidator(name, validator);
+	}
 
 	// const validator = new PhoneNumberValidator()
 
@@ -64,9 +75,22 @@ export default function FormInput({
 					: currentValue;
 
 				e.currentTarget.value = newValue.displayValue ?? currentValue;
-				controller.setFieldValue(name, newValue.newValue);
+				
+				if (controller) controller.setFieldValue(name, newValue.newValue);
+				// if (controllerAction) controllerAction({action: "setFieldError", fieldName: name, error: {message: e.currentTarget.value}})
+				// if (controller) console.log(controller.getFieldErrorMessage(name))
 			}}
-			onBlur={() => {console.log("input is now out of focus! validate field and show errors here!")}}
+			onBlur={(e) => {
+				const validationStatus = validator ? validator.validate(e.currentTarget.value.replaceAll(/\D/g, '')) : true
+				console.log(validationStatus)
+				if (!validationStatus) {
+					if (controllerAction) controllerAction({action: "setFieldError", fieldName: name, error: {message: "Something's not right on this field. Please check."}})
+				} else {
+					if (controllerAction) controllerAction({action: "cleanFieldError", fieldName: name})
+				}
+				console.log("input is now out of focus! validate field and show errors here!")
+
+			}}
 			{...basicInputParameters}
 			type={type}
 			className="form-input"
@@ -76,7 +100,7 @@ export default function FormInput({
 
 	const DefaultControllerLabel = (
 		<p className="text-sm text-hint-warning">
-			{controller.getFieldErrorMessage(name)}
+			{controller && controller.getFieldErrorMessage(name)}
 		</p>
 	);
 

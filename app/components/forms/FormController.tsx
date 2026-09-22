@@ -1,4 +1,6 @@
-interface FormError {
+import React, { useState } from "react";
+
+export interface FormError {
 	message?: string;
 }
 
@@ -63,6 +65,10 @@ export default class FormController {
 		// console.log(this.fields);
 	}
 
+	// notify() {
+	// 	this.listeners
+	// }
+
 	getFieldValue(fieldName: string) {
 		if (!this.fieldExists(fieldName)) return undefined;
 
@@ -82,9 +88,14 @@ export default class FormController {
 		console.log(this.fields[fieldName].error);
 	}
 
+	cleanFieldError(fieldName:string) {
+		if (!this.fieldExists(fieldName)) this.addField(fieldName);
+
+		this.fields[fieldName].error = undefined;		
+	}
+
 	getFieldErrorMessage(fieldName: string) {
 		if (!this.fieldExists(fieldName)) return;
-
 		return this.fields[fieldName].error?.message;
 	}
 
