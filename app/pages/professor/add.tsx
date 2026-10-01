@@ -3,7 +3,11 @@ import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
 import Header from "~/layouts/Header";
 import Professor from "~/modules/professor/professor.class";
-import FormController, { InputValidator } from "../../components/forms/FormController";
+import FormController, {
+	InputValidator,
+} from "../../components/forms/FormController";
+import type { SubmitEventHandler, SyntheticEvent } from "react";
+import ProfessorService from "~/modules/professor/professor.service";
 
 function FormSection({
 	section,
@@ -20,12 +24,14 @@ function FormSection({
 			<aside className="flex flex-row gap-4">
 				<div className="mr-20 flex flex-col w-full">
 					<p>{section}</p>
-					<p className="text-sm text-slate-400">{description}</p>
+					<p className="text-sm text-gray-400">{description}</p>
 				</div>
 
 				<div className="min-w-1.5 min-h-10 rounded-full bg-header-bg/15" />
 			</aside>
-			<main className="flex flex-col my-2 ml-5 justify-start">{children}</main>
+			<main className="flex flex-col my-3 ml-5 gap-3 justify-start">
+				{children}
+			</main>
 			{/*</div>*/}
 		</section>
 	);
@@ -89,96 +95,218 @@ class PhoneNumberValidator extends InputValidator {
 	}
 }
 
-export default function Page() {
-	const decoy = new FormController();
+async function submitData(
+	event: SyntheticEvent<HTMLFormElement>,
+	mode: "add" | "edit",
+	controller: FormController,
+	id?: number
+) {
+	event.preventDefault();
+	const data = Object.fromEntries(new FormData(event.currentTarget));
+	console.log("data from form: ", data);
 
-	decoy.addField("formControllerField01", "value that came from API to #01");
+	// export form as plain object or class directly using mapper if viable
+	const profRaw = {
+		name: data.nome as string,
+		cpf: data.cpf as string,
+		registry: data.matricula as string,
+		contract: data.contrato as string,
+		status: data.status as string,
+		title: data.titulacao as string,
+		code: data.codigo as string,
+		// id: data.id as string,
+	};
 
-	decoy.addField("formControllerField02", "Test");
-	decoy.setFieldError("formControllerField02", {
-		message:
-			"#02: This field should format as a telephone field, try pressing letters and filling it normally.",
-	});
-
-	decoy.addField(
-		"formControllerField03",
-		"field with value that is not correct",
+	// TODO if classes throws errors, they must be inserted inside try..catch scope and treated properly
+	const prof = new Professor(
+		profRaw.name,
+		profRaw.cpf,
+		profRaw.registry,
+		profRaw.contract,
+		profRaw.status,
+		profRaw.title,
+		profRaw.code,
+		id,
 	);
-	decoy.setFieldError("formControllerField03", {
-		message: "Error! #03's value not correct!",
-	});
-	console.log("decoy")
-	console.log(decoy)
+	// console.log("prof", prof);
+
+	try {
+		// inserts edit or save method depending on method's mode
+		const res = mode === "add" ? await ProfessorService.save(prof) : await ProfessorService.edit(id!, prof);
+
+		console.log(
+			"looks like it saved, this is the data ProfessorService returned:",
+			res,
+		);
+		// redirect user to newly created professor page
+		// redirect(`/professor/${res.id}`)
+	} catch (e) {
+		// ValidationError(400, fields: {name: "Name must not contain blablabla", cpf: "this is not a !@#$%& number!"}) => fills fields with error messages
+		// 	REFLECT must be interesting if we can make FormController read those messages and applies them automatically to fields
+		// AutheticationError(401, "not authorized/authenticated.") => redirects user to page or a popup window appears for authenticating first before sending to not lose data.
+		// ServerError(500, "Something wrong happened") => sends user to Internal error page or fills global error message to internal error.
+	}
+
+	// validate form (as it is already formatted and validated through InputValidator when exiting FormInput)
+	// 	REFLECT if validation rules are applicable on classes too, does it sounds interesting to make them like classes or something like this to be used on anywhere?
+
+	// create professor object with data
+	// send object to ProfessorService
+	// check if result was success
+	// 	if true, redirects user to it's own page
+	// 	if false, return with errors and behaves accordigly
+	// 		if validation is the cause (400), fill fields with errors (CPF duplicates, error that came from API)
+	// 		if 401 (unauthorized | authentication error basically), redirects user to login page or popups login window before proceeding
+	// 		if server error 500, redirects user to Internal Server error page or shows global error message in formulary
+}
+
+export default function Page({professor}: {professor?:Professor}) {
+	const controller = new FormController();
+
+	const formMode = professor ? "edit" : "add";
+
+	const submit = (e: SyntheticEvent<HTMLFormElement>) =>
+		submitData(e, formMode, controller, professor?.id);
+
+	if (professor) {
+		controller.addField("nome", professor.name)
+		controller.addField("cpf", professor.cpf)
+
+		controller.addField("matricula", professor.registry)
+		controller.addField("contrato", professor.contract)
+		controller.addField("status", professor.status)
+		controller.addField("codigo", professor.code)
+		controller.addField("titulacao", professor.title)
+
+		// controller.addField("email", professor.name)
+		// controller.addField("teams", professor.name)
+		// controller.addField("telefone", professor.name)
+	}
+
+	// controller.addField("formControllerField01", "value that came from API to #01");
+
+	// controller.addField("formControllerField02", "Test");
+	// controller.setFieldError("formControllerField02", {
+	// 	message:
+	// 		"#02: This field should format as a telephone field, try pressing letters and filling it normally.",
+	// });
+
+	// controller.addField(
+	// 	"formControllerField03",
+	// 	"field with value that is not correct",
+	// );
+	// controller.setFieldError("formControllerField03", {
+	// 	message: "Error! #03's value not correct!",
+	// });
+	// console.log("decoy");
+	// console.log(controller);
 
 	return (
 		<main className="flex flex-1 flex-col">
 			<Header activeItem="Professores" />
 
+			{/* TODO LOW add stateful variable here */}
+			{professor && <h1 className="text-4xl my-5 mx-2">Editar dados de { professor.name }</h1>}
 			<FormContainer
-				controller={decoy}
-				className="flex flex-1 flex-col gap-10 my-5 mx-20"
+				initialController={controller}
+				onSubmit={submit}
+				className="flex flex-col gap-8 m-5"
 			>
-				<FormInput
-					type="text"
-					name={"formControllerField01"}
-					label="FormController Field #01"
-				/>
-				<FormInput
-					type="text"
-					InputFormatter={PhoneFormatter}
-					validator={new PhoneNumberValidator()}
-					name={"formControllerField02"}
-					label="FormController Field #02"
-				/>
-				<FormInput
-					type="text"
-					name={"formControllerField03"}
-					label="FormController Field #03"
-				/>
-
-				<FormInput
-					type="text"
-					name={"formControllerField04"}
-					InputFormatter={CPFFormatter}
-					label="FormController Field #03"
-				/>
-
-				<FormInput
-					type="text"
-					name={"formControllerField05"}
-					InputFormatter={LegalNameFormatter}
-					label="FormController Field #04"
-				/>
-				<button type="submit">Submit</button>
-			</FormContainer>
-
-			<Form>
+				{/*
+					REFLECT i think i can use hidden value inputs for managing states between formatted value objects,
+					or i could just go object-based on FormController
+					*/}
+				{/*<input type="hidden" disabled name="disabled_value_shouldnt_be_here" value={"i believe this value shouldn't appear on console log since it's disabled?"}/>*/}
 				<FormSection
 					section={"Informações Básicas"}
 					description={"Informações basicas sobre o Professor à ser adicionado"}
 				>
-					<FormInput required name={"professor"} type="text" label="Docente" />
-					<FormInput required name={"professor"} type="text" label="CPF" />
+					<FormInput required name={"nome"} type="text" label="Nome Completo" />
+					<FormInput required name={"cpf"} type="text" label="CPF" />
+					{/*<FormInput required name={"professor"} type="text" label="Cursos" />*/
+					/* TO BE ADDED LATER */}
+				</FormSection>
+
+				<FormSection
+					section={"Dados de Docente"}
+					description={
+						"Dados relacionados a vida acadêmica deste Professor dentro da institução"
+					}
+				>
 					<FormInput
 						required
-						name={"professor"}
+						name={"matricula"}
 						type="text"
 						label="Matrícula"
 					/>
-					<FormInput required name={"professor"} type="text" label="Cursos" />
+
+					{/* TODO change to select with restricted options (DETERMIADO, INDETERMINADO, TEMPORARIO) */}
+					<FormInput required name={"contrato"} type="text" label="Contrato" />
+
+					{/* TODO change to according value */}
+					<FormInput required name={"status"} type="text" label="Status" />
+
+					{/* TODO change to according value */}
+					<FormInput name={"codigo"} type="text" label="Código" />
+
+					{/* TODO change to according value */}
+					<FormInput name={"titulacao"} type="text" label="Titulação" />
 				</FormSection>
 
 				<FormSection
 					section={"Extras"}
 					description={
-						"Informações extras que podem facilitar o contato do docente ou para outros aspectos que possam te ajudar."
+						"Informações extras que podem facilitar o contato do Docente ou para outros aspectos que possam te ajudar."
 					}
 				>
-					<FormInput name={"professor"} type="text" label="E-Mail" />
-					<FormInput name={"professor"} type="text" label="Usuário Teams" />
-					<FormInput name={"professor"} type="text" label="Telefone" />
+					<FormInput name={"email"} type="text" label="E-Mail" />
+					<FormInput name={"teams"} type="text" label="Usuário Teams" />
+					<FormInput name={"telefone"} type="text" label="Telefone" />
 				</FormSection>
-			</Form>
+
+				{/* DELETE THIS ASAP */}
+				{/*
+					<FormContainer
+					controller={decoy}
+					className="flex flex-1 flex-col gap-10 my-5 mx-20"
+					>
+					<FormInput
+						type="text"
+						name={"formControllerField01"}
+						label="FormController Field #01"
+					/>
+					<FormInput
+						type="text"
+						InputFormatter={PhoneFormatter}
+						validator={new PhoneNumberValidator()}
+						name={"formControllerField02"}
+						label="FormController Field #02"
+					/>
+					<FormInput
+						type="text"
+						name={"formControllerField03"}
+						label="FormController Field #03"
+					/>
+
+					<FormInput
+						type="text"
+						name={"formControllerField04"}
+						InputFormatter={CPFFormatter}
+						label="FormController Field #03"
+					/>
+
+					<FormInput
+						type="text"
+						name={"formControllerField05"}
+						InputFormatter={LegalNameFormatter}
+						label="FormController Field #04"
+					/>
+					<button type="submit">Submit</button>
+				</FormContainer>*/}
+				<button type="submit" className="flex btn btn-success">
+					{professor ? "Salvar Alterações" : "Adicionar"}
+				</button>
+			</FormContainer>
 		</main>
 	);
 }

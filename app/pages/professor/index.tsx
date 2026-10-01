@@ -4,18 +4,36 @@ import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
+import type Professor from "~/modules/professor/professor.class";
 
-export default function Page() {
+export default function Page({list}: {list: Professor[]}) {
 	// TODO test and switch with ObjectTableModel
-	const professorsTable = new DefaultTableModel(
-		[
+	//
+	//
 
-		],
+	const professorTableList = list.map((prof) => [
+		{
+			value: prof.name,
+			display: (
+				<Link key={prof.id} className="link" to={`/professor/${prof.id}`}>
+					{prof.name}
+				</Link>
+			),
+		},
+		prof.registry,
+		prof.cpf,
+		prof.contract,
+		prof.status
+	]);
+
+	const professorsTable = new DefaultTableModel(
+		professorTableList,
 		[
 			'Docente',
-			'Matrícula',
 			'CPF',
-			'Curso(s)',
+			'Matrícula',
+			'Tipo de Contrato',
+			'Status'
 		]
 	)
 
