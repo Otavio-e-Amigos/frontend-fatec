@@ -2,12 +2,14 @@ import { Link, useNavigate } from "react-router";
 import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import { auth } from "~/mock/db/users.db";
-import type User from "~/modules/user/user.class";
+// import { auth } from "~/mock/db/users.db";
+import User from "~/modules/user/user.class";
 import UserService from "~/modules/user/user.service";
 
 export default function Page({ users }: { users: User[] }) {
 	const navigate = useNavigate();
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+
 
 	async function activateUser(id: number) {
 		const res = await UserService.activate(id, auth);

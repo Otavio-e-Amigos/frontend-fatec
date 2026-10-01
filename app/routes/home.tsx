@@ -3,6 +3,7 @@ import type { Route } from "./+types/home";
 import Index from "~/pages";
 import ProfessorService from "~/modules/professor/professor.service";
 import User from "~/modules/user/user.class";
+import { redirect } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
 	return [
@@ -12,7 +13,11 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function clientLoader({ }: Route.LoaderArgs) {
+	if (!localStorage.getItem("auth")) {
+		throw redirect("/login")
+	}
 	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+
 	const list = await ProfessorService.get(auth);
 	return { list };
 }

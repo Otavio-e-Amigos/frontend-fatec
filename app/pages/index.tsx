@@ -117,7 +117,7 @@ export default function Page({
 		// 	],
 		// ],
 		professorTableList,
-		["Docente", "CPF", "Status"],
+		["Docente", "Matrícula", "Status"],
 	);
 
 	// console.log(React.isValidElement(<ProfessorLink name="sodkoskd"/>))
