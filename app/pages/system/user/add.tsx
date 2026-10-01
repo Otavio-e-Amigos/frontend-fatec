@@ -4,7 +4,7 @@ import FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
 import Header from "~/layouts/Header";
 import FormSection from "~/layouts/forms/FormSection";
-import { AuthUserContext } from "~/modules/user/components/AuthenticationService";
+import { auth } from "~/mock/db/users.db";
 import User, { type UserInterface } from "~/modules/user/user.class";
 import UserService from "~/modules/user/user.service";
 
@@ -23,19 +23,20 @@ async function submitData(
 		id: id,
 		name: data.user as string,
 		password: data.pass as string,
-		profile: data.profile as "TI" | "RESPONSAVEL"
-	}
+		profile: data.profile as "TI" | "RESPONSAVEL",
+	};
 	// TODO if classes throws errors, they must be inserted inside try..catch scope and treated properly
-	const user = new User(raw)
-	// console.log("prof", prof);
+	const user = new User(raw);
 
 	try {
 		// inserts edit or save method depending on method's mode
-		console.log("requesting save data...")
+		localStorage.setItem("test", JSON.stringify(user));
+		console.log("requesting save data...");
+
 		const res =
 			mode === "add"
 				? await UserService.save(user, auth)
-				: await UserService.edit(id!, user);
+				: await UserService.edit(id!, user, auth);
 
 		console.log(
 			"looks like it saved, this is the data UserService returned:",
@@ -43,40 +44,24 @@ async function submitData(
 		);
 		// redirect user to newly created professor page
 		// redirect(`/professor/${res.id}`)
-	} catch (e) {
-		// ValidationError(400, fields: {name: "Name must not contain blablabla", cpf: "this is not a !@#$%& number!"}) => fills fields with error messages
-		// 	REFLECT must be interesting if we can make FormController read those messages and applies them automatically to fields
-		// AutheticationError(401, "not authorized/authenticated.") => redirects user to page or a popup window appears for authenticating first before sending to not lose data.
-		// ServerError(500, "Something wrong happened") => sends user to Internal error page or fills global error message to internal error.
-	}
-
-	// validate form (as it is already formatted and validated through InputValidator when exiting FormInput)
-	// 	REFLECT if validation rules are applicable on classes too, does it sounds interesting to make them like classes or something like this to be used on anywhere?
-
-	// create professor object with data
-	// send object to ProfessorService
-	// check if result was success
-	// 	if true, redirects user to it's own page
-	// 	if false, return with errors and behaves accordigly
-	// 		if validation is the cause (400), fill fields with errors (CPF duplicates, error that came from API)
-	// 		if 401 (unauthorized | authentication error basically), redirects user to login page or popups login window before proceeding
-	// 		if server error 500, redirects user to Internal Server error page or shows global error message in formulary
+	} catch (e) {}
 }
 
-export default function Page({ user }: { user?: any }) {
+export default function Page({ user }: { user?: User }) {
 	const controller = new FormController();
 
 	const formMode = user ? "edit" : "add";
 	// console.log(formMode)
-	const auth = useContext(AuthUserContext)
+	// const auth = useContext(AuthUserContext)
+	const userAuth = auth;
 
 	if (user) {
-		controller.addField("user", "Username");
-		controller.addField("user", "password");
+		controller.addField("user", user.name);
+		controller.addField("pass", user.password);
 	}
 
 	const submit = (e: SyntheticEvent<HTMLFormElement>) =>
-		submitData(e, formMode, controller, auth, user?.id);
+		submitData(e, formMode, controller, userAuth, user?.id);
 
 	return (
 		<>
@@ -93,7 +78,16 @@ export default function Page({ user }: { user?: any }) {
 						description={"Informações do usuário á ser adicionado ao sistema"}
 					>
 						<FormInput required name={"user"} type="text" label="Usuário" />
-						<FormInput required name={"pass"} type="text" label="Senha" />
+						<FormInput required name={"pass"} type="text" label="Nova Senha" />
+						<div className="flex flex-col">
+							<label>Perfil de Usuário</label>
+							<select name="profile" defaultValue={"TI"} className="form-input">
+								<option value={"TI"} selected>
+									TI
+								</option>
+								<option value={"RESPONSAVEL"}>Responsável</option>
+							</select>
+						</div>
 					</FormSection>
 					<button type="submit" className="btn btn-success">
 						Adicionar

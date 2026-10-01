@@ -7,27 +7,90 @@ import User, { type UserInterface } from "./user.class";
 import { AuthUserContext } from "./components/AuthenticationService";
 
 export default class UserService {
-	static async get(): Promise<User[]>;
-	static async get(id: number): Promise<User>;
-	static async get(id?: number): Promise<User[] | User> {
-		const usrInit: UserInterface = {
-			name: "",
-			login: "",
-			profile: "TI",
-			active: false,
-			createdAt: "",
-			updatedAt: "",
+	static async get(auth: User): Promise<User[]>;
+	static async get(id: number, auth: User): Promise<User>;
+	static async get(id?: number | User, auth?: User): Promise<User[] | User | undefined> {
+		// const usrInit: UserInterface = {
+		// 	name: "",
+		// 	login: "",
+		// 	profile: "TI",
+		// 	active: false,
+		// 	createdAt: "",
+		// 	updatedAt: "",
+		// };
+		// const prof = new User(usrInit);
+		const req: AbstractQueryObject = {
+			method: "GET",
+			path: typeof id === 'number' ? ["usuarios", id] : ['usuarios'],
+			credentials: auth,
 		};
-		const prof = new User(usrInit);
+
+		if (typeof id === "number") {
+			const module = new DefaultAPIModule();
+
+			try {
+				const res = await module.request(req);
+				console.log(res)
+				if (res.ok) {
+
+					const usrInit: UserInterface = {
+						id: res.rawData.dados.id,
+						name: res.rawData.dados.nome,
+						login: res.rawData.dados.login,
+						profile: res.rawData.dados.perfil,
+						active: res.rawData.dados.ativo,
+						createdAt: res.rawData.dados.createdAt,
+						updatedAt: res.rawData.dados.updatedAt,
+					};
+					return new User(usrInit);
+				}
+			} catch (e) {
+				console.log(e)
+			}
+		}
 
 		// get data from APIModule, whether an id is declared or not
 		// 	if found by id, return Professor found by id
 		// 		if no professor has been found with that id, throws NotFoundError(404, "No professor")
 		// 	if no id is provided, return Professor[], no matter if is empty or not
-		return prof;
+		// return prof;
 	}
 
-	static async edit(id: number, data: User): Promise<User> {
+	static async edit(id: number, data: User, auth: User): Promise<User> {
+		const form = {
+			nome: data.name,
+			novaSenha: data.password,
+		};
+
+		const req: AbstractQueryObject = {
+			method: "PUT",
+			body: form,
+			path: ["usuarios", id],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+			console.log(res);
+			if (res.ok) {
+				console.log("user edited!");
+				const usrInit: UserInterface = {
+					id: res.rawData.dados.id,
+					name: res.rawData.dados.nome,
+					login: res.rawData.dados.login,
+					profile: res.rawData.dados.perfil,
+					active: res.rawData.dados.ativo,
+					createdAt: res.rawData.dados.createdAt,
+					updatedAt: res.rawData.dados.updatedAt,
+				};
+				return new User(usrInit);
+			}
+		} catch (e) {
+			console.log(e);
+		}
+
 		//parse data to defined schema by API route
 		// send request to API through DefaultAPIModule (apply MockAPIModule here when on development mode?)
 		// if success (2xx), returns edited object with extra parameters to caller
@@ -35,11 +98,10 @@ export default class UserService {
 		return data;
 	}
 
-	static async save(data: User, credentials:User): Promise<User> {
-
-		console.log("saving user!")
-		console.log("checking user credentials!")
-		console.log(credentials)
+	static async save(data: User, credentials: User): Promise<User> {
+		console.log("saving user!");
+		console.log("checking user credentials!");
+		console.log(credentials);
 
 		const form = {
 			nome: data.name,
@@ -51,7 +113,7 @@ export default class UserService {
 			method: "POST",
 			body: form,
 			path: ["usuarios"],
-			// credentials: auth
+			credentials: credentials,
 		};
 
 		const dataInit: AbstractAPIDataInit = {
@@ -64,7 +126,7 @@ export default class UserService {
 
 		try {
 			const res = await module.request(req);
-			console.log(res)
+			console.log(res);
 			if (res.ok) {
 				const usrInit: UserInterface = {
 					id: res.rawData.dados.id,
@@ -75,11 +137,11 @@ export default class UserService {
 					createdAt: res.rawData.dados.createdAt,
 					updatedAt: res.rawData.dados.updatedAt,
 				};
-				return new User(usrInit)
+				return new User(usrInit);
 			}
 			// const data = new DefaultAPIData(dataInit)
 		} catch (e) {
-			console.log(e)
+			console.log(e);
 		}
 
 		//parse data to defined schema by API route
