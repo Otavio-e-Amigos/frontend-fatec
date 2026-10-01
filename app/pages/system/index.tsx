@@ -27,9 +27,12 @@ export default function Page({ users }: { users: User[] }) {
 		{
 			value: user.name,
 			display: (
-				<Link key={user.id} className="link" to={`/usuario/${user.id}`}>
+				// <Link key={user.id} className="link" to={`/usuario/${user.id}`}>
+				// 	{user.name}
+				// </Link>
+				<p key={user.id}>
 					{user.name}
-				</Link>
+				</p>
 			),
 		},
 		user.login,
@@ -38,16 +41,25 @@ export default function Page({ users }: { users: User[] }) {
 		{
 			value: 0,
 			display: (
-				<button
-					key={user.id}
-					className="btn btn-normal"
-					onClick={(e) => {
-						user.active ? deactivateUser(user.id!) : activateUser(user.id!);
-						e.currentTarget.disabled = true;
-					}}
-				>
-					{user.active ? "Desativar" : "Ativar"}
-				</button>
+				<div key={user.id} className="flex flex-row gap-2 justify-center">
+					<button
+						key={user.id}
+						className="btn btn-normal"
+						onClick={(e) => {
+							user.active ? deactivateUser(user.id!) : activateUser(user.id!);
+							e.currentTarget.disabled = true;
+						}}
+					>
+						{user.active ? "Desativar" : "Ativar"}
+					</button>
+					<Link
+						key={user.id}
+						className="btn btn-normal"
+						to={`/system/user/${user.id}/edit`}
+					>
+						Editar
+					</Link>
+				</div>
 			),
 		},
 	]);
@@ -64,14 +76,14 @@ export default function Page({ users }: { users: User[] }) {
 		<div className="flex flex-1 flex-col">
 			<Header />
 			<main className="mt-5">
-				<h1 className="text-3xl">Gerenciamento do sistema</h1>
+				<h1 className="text-3xl mx-2">Gerenciamento do sistema</h1>
 				<section className="flex flex-col gap-2 mx-10 my-5">
-					<ComplexTableModelView data={usersTable} />
-
 					<Link to={"/system/user/add"} className="btn btn-normal">
 						Adicionar Usuário
 					</Link>
-					<button
+					<ComplexTableModelView data={usersTable} />
+
+					{/*<button
 						className="btn btn-normal"
 						onClick={async () => {
 							UserService.activate(9, auth);
@@ -86,7 +98,7 @@ export default function Page({ users }: { users: User[] }) {
 						}}
 					>
 						Desativar usuário user01
-					</button>
+					</button>*/}
 				</section>
 			</main>
 		</div>

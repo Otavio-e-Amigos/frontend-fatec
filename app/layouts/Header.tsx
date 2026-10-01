@@ -2,7 +2,7 @@ import { Link } from "react-router"
 
 const links = [
   // {label: "Página inicial", href: "/"},
-  {label: "Grades", href: "/"},
+  // {label: "Grades", href: "/"},
   {label: "Professores", href: "/professor", items: [
     {label: "Gerenciar Professores"},
     {label: "Gerenciar Cursos"},
