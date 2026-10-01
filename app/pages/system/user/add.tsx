@@ -5,7 +5,7 @@ import FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
 import Header from "~/layouts/Header";
 import FormSection from "~/layouts/forms/FormSection";
-import { auth } from "~/mock/db/users.db";
+// import { auth } from "~/mock/db/users.db";
 import User, { type UserInterface } from "~/modules/user/user.class";
 import UserService from "~/modules/user/user.service";
 
@@ -16,7 +16,7 @@ export default function Page({ user }: { user?: User }) {
 	const formMode = user ? "edit" : "add";
 	// console.log(formMode)
 	// const auth = useContext(AuthUserContext)
-	const userAuth = auth;
+	const userAuth = new User(JSON.parse(localStorage.getItem("auth") as string));
 
 	async function submitData(
 		event: SyntheticEvent<HTMLFormElement>,
@@ -37,11 +37,9 @@ export default function Page({ user }: { user?: User }) {
 		};
 		// TODO if classes throws errors, they must be inserted inside try..catch scope and treated properly
 		const user = new User(raw);
-
 		try {
 			// inserts edit or save method depending on method's mode
-			localStorage.setItem("test", JSON.stringify(user));
-			console.log("requesting save data...");
+			// console.log("requesting save data...");
 
 			const res =
 				mode === "add"
