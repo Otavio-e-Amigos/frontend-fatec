@@ -9,6 +9,10 @@ export default [
 		index("routes/system/index.tsx"),
 		route("user", "routes/system/user/router.outlet.tsx", [
 			route("add", "routes/system/user/add.tsx"),
+			route(":id", "routes/system/user/[id]/router.outlet.tsx", [
+				// index("routes/system/user/[id]/[id].tsx"),
+				route("edit", "routes/system/user/[id]/edit.tsx"),
+			]),
 		]),
 	]),
 
