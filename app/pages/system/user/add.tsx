@@ -95,7 +95,7 @@ export default function Page({ user }: { user?: User }) {
 						</div>
 					</FormSection>
 					<button type="submit" className="btn btn-success">
-						Adicionar
+						{user ? "Salvar Alterações" : "Adicionar"}
 					</button>
 				</FormContainer>
 			</main>

@@ -1,4 +1,4 @@
-import { createContext, Form } from "react-router";
+import { createContext, Form, useNavigate } from "react-router";
 import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
 import Header from "~/layouts/Header";
@@ -144,6 +144,11 @@ async function submitData(
 			"looks like it saved, this is the data ProfessorService returned:",
 			res,
 		);
+
+		if (res) {
+			return res
+
+		}
 		// redirect user to newly created professor page
 		// redirect(`/professor/${res.id}`)
 	} catch (e) {
@@ -167,13 +172,18 @@ async function submitData(
 }
 
 export default function Page({ professor }: { professor?: Professor }) {
+	const navigate = useNavigate()
 	const controller = new FormController();
 
 	const formMode = professor ? "edit" : "add";
 
-	const submit = (e: SyntheticEvent<HTMLFormElement>) =>
-		submitData(e, formMode, controller, professor?.id);
-
+	const submit = async (e: SyntheticEvent<HTMLFormElement>) =>
+	{
+		const res = await submitData(e, formMode, controller, professor?.id);
+		if (res) {
+			navigate("/professor")
+		}
+	}
 	if (professor) {
 		controller.addField("nome", professor.name);
 		controller.addField("cpf", professor.cpf);
