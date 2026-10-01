@@ -14,26 +14,26 @@ interface ExportableFormFormat {
 	exportReturnType: unknown;
 }
 
+// class FieldFormController {
+// 	private _value: any;
+// 	private _validator?: InputValidator | undefined;
+// 	private _error?: FormError | undefined;
+
+// 	constructor(
+// 		value: any,
+// 		params: { validator?: InputValidator; error?: FormError },
+// 	) {
+// 		this._value = value;
+// 		this._validator = params.validator;
+// 		this._error = params.error;
+// 	}
+
+// }
+
 interface FormFieldController extends Record<string, any> {
 	value: any;
 	validator?: InputValidator;
 	error?: FormError;
-}
-
-class FieldFormController {
-	private _value: any;
-	private _validator?: InputValidator | undefined;
-	private _error?: FormError | undefined;
-
-	constructor(
-		value: any,
-		params: { validator?: InputValidator; error?: FormError },
-	) {
-		this._value = value;
-		this._validator = params.validator;
-		this._error = params.error;
-	}
-
 }
 
 /**
@@ -44,6 +44,7 @@ export default class FormController {
 	private fields: Record<string, FormFieldController> = {};
 	private error?: FormError;
 	private submitButtonPressed: boolean = false;
+	private canSubmit: boolean = false;
 
 	addField(
 		fieldName: string,
@@ -65,10 +66,6 @@ export default class FormController {
 		// console.log(this.fields);
 	}
 
-	// notify() {
-	// 	this.listeners
-	// }
-
 	getFieldValue(fieldName: string) {
 		if (!this.fieldExists(fieldName)) return undefined;
 
@@ -88,10 +85,10 @@ export default class FormController {
 		console.log(this.fields[fieldName].error);
 	}
 
-	cleanFieldError(fieldName:string) {
+	cleanFieldError(fieldName: string) {
 		if (!this.fieldExists(fieldName)) this.addField(fieldName);
 
-		this.fields[fieldName].error = undefined;		
+		this.fields[fieldName].error = undefined;
 	}
 
 	getFieldErrorMessage(fieldName: string) {
@@ -123,6 +120,7 @@ export default class FormController {
 
 		return result;
 	}
+
 	/**
 	 * cleans all existents errors on fields and Controller.
 	 * @param persistOnController if enabled, error object persists on controler, cleaning errors only on fields
@@ -139,7 +137,7 @@ export default class FormController {
 /**
  * Inserted on FormInput components, this class (or function)
  * validates and blocks FormController from sending the form if a certain criteria has not been met.
- * Does it sounds interesting for the <input> to have value formatation too?
+ * Does it sounds interesting for the <input> to have value formatation too? absolutely.
  */
 export abstract class InputValidator {
 	private criteria: RegExp;

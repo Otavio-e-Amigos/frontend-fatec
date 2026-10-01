@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import {FormControllerContext, FormDispatcherContext} from "./form.context";
+import {FormControllerContext, FormDispatcherContext} from "./FormContext";
 import { InputValidator } from "~/components/forms/FormController";
 
 type FormInputTypesSupported = React.HTMLInputTypeAttribute | "time-range";
@@ -46,10 +46,10 @@ export default function FormInput({
 	// 	console.log("controller changed!")
 	// 	console.log(controller)
 	// }, [controller])
-	
+
 	if (controller) {
 		var formValue = value ?? controller.getFieldValue(name);
-	
+
 		// if (!controller.fieldExists(name)) controller.addField(name, value);
 		if (!controller.fieldExists(name)) controllerAction({action: "addField", fieldName: name});
 		if (validator) controller.setFieldValidator(name, validator);
@@ -75,7 +75,7 @@ export default function FormInput({
 					: currentValue;
 
 				e.currentTarget.value = newValue.displayValue ?? currentValue;
-				
+
 				if (controller) controller.setFieldValue(name, newValue.newValue);
 				// if (controllerAction) controllerAction({action: "setFieldError", fieldName: name, error: {message: e.currentTarget.value}})
 				// if (controller) console.log(controller.getFieldErrorMessage(name))

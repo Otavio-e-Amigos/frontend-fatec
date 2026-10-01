@@ -1,13 +1,36 @@
-import { useReducer } from "react";
+import { useReducer, type SubmitEventHandler } from "react";
 import { Form } from "react-router";
 import FormController from "~/components/forms/FormController";
-import { FormControllerContext, FormDispatcherContext, formReducer } from "./form.context";
+import {
+	FormControllerContext,
+	FormDispatcherContext,
+	formReducer,
+} from "./FormContext";
 
-export default function FormContainer({ controller: initialController, children, className }: { controller?: FormController, children?: any, className?: string }) {
-	const [controller, dispatch] = useReducer(formReducer, initialController ?? new FormController())
+type FormContainerProps = {
+	initialController?: FormController;
+	children?: any;
+	className?: string;
+	onSubmit?: SubmitEventHandler<HTMLFormElement>;
+	action?: string;
+};
+
+export default function FormContainer({
+	initialController,
+	children,
+	className,
+	onSubmit,
+	action,
+}: FormContainerProps) {
+	const [controller, dispatch] = useReducer(
+		formReducer,
+		initialController ?? new FormController(),
+	);
+
+	const formProps = { className, onSubmit, action };
 
 	return (
-		<Form onSubmit={(e) => { e.preventDefault() }} action="/" className={className}>
+		<Form {...formProps}>
 			<FormControllerContext value={controller}>
 				<FormDispatcherContext value={dispatch}>
 					{children}
