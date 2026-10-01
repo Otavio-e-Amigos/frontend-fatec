@@ -1,15 +1,18 @@
-import { useContext } from "react";
+// import { useContext } from "react";
 import type { AbstractAPIDataInit } from "../api/base/AbstractAPIData";
 import type AbstractQueryObject from "../api/base/AbstractQueryObject";
-import DefaultAPIData from "../api/modules/default/DefaultAPIData";
+// import DefaultAPIData from "../api/modules/default/DefaultAPIData";
 import { DefaultAPIModule } from "../api/modules/default/DefaultAPIModule";
 import User, { type UserInterface } from "./user.class";
-import { AuthUserContext } from "./components/AuthenticationService";
+// import { AuthUserContext } from "./components/AuthenticationService";
 
 export default class UserService {
 	static async get(auth: User): Promise<User[]>;
 	static async get(id: number, auth: User): Promise<User>;
-	static async get(id?: number | User, auth?: User): Promise<User[] | User | undefined> {
+	static async get(
+		id?: number | User,
+		auth?: User,
+	): Promise<User[] | User | undefined> {
 		// const usrInit: UserInterface = {
 		// 	name: "",
 		// 	login: "",
@@ -21,18 +24,17 @@ export default class UserService {
 		// const prof = new User(usrInit);
 		const req: AbstractQueryObject = {
 			method: "GET",
-			path: typeof id === 'number' ? ["usuarios", id] : ['usuarios'],
-			credentials: auth,
+			path: typeof id === "number" ? ["usuarios", id] : ["usuarios"],
+			credentials: auth ?? id,
 		};
 
-		if (typeof id === "number") {
-			const module = new DefaultAPIModule();
+		const module = new DefaultAPIModule();
 
-			try {
-				const res = await module.request(req);
-				console.log(res)
-				if (res.ok) {
-
+		try {
+			const res = await module.request(req);
+			console.log(res);
+			if (res.ok) {
+				if (typeof id === "number") {
 					const usrInit: UserInterface = {
 						id: res.rawData.dados.id,
 						name: res.rawData.dados.nome,
@@ -43,10 +45,23 @@ export default class UserService {
 						updatedAt: res.rawData.dados.updatedAt,
 					};
 					return new User(usrInit);
+				} else {
+					return res.rawData.dados.map(
+						(user:any) =>
+							new User({
+								id: user.id,
+								name: user.nome,
+								login: user.login,
+								profile: user.perfil,
+								active: user.ativo,
+								createdAt: user.createdAt,
+								updatedAt: user.updatedAt,
+							}),
+					);
 				}
-			} catch (e) {
-				console.log(e)
 			}
+		} catch (e) {
+			console.log(e);
 		}
 
 		// get data from APIModule, whether an id is declared or not
@@ -157,5 +172,47 @@ export default class UserService {
 		// if not found, returns NotFoundError (or return false?)
 		// if it cant be deleted by some astral reason, return false
 		return true;
+	}
+
+	static async activate(id: number, auth: User): Promise<boolean> {
+		const req: AbstractQueryObject = {
+			method: "PATCH",
+			path: ["usuarios", id, "ativar"],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			return res.ok;
+		} catch (e) {
+			console.log(e);
+			return false;
+		}
+	}
+
+	static async deactivate(id: number, auth: User): Promise<boolean> {
+		const req: AbstractQueryObject = {
+			method: "PATCH",
+			path: ["usuarios", id, "desativar"],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			return res.ok;
+		} catch (e) {
+			console.log(e);
+			return false;
+		}
 	}
 }
