@@ -42,7 +42,7 @@ interface FormFieldController extends Record<string, any> {
  */
 export default class FormController {
 	private fields: Record<string, FormFieldController> = {};
-	private error?: FormError;
+	public error?: FormError;
 	private submitButtonPressed: boolean = false;
 	private canSubmit: boolean = false;
 
@@ -56,6 +56,14 @@ export default class FormController {
 			validator: params?.validator,
 			error: params?.error,
 		};
+	}
+
+	setError(error?: FormError) {
+		this.error = error
+	}
+
+	getError() {
+		return this.error
 	}
 
 	setFieldValue(fieldName: string, value: any) {
