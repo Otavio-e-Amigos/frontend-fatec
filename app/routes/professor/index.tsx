@@ -1,7 +1,8 @@
 import Index from "~/pages/professor/index";
 import ProfessorService from "~/modules/professor/professor.service";
-import { auth } from "~/mock/db/users.db";
+// import { auth } from "~/mock/db/users.db";
 import { useEffect, useState } from "react";
+import User from "~/modules/user/user.class";
 
 export function meta() {
 	return [{ title: "Appointer: Professores" }];
@@ -11,6 +12,7 @@ export default function Page() {
 	const [professors, setProfessors] = useState<any[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
 
 	useEffect(() => {
 		let active = true;
