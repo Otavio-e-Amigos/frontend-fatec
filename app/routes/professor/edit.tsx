@@ -1,6 +1,6 @@
 import Page from "~/pages/professor/add";
 import type { Route } from "./+types/edit";
-import professors from "~/mock/db/professors.db";
+// import professors from "~/mock/db/professors.db";
 import ProfessorService from "~/modules/professor/professor.service";
 import User from "~/modules/user/user.class";
 
