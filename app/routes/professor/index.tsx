@@ -10,6 +10,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function clientLoader() {
+
 	// const id = Number(params.id);
 	// const prof = professors.find((prof) => prof.id == id);
 	return { professors };

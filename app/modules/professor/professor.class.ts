@@ -10,7 +10,7 @@ export default class Professor {
 		public registry: string,
 		public contract: "DETERMINADO" | "INDERTEMINADO" | "TEMPORARIO" | string,
 		public status: "ATIVO" | "INATIVO" | "AFASTADO" | string,
-		public title?: "GRADUADO" | "ESPECIALISTA" | "MESTRE" | "DOUTOR" | "PÓS-DOUTOR" | string,
+		public title?: "GRADUADO" | "ESPECIALISTA" | "MESTRE" | "DOUTOR" | "POS_DOUTOR" | string,
 		public code?: string,
 		public id?: number,
 	) {
