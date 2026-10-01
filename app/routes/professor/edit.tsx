@@ -1,6 +1,8 @@
 import Page from "~/pages/professor/add";
 import type { Route } from "./+types/edit";
 import professors from "~/mock/db/professors.db";
+import ProfessorService from "~/modules/professor/professor.service";
+import User from "~/modules/user/user.class";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,7 +13,8 @@ export function meta({}: Route.MetaArgs) {
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
 	const id = Number(params.id);
-	const prof = professors.find((prof) => prof.id == id);
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+	const prof = await ProfessorService.get(id, auth);
 	return { prof };
 }
 

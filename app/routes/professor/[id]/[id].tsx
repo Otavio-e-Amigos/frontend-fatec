@@ -3,10 +3,14 @@ import type { Route } from "./+types/[id]";
 import About from "~/pages/professor/[id]";
 
 import professors from "~/mock/db/professors.db";
+import ProfessorService from "~/modules/professor/professor.service";
+import User from "~/modules/user/user.class";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
 	const id = Number(params.id);
-	const prof = professors.find((prof) => prof.id == id);
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+	const prof = await ProfessorService.get(id, auth);
+	// const prof = professors.find((prof) => prof.id == id);
 	return { prof };
 }
 

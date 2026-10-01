@@ -1,15 +1,33 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import type Professor from "~/modules/professor/professor.class";
+import ProfessorService from "~/modules/professor/professor.service";
+import User from "~/modules/user/user.class";
 
 export default function Page({list}: {list: Professor[]}) {
 	// TODO test and switch with ObjectTableModel
 	//
 	//
+	const navigate = useNavigate()
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+
+	async function activate(id: number) {
+		const res = await ProfessorService.activate(id, auth);
+		if (res) {
+			navigate(0);
+		}
+	}
+
+	async function deactivate(id: number) {
+		const res = await ProfessorService.deactivate(id, auth);
+		if (res) {
+			navigate(0);
+		}
+	}
 
 	const professorTableList = list.map((prof) => [
 		{
@@ -21,19 +39,42 @@ export default function Page({list}: {list: Professor[]}) {
 			),
 		},
 		prof.registry,
-		prof.cpf,
 		prof.contract,
-		prof.status
+		prof.status,
+		{
+			value: 0,
+			display: (
+				<div key={prof.id} className="flex flex-row gap-2 justify-center">
+					<button
+						key={prof.id}
+						className="btn btn-normal"
+						onClick={(e) => {
+							prof.status === "ATIVO" ? deactivate(prof.id!) : activate(prof.id!);
+							e.currentTarget.disabled = true;
+						}}
+					>
+						{prof.status === "ATIVO" ? "Desativar" : "Ativar"}
+					</button>
+					<Link
+						key={prof.id}
+						className="btn btn-normal"
+						to={`/professor/${prof.id}/edit`}
+					>
+						Editar
+					</Link>
+				</div>
+			),
+		},
 	]);
 
 	const professorsTable = new DefaultTableModel(
 		professorTableList,
 		[
 			'Docente',
-			'CPF',
 			'Matrícula',
 			'Tipo de Contrato',
-			'Status'
+			'Status',
+			"Ação"
 		]
 	)
 

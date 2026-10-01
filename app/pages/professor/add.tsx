@@ -8,6 +8,7 @@ import FormController, {
 } from "../../components/forms/FormController";
 import type { SubmitEventHandler, SyntheticEvent } from "react";
 import ProfessorService from "~/modules/professor/professor.service";
+import User from "~/modules/user/user.class";
 
 function FormSection({
 	section,
@@ -99,7 +100,7 @@ async function submitData(
 	event: SyntheticEvent<HTMLFormElement>,
 	mode: "add" | "edit",
 	controller: FormController,
-	id?: number
+	id?: number,
 ) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.currentTarget));
@@ -110,7 +111,7 @@ async function submitData(
 		name: data.nome as string,
 		cpf: data.cpf as string,
 		registry: data.matricula as string,
-		contract: data.contrato as string,
+		contract: data.regimeContrato as string,
 		status: data.status as string,
 		title: data.titulacao as string,
 		code: data.codigo as string,
@@ -130,9 +131,14 @@ async function submitData(
 	);
 	// console.log("prof", prof);
 
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
+
 	try {
 		// inserts edit or save method depending on method's mode
-		const res = mode === "add" ? await ProfessorService.save(prof) : await ProfessorService.edit(id!, prof);
+		const res =
+			mode === "add"
+				? await ProfessorService.save(prof, auth)
+				: await ProfessorService.edit(id!, prof, auth);
 
 		console.log(
 			"looks like it saved, this is the data ProfessorService returned:",
@@ -160,7 +166,7 @@ async function submitData(
 	// 		if server error 500, redirects user to Internal Server error page or shows global error message in formulary
 }
 
-export default function Page({professor}: {professor?:Professor}) {
+export default function Page({ professor }: { professor?: Professor }) {
 	const controller = new FormController();
 
 	const formMode = professor ? "edit" : "add";
@@ -169,14 +175,14 @@ export default function Page({professor}: {professor?:Professor}) {
 		submitData(e, formMode, controller, professor?.id);
 
 	if (professor) {
-		controller.addField("nome", professor.name)
-		controller.addField("cpf", professor.cpf)
+		controller.addField("nome", professor.name);
+		controller.addField("cpf", professor.cpf);
 
-		controller.addField("matricula", professor.registry)
-		controller.addField("contrato", professor.contract)
-		controller.addField("status", professor.status)
-		controller.addField("codigo", professor.code)
-		controller.addField("titulacao", professor.title)
+		controller.addField("matricula", professor.registry);
+		controller.addField("regimeContrato", professor.contract);
+		controller.addField("status", professor.status);
+		controller.addField("codigo", professor.code);
+		controller.addField("titulacao", professor.title);
 
 		// controller.addField("email", professor.name)
 		// controller.addField("teams", professor.name)
@@ -200,13 +206,15 @@ export default function Page({professor}: {professor?:Professor}) {
 	// });
 	// console.log("decoy");
 	// console.log(controller);
-
+	const editMode = formMode === "edit" ? true : false;
 	return (
 		<main className="flex flex-1 flex-col">
 			<Header activeItem="Professores" />
 
 			{/* TODO LOW add stateful variable here */}
-			{professor && <h1 className="text-4xl my-5 mx-2">Editar dados de { professor.name }</h1>}
+			{professor && (
+				<h1 className="text-4xl my-5 mx-2">Editar dados de {professor.name}</h1>
+			)}
 			<FormContainer
 				initialController={controller}
 				onSubmit={submit}
@@ -221,8 +229,18 @@ export default function Page({professor}: {professor?:Professor}) {
 					section={"Informações Básicas"}
 					description={"Informações basicas sobre o Professor à ser adicionado"}
 				>
-					<FormInput required name={"nome"} type="text" label="Nome Completo" />
-					<FormInput required name={"cpf"} type="text" label="CPF" />
+					<FormInput
+						required={!editMode}
+						name={"nome"}
+						type="text"
+						label="Nome Completo"
+					/>
+					<FormInput
+						required={!editMode}
+						name={"cpf"}
+						type="text"
+						label="CPF"
+					/>
 					{/*<FormInput required name={"professor"} type="text" label="Cursos" />*/
 					/* TO BE ADDED LATER */}
 				</FormSection>
@@ -234,26 +252,74 @@ export default function Page({professor}: {professor?:Professor}) {
 					}
 				>
 					<FormInput
-						required
+						required={!editMode}
 						name={"matricula"}
 						type="text"
 						label="Matrícula"
 					/>
 
 					{/* TODO change to select with restricted options (DETERMIADO, INDETERMINADO, TEMPORARIO) */}
-					<FormInput required name={"contrato"} type="text" label="Contrato" />
+					{/*<FormInput
+						required={!editMode}
+						name={"contrato"}
+						type="text"
+						label="Contrato"
+					/>*/}
+					<div className="flex flex-col">
+						<label>
+							Contrato {!editMode && <span className="text-rose-500">*</span>}
+						</label>
+						<select name="regimeContrato" defaultValue={"DETERMINADO"} className="form-input">
+							<option value={"DETERMINADO"} selected>
+								Determinado
+							</option>
+							<option value={"INDETERMINADO"}>Indeterminado</option>
+							<option value={"TEMPORARIO"}>Temporário</option>
+						</select>
+					</div>
 
 					{/* TODO change to according value */}
-					<FormInput required name={"status"} type="text" label="Status" />
+					{/*<FormInput
+						required={!editMode}
+						name={"status"}
+						type="text"
+						label="Status"
+					/>*/}
+					<div className="flex flex-col">
+						<label>
+							Status {!editMode && <span className="text-rose-500">*</span>}
+						</label>
+						<select name="status" className="form-input">
+							<option value={"ATIVO"} selected>
+								Ativo
+							</option>
+							<option value={"INATIVO"}>Inativo</option>
+							<option value={"AFASTADO"}>Afastado</option>
+						</select>
+					</div>
+
+					{/* TODO change to according value */}
+					{/*<FormInput name={"titulacao"} type="text" label="Titulação" />*/}
+					<div className="flex flex-col">
+						<label>
+							Titulação {!editMode && <span className="text-rose-500">*</span>}
+						</label>
+						<select name="titulacao" className="form-input">
+							<option value={"GRADUADO"} selected>
+								Graduado
+							</option>
+							<option value={"ESPECIALISTA"}>Especialista</option>
+							<option value={"MESTRE"}>Mestre</option>
+							<option value={"DOUTOR"}>Doutor</option>
+							<option value={"POS_DOUTOR"}>Pós Doutorado</option>
+						</select>
+					</div>
 
 					{/* TODO change to according value */}
 					<FormInput name={"codigo"} type="text" label="Código" />
-
-					{/* TODO change to according value */}
-					<FormInput name={"titulacao"} type="text" label="Titulação" />
 				</FormSection>
 
-				<FormSection
+				{/*<FormSection
 					section={"Extras"}
 					description={
 						"Informações extras que podem facilitar o contato do Docente ou para outros aspectos que possam te ajudar."
@@ -262,7 +328,7 @@ export default function Page({professor}: {professor?:Professor}) {
 					<FormInput name={"email"} type="text" label="E-Mail" />
 					<FormInput name={"teams"} type="text" label="Usuário Teams" />
 					<FormInput name={"telefone"} type="text" label="Telefone" />
-				</FormSection>
+				</FormSection>*/}
 
 				{/* DELETE THIS ASAP */}
 				{/*

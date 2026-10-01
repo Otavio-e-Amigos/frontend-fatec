@@ -39,7 +39,7 @@ function ProfessorInfo({ professor }: { professor?: Professor }) {
 					<Link className="link" to={`/professor/${professor?.id}/edit`}>Editar</Link>
 
 					{/* TODO insert confirmation window here */}
-					<Link to={"/"}>Excluir</Link>
+					{/*<Link to={"/"}>Excluir</Link>*/}
 				</div>
 
 				{/*<div className="flex flex-col">
@@ -87,9 +87,9 @@ export default function About({ professor }: { professor: Professor }) {
 							<li>
 								<b>Código do Professor</b>: {professor.code}
 							</li>
-							<li>
+							{/*<li>
 								<b>CPF</b>: {professor.cpf}
-							</li>
+							</li>*/}
 						</ul>
 						{/*<p>Nome: {professor.name}</p>*/}
 						{/*<p></p>*/}

@@ -67,13 +67,16 @@ export default class ProfessorService {
 
 		const form: any = {
 			nome: data.name,
-			cpf: data.cpf,
 			matricula: data.registry,
 			regimeContrato: data.contract,
 			status: data.status,
 			titulacao: data.title,
 			codigo: data.code,
 		};
+
+		if (data.cpf) {
+			form['cpf'] = data.cpf
+		}
 
 		const req: AbstractQueryObject = {
 			method: "PUT",
