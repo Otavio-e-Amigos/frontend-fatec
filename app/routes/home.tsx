@@ -1,6 +1,8 @@
-import professors from "~/mock/db/professors.db";
+// import professors from "~/mock/db/professors.db";
 import type { Route } from "./+types/home";
 import Index from "~/pages";
+import ProfessorService from "~/modules/professor/professor.service";
+import User from "~/modules/user/user.class";
 
 export function meta({}: Route.MetaArgs) {
 	return [
@@ -9,8 +11,9 @@ export function meta({}: Route.MetaArgs) {
 	];
 }
 
-export async function clientLoader({}: Route.LoaderArgs) {
-	const list = professors;
+export async function clientLoader({ }: Route.LoaderArgs) {
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+	const list = await ProfessorService.get(auth);
 	return { list };
 }
 

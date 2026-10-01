@@ -3,6 +3,8 @@ import { Link } from "react-router"
 const links = [
   // {label: "Página inicial", href: "/"},
   // {label: "Grades", href: "/"},
+  {label: "Login", href: "/login"},
+  {label: "Gestão", href: "/system"},
   {label: "Professores", href: "/professor", items: [
     {label: "Gerenciar Professores"},
     {label: "Gerenciar Cursos"},

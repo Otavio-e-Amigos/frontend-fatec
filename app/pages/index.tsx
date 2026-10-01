@@ -85,8 +85,8 @@ export default function Page({
 				</Link>
 			),
 		},
-		prof.cpf,
 		prof.registry,
+		prof.status,
 	]);
 
 	const professorMockTable = new DefaultTableModel(
@@ -117,7 +117,7 @@ export default function Page({
 		// 	],
 		// ],
 		professorTableList,
-		["Docente", "CPF", "Matrícula"],
+		["Docente", "CPF", "Status"],
 	);
 
 	// console.log(React.isValidElement(<ProfessorLink name="sodkoskd"/>))
@@ -132,7 +132,8 @@ export default function Page({
 			{/*{Test()}*/}
 			<main className="grid grid-cols-4 flex-1 gap-x-8 m-5 overflow-hidden">
 				<section className="col-span-3 flex flex-col">
-					<PageSection name="Grades Recentes" />
+					{/*<PageSection name="Grades Recentes" />*/}
+					<PageSection name="Professores Recentes" />
 
 					<ComplexTableModelView data={professorMockTable} />
 				</section>
