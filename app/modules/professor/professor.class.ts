@@ -1,19 +1,27 @@
-export default class Professor {
-	id?: number
-	name: string
-	registry: string
-	govID: string
-	courses: string[]
-	courseClass: number
+interface JSONExportable {
+	toJSON(): string;
+}
 
-	constructor(name: string, govID: string, registry: string, courses: string[], courseClass: number, id?: number) {
-		this.id = id
-		this.name = name
-		this.registry = registry
-		this.courses = courses
-		this.courseClass = courseClass
-		this.govID = govID
+export default class Professor {
+	// public name: string;
+	constructor(
+		public name: string,
+		public cpf: string,
+		public registry: string,
+		public contract: "DETERMINADO" | "INDERTEMINADO" | "TEMPORARIO" | string,
+		public status: "ATIVO" | "INATIVO" | "AFASTADO" | string,
+		public title?: "GRADUADO" | "ESPECIALISTA" | "MESTRE" | "DOUTOR" | "PÓS-DOUTOR" | string,
+		public code?: string,
+		public id?: number,
+	) {
+		// this.name = name;
 	}
 
-	// TODO GETTER and SETTER here
+	// get name(): string {
+	// 	return this._name
+	// }
+
+	// set name(newName: string) {
+	// 	this._name = newName
+	// }
 }
