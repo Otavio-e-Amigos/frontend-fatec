@@ -1,48 +1,200 @@
+import type AbstractQueryObject from "../api/base/AbstractQueryObject";
+import { DefaultAPIModule } from "../api/modules/default/DefaultAPIModule";
 import Professor from "./professor.class";
+import User from "../user/user.class";
+
+// Único lugar que monta o Professor a partir da resposta da API.
+// A API não retorna "cpf", então usamos "" para não deixar undefined.
+function toProfessor(prof: any): Professor {
+	return new Professor(
+		prof.nome,
+		prof.cpf ?? "",
+		prof.matricula ?? "",
+		prof.regimeContrato ?? "",
+		prof.status ?? "",
+		prof.titulacao ?? "",
+		prof.codigo ?? "",
+		prof.id
+	);
+}
 
 export default class ProfessorService {
-	static async get(): Promise<Professor[]>;
-	static async get(id: number): Promise<Professor>;
-	static async get(id?: number): Promise<Professor[] | Professor> {
-		const prof = new Professor(
-			"_name",
-			"_cpf",
-			"_registry",
-			"_contract",
-			"_status",
-			"_title",
-			// "_code",
-			// "_id",
-		);
+	static async get(auth: User): Promise<Professor[]>;
+	static async get(id: number, auth: User): Promise<Professor>;
 
-		// get data from APIModule, whether an id is declared or not
-		// 	if found by id, return Professor found by id
-		// 		if no professor has been found with that id, throws NotFoundError(404, "No professor")
-		// 	if no id is provided, return Professor[], no matter if is empty or not
-		return prof;
+	static async get(
+		idOrAuth: number | User,
+		maybeAuth?: User
+	): Promise<Professor[] | Professor | undefined> {
+
+		const id = typeof idOrAuth === "number" ? idOrAuth : undefined;
+		const auth = typeof idOrAuth === "number" ? maybeAuth : idOrAuth;
+
+		const req: AbstractQueryObject = {
+			method: "GET",
+			path: id !== undefined ? ["professores", id] : ["professores"],
+			credentials: auth,
+		};
+
+		// ... o resto continua igual (try/catch, toProfessor etc.)
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			if (res.ok) {
+
+				if (typeof id === "number") {
+					return toProfessor(res.rawData.dados);
+				}
+
+				return res.rawData.dados.map(toProfessor);
+			}
+
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
-	static async edit(id: number, data: Professor): Promise<Professor> {
-		//parse data to defined schema by API route
-		// send request to API through DefaultAPIModule (apply MockAPIModule here when on development mode?)
-		// if success (2xx), returns edited object with extra parameters to caller
-		// if error (4xx/5xx), throws corresponding error messages
+	static async edit(
+		id: number,
+		data: Professor,
+		auth: User
+	): Promise<Professor> {
+
+		const form: any = {
+			nome: data.name,
+			cpf: data.cpf,
+			matricula: data.registry,
+			regimeContrato: data.contract,
+			status: data.status,
+			titulacao: data.title,
+			codigo: data.code,
+		};
+
+		const req: AbstractQueryObject = {
+			method: "PUT",
+			body: form,
+			path: ["professores", id],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			if (res.ok) {
+				console.log("professor edited!");
+
+				return toProfessor(res.rawData.dados);
+			}
+
+		} catch (e) {
+			console.log(e);
+		}
+
 		return data;
 	}
 
-	static async save(data: Professor): Promise<Professor> {
-		//parse data to defined schema by API route
-		// send request to API through DefaultAPIModule (apply MockAPIModule here when on development mode?)
-		// if success (2xx), returns newly created object to caller
-		// if error (4xx/5xx), throws corresponding error messages
+	static async save(
+		data: Professor,
+		auth: User
+	): Promise<Professor> {
+
+		console.log("saving professor!");
+		console.log("checking user credentials!");
+		console.log(auth);
+
+		const form = {
+			nome: data.name,
+			cpf: data.cpf,
+			matricula: data.registry,
+			regimeContrato: data.contract,
+			status: data.status,
+			titulacao: data.title,
+			codigo: data.code,
+		};
+
+		const req: AbstractQueryObject = {
+			method: "POST",
+			body: form,
+			path: ["professores"],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			if (res.ok) {
+				return toProfessor(res.rawData.dados);
+			}
+
+		} catch (e) {
+			console.log(e);
+		}
+
 		return data;
 	}
 
-	static async delete(id: number): Promise<boolean> {
-		//sends request through APIModule to delete Professor #{id}
-		// if deleted, returns true
-		// if not found, returns NotFoundError (or return false?)
-		// if it cant be deleted by some astral reason, return false
-		return true;
+	static async activate(
+		id: number,
+		auth: User
+	): Promise<boolean> {
+
+		const req: AbstractQueryObject = {
+			method: "PATCH",
+			path: ["professores", id, "ativar"],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			return res.ok;
+
+		} catch (e) {
+			console.log(e);
+			return false;
+		}
+	}
+
+	static async deactivate(
+		id: number,
+		auth: User
+	): Promise<boolean> {
+
+		const req: AbstractQueryObject = {
+			method: "PATCH",
+			path: ["professores", id, "desativar"],
+			credentials: auth,
+		};
+
+		const module = new DefaultAPIModule();
+
+		try {
+			const res = await module.request(req);
+
+			console.log(res);
+
+			return res.ok;
+
+		} catch (e) {
+			console.log(e);
+			return false;
+		}
 	}
 }
