@@ -1,15 +1,5 @@
 import Professor from "~/modules/professor/professor.class";
 
-// new Professor(
-// 	profRaw.name,
-// 	profRaw.cpf,
-// 	profRaw.registry,
-// 	profRaw.contract,
-// 	profRaw.status,
-// 	profRaw.title,
-// 	profRaw.code,
-// 	// profRaw.id,
-// );
 
 const professors: Professor[] = [
 	new Professor(
@@ -63,11 +53,5 @@ const professors: Professor[] = [
 		5
 	)
 ];
-
-export function generate() {}
-
-// export function getRandom() {
-// 	return professors.
-// }
 
 export default professors;
