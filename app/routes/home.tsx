@@ -4,6 +4,7 @@ import Index from "~/pages";
 import ProfessorService from "~/modules/professor/professor.service";
 import User from "~/modules/user/user.class";
 import { redirect } from "react-router";
+import professors from "~/mock/db/professors.db";
 
 export function meta({}: Route.MetaArgs) {
 	return [
@@ -18,7 +19,8 @@ export async function clientLoader({ }: Route.LoaderArgs) {
 	}
 	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
 
-	const list = await ProfessorService.get(auth);
+	// const list = await ProfessorService.get(auth);
+	const list = professors;
 	return { list };
 }
 

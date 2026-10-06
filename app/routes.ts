@@ -1,5 +1,6 @@
 import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
+// REFLECT i believe there is a way of reducing or optimize this part using dynamic helper functions for each part of the website
 export default [
 	index("routes/home.tsx"),
 

@@ -1,8 +1,7 @@
 import { Link, useNavigate } from "react-router";
-import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
+import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-// import { auth } from "~/mock/db/users.db";
 import User from "~/modules/user/user.class";
 import UserService from "~/modules/user/user.service";
 
@@ -29,9 +28,6 @@ export default function Page({ users }: { users: User[] }) {
 		{
 			value: user.name,
 			display: (
-				// <Link key={user.id} className="link" to={`/usuario/${user.id}`}>
-				// 	{user.name}
-				// </Link>
 				<p key={user.id}>
 					{user.name}
 				</p>
@@ -84,23 +80,6 @@ export default function Page({ users }: { users: User[] }) {
 						Adicionar Usuário
 					</Link>
 					<ComplexTableModelView data={usersTable} />
-
-					{/*<button
-						className="btn btn-normal"
-						onClick={async () => {
-							UserService.activate(9, auth);
-						}}
-					>
-						Ativar usuário user01
-					</button>
-					<button
-						className="btn btn-normal"
-						onClick={async () => {
-							UserService.deactivate(9, auth);
-						}}
-					>
-						Desativar usuário user01
-					</button>*/}
 				</section>
 			</main>
 		</div>

@@ -7,5 +7,10 @@ export default interface AbstractQueryObject {
 	method?: string; //uri's method (GET, POST, ...)
 	body?: any;
 	headers?: Record<string, string>;
-	credentials?: any
+	credentials?: any //credentials that some systems may require along the request
 }
+
+/**
+ * About QueryObject.path: is there a way of defining this dynamically and "object-like"? Like treating it as a object that you can set
+ * it's dynamic parameters via functions safely and conventional?
+ */

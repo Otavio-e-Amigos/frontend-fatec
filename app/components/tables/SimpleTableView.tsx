@@ -11,8 +11,6 @@ export default function SimpleTableModelView({ data }: { data: AbstractTableMode
       <thead>
         <tr className="bg-slate-600">
           {columns.map((column, idx) => (<th key={idx} className={`px-2 ${idx == 0 && "text-left"}`}>{column}</th>))}
-          {/*<th className="px-2 text-left">Tipo</th>*/}
-          {/*<th className="px-2">Ação</th>*/}
         </tr>
       </thead>
       <tbody>

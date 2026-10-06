@@ -50,18 +50,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	const [auth, setAuth] = useState(new User({}));
-	useEffect(() => {
-		console.log("auth", auth);
-	}, [auth, setAuth]);
+	// const [auth, setAuth] = useState(new User({}));
+	// useEffect(() => {
+	// 	console.log("auth", auth);
+	// }, [auth, setAuth]);
 
 	return (
 		<>
-			<AuthUserContext value={auth}>
-				<SetAuthUserContext value={setAuth}>
+			{/*<AuthUserContext value={auth}>*/}
+				{/*<SetAuthUserContext value={setAuth}>*/}
 					<Outlet />
-				</SetAuthUserContext>
-			</AuthUserContext>
+				{/*</SetAuthUserContext>*/}
+			{/*</AuthUserContext>*/}
 		</>
 	);
 }
