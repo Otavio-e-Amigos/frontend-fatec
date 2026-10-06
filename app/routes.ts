@@ -29,4 +29,24 @@ export default [
 		]),
 		route("add", "routes/professor/add.tsx"),
 	]),
+
+	
+	route("curso", "routes/curso/router.outlet.tsx", [
+		index("routes/curso/index.tsx"),
+		route(":id", "routes/curso/[id]/router.outlet.tsx", [
+			index("routes/curso/[id]/[id].tsx"),
+			route("edit", "routes/curso/edit.tsx"),
+		]),
+		route("add", "routes/curso/add.tsx"),
+	]),
+
+	route("disciplina", "routes/disciplina/router.outlet.tsx", [
+		index("routes/disciplina/index.tsx"),
+		route(":id", "routes/disciplina/[id]/router.outlet.tsx", [
+			index("routes/disciplina/[id]/[id].tsx"),
+			route("edit", "routes/disciplina/edit.tsx"),
+		]),
+		route("add", "routes/disciplina/add.tsx"),
+	]),
+
 ] satisfies RouteConfig;
