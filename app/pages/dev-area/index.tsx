@@ -1,5 +1,5 @@
 import { Form, Link } from "react-router";
-import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
+import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import SimpleTableModelView from "~/components/tables/SimpleTableView";
 import Header from "~/layouts/Header";

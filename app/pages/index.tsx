@@ -1,29 +1,10 @@
 import { Link } from "react-router";
-import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
+import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import type Professor from "~/modules/professor/professor.class";
-
-function NotificationBadge({
-	state,
-	description,
-	action,
-}: {
-	state: string;
-	description: string;
-	action: any;
-}) {
-	return (
-		<div className="p-2 flex flex-1 flex-row items-start gap-2 rounded-xl border-2 border-x-slate-500 border-y-slate-400 bg-slate-100">
-			<img src="/favicon.ico" className="size-6" />
-			<div className="flex flex-col gap-1">
-				<div className="flex-1">{description}</div>
-				{action}
-			</div>
-		</div>
-	);
-}
+import NotificationBadge from "~/components/badges/NotificationBadge";
 
 export default function Page({
 	professorList,
@@ -69,12 +50,7 @@ export default function Page({
 	// 	},
 	// ];
 
-	const notifications = []
-
-	// function ProfessorLink(name: any):React.ReactElement {
-	// 	return <span className="text-indigo-500">{ name }</span>
-	// }
-	//
+	const notifications: any[] = [];
 
 	const professorTableList = professorList.map((prof) => [
 		{
@@ -89,47 +65,16 @@ export default function Page({
 		prof.status,
 	]);
 
-	const professorMockTable = new DefaultTableModel(
-		// [
-		// 	[
-		// 		{
-		// 			value: professors[0].name,
-		// 			display: (
-		// 				<Link className="link" to={"/professor/1"}>
-		// 					{professors[0].name}
-		// 				</Link>
-		// 			),
-		// 		},
-		// 		professors[0].cpf,
-		// 		professors[0].registry,
-		// 	],
-		// 	[
-		// 		{
-		// 			value: professors[1].name,
-		// 			display: (
-		// 				<Link className="link" to={"/professor/2"}>
-		// 					{professors[1].name}
-		// 				</Link>
-		// 			),
-		// 		},
-		// 		professors[1].cpf,
-		// 		professors[1].registry,
-		// 	],
-		// ],
-		professorTableList,
-		["Docente", "Matrícula", "Status"],
-	);
-
-	// console.log(React.isValidElement(<ProfessorLink name="sodkoskd"/>))
-	// const Test = <ProfessorLink name="Tester"/>
-
-	// console.log(Test)
+	// TODO remove mock and change with real data
+	const professorMockTable = new DefaultTableModel(professorTableList, [
+		"Docente",
+		"Matrícula",
+		"Status",
+	]);
 
 	return (
-		// <main className="bg-cps min-h-full">
 		<div className="flex flex-1 flex-col max-h-screen">
 			<Header />
-			{/*{Test()}*/}
 			<main className="grid grid-cols-4 flex-1 gap-x-8 m-5 overflow-hidden">
 				<section className="col-span-3 flex flex-col">
 					{/*<PageSection name="Grades Recentes" />*/}
@@ -156,7 +101,9 @@ export default function Page({
 
 						<div className="flex flex-col gap-1">
 							{quickActionLinks.map((action, idx) => (
-								<Link key={idx} to={action.href}>{action.label}</Link>
+								<Link key={idx} to={action.href}>
+									{action.label}
+								</Link>
 							))}
 						</div>
 					</section>

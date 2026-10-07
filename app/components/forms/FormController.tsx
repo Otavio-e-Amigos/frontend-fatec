@@ -118,6 +118,7 @@ export default class FormController {
 		this.submitButtonPressed = state;
 	}
 
+	// TODO turn this function into hibrid, where it can both check for individual validations, as well as for the entire form
 	validateField(fieldName: string, value: any) {
 		const result = this.fields[fieldName].validator?.validate(value);
 
@@ -149,6 +150,7 @@ export default class FormController {
  */
 export abstract class InputValidator {
 	private criteria: RegExp;
+	/* REFLECT doesnt sound interesting if i put the error message here, so that ValidatorError gets thrown and sent to FormController or other object? */
 
 	constructor(criteria: RegExp) {
 		this.criteria = criteria;

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
+// import CPFFormatter from "~/classes/ValueFormatters/CPFFormatter";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import type Professor from "~/modules/professor/professor.class";
@@ -27,11 +28,12 @@ function ProfessorInfo({ professor }: { professor?: Professor }) {
 				<p className="text-slate-300 text-xs">
 					Docente | {professor?.status} | {professor?.contract}
 				</p>
-				{/*<section className="flex flex-row gap-4">
-					<InfoBadge icon={"/"} info={<Link to={"mailto:PROFESSOR.EMAIL@EMAIL.DOMAIN"}>PROFESSOR.EMAIL@EMAIL.DOMAIN</Link>} />
-					<InfoBadge icon={"/"} info={"(11) 12345-6789"} />
-					<InfoBadge icon={"/"} info={"@TEAMSUSER"} />
-				</section>*/}
+				<section className="flex flex-row gap-4">
+					{/*<InfoBadge icon={"/"} info={<Link to={"mailto:PROFESSOR.EMAIL@EMAIL.DOMAIN"}>PROFESSOR.EMAIL@EMAIL.DOMAIN</Link>} />*/}
+					{/*<InfoBadge icon={"/"} info={"(11) 12345-6789"} />*/}
+					{/*<InfoBadge icon={"/"} info={"@TEAMSUSER"} />*/}
+					{/*<InfoBadge icon={"/"} info={CPFFormatter.format(professor?.cpf as string)} />*/}
+				</section>
 			</summary>
 
 			<section className="flex flex-col gap-2">
@@ -87,18 +89,7 @@ export default function About({ professor }: { professor: Professor }) {
 							<li>
 								<b>Código do Professor</b>: {professor.code}
 							</li>
-							{/*<li>
-								<b>CPF</b>: {professor.cpf}
-							</li>*/}
 						</ul>
-						{/*<p>Nome: {professor.name}</p>*/}
-						{/*<p></p>*/}
-						{/*<p>CPF: {professor.cpf}</p>*/}
-						{/*<p>CURSOS MINISTRADOS</p>*/}
-						{/*<p>STATUS GRADE ATUAL</p>*/}
-						{/*<p></p>*/}
-						{/*<p></p>*/}
-						{/*<p></p>*/}
 					</section>
 				</section>
 			</main>

@@ -1,27 +1,35 @@
-interface JSONExportable {
-	toJSON(): string;
+export interface ProfessorInterface {
+	name?: string;
+	cpf?: string;
+	registry?: string;
+	contract?: "DETERMINADO" | "INDERTEMINADO" | "TEMPORARIO" | string;
+	status?: "ATIVO" | "INATIVO" | "AFASTADO" | string;
+	title?:
+		"GRADUADO" | "ESPECIALISTA" | "MESTRE" | "DOUTOR" | "POS_DOUTOR" | string;
+	code?: string;
+	id?: number;
 }
 
-export default class Professor {
-	// public name: string;
-	constructor(
-		public name: string,
-		public cpf: string,
-		public registry: string,
-		public contract: "DETERMINADO" | "INDERTEMINADO" | "TEMPORARIO" | string,
-		public status: "ATIVO" | "INATIVO" | "AFASTADO" | string,
-		public title?: "GRADUADO" | "ESPECIALISTA" | "MESTRE" | "DOUTOR" | "POS_DOUTOR" | string,
-		public code?: string,
-		public id?: number,
-	) {
-		// this.name = name;
+// TODO change internal constructor to interface constructor type
+export default class Professor implements ProfessorInterface {
+	name?: string;
+	cpf?: string;
+	registry?: string;
+	contract?: "DETERMINADO" | "INDERTEMINADO" | "TEMPORARIO" | string;
+	status?: "ATIVO" | "INATIVO" | "AFASTADO" | string;
+	title?:
+		"GRADUADO" | "ESPECIALISTA" | "MESTRE" | "DOUTOR" | "POS_DOUTOR" | string;
+	code?: string;
+	id?: number;
+
+	constructor(init: ProfessorInterface) {
+		this.name = init.name;
+		this.cpf = init.cpf;
+		this.registry = init.registry;
+		this.contract = init.contract;
+		this.status = init.status;
+		this.title = init.title;
+		this.code = init.code;
+		this.id = init.id;
 	}
-
-	// get name(): string {
-	// 	return this._name
-	// }
-
-	// set name(newName: string) {
-	// 	this._name = newName
-	// }
 }

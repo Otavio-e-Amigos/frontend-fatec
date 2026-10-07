@@ -62,7 +62,7 @@ export default function Page() {
 			if (e instanceof AxiosError) {
 				console.log(e.response);
 				controller.setError({ message: e.response?.data.mensagem });
-				setError(e.response?.data.mensagem)
+				setError(e.response?.data.mensagem);
 			}
 		}
 	}

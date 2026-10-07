@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-import {FormControllerContext, FormDispatcherContext} from "./FormContext";
+import { FormControllerContext, FormDispatcherContext } from "./FormContext";
 import { InputValidator } from "~/components/forms/FormController";
+import AbstractValueFormatter, { type AbstractValueFormatterInterface } from "~/classes/base/AbstractValueFormatter";
 
-type FormInputTypesSupported = React.HTMLInputTypeAttribute | "time-range";
+type FormInputTypesSupported =
+	React.HTMLInputTypeAttribute | "time-range" | "select";
 type FormInputProps = {
 	name: string;
 	label?: string;
@@ -13,23 +15,16 @@ type FormInputProps = {
 	labelAlign?: "top" | "left";
 	placeholder?: string;
 	required?: boolean;
-	InputFormatter?: any;
-
+	ValueFormatter?: AbstractValueFormatter;
 	onChange?: any;
 };
-
-class PhoneNumberValidator extends InputValidator {
-	constructor() {
-		super(/^\d{11}$/);
-	}
-}
 
 // TODO optimize and refactor component returnings
 export default function FormInput({
 	name,
 	label,
 	value,
-	InputFormatter,
+	ValueFormatter,
 	validator,
 	type = "text",
 	disabled,
@@ -39,8 +34,9 @@ export default function FormInput({
 	required,
 }: FormInputProps) {
 	const controller = useContext(FormControllerContext);
-	const controllerAction = useContext(FormDispatcherContext)
+	const controllerAction = useContext(FormDispatcherContext);
 	// const {error} = useState(controller && controller.getFieldErrorMessage(name))
+	const formatter = ValueFormatter && ValueFormatter as AbstractValueFormatterInterface
 
 	// useEffect(() => {
 	// 	console.log("controller changed!")
@@ -51,7 +47,8 @@ export default function FormInput({
 		var formValue = value ?? controller.getFieldValue(name);
 
 		// if (!controller.fieldExists(name)) controller.addField(name, value);
-		if (!controller.fieldExists(name)) controllerAction({action: "addField", fieldName: name});
+		if (!controller.fieldExists(name))
+			controllerAction({ action: "addField", fieldName: name });
 		if (validator) controller.setFieldValidator(name, validator);
 	}
 
@@ -68,28 +65,47 @@ export default function FormInput({
 	const DefaultInputElement = (
 		<input
 			onChange={(e) => {
-				const currentValue = e.currentTarget.value;
+				let currentValue = e.currentTarget.value;
 
-				let newValue = InputFormatter
-					? InputFormatter(currentValue)
-					: currentValue;
+				// TODO change this to class implementation
+				// TODO apply unformat() and then format() for the value since the display on <input> is same when passed here
+				if (formatter) {
+					// console.log("currentValue")
+					// console.log(currentValue)
+					// console.log("formatter.unformat(currentValue)")
+					// console.log(formatter.unformat(currentValue))
+					currentValue = formatter.format(formatter.unformat(currentValue))
+				}
 
-				e.currentTarget.value = newValue.displayValue ?? currentValue;
+				console.log(currentValue)
+				e.currentTarget.value = currentValue;
 
-				if (controller) controller.setFieldValue(name, newValue.newValue);
-				// if (controllerAction) controllerAction({action: "setFieldError", fieldName: name, error: {message: e.currentTarget.value}})
-				// if (controller) console.log(controller.getFieldErrorMessage(name))
+				if (controller) controller.setFieldValue(name, currentValue);
 			}}
 			onBlur={(e) => {
-				const validationStatus = validator ? validator.validate(e.currentTarget.value.replaceAll(/\D/g, '')) : true
-				console.log(validationStatus)
+				// TODO change to dynamic validation
+				// TODO apply ValueFormatter.unformat() before validating value
+				// TODO make ValueValidator throw ValidationError if result is unsastifiable
+				const validationStatus = validator
+					? validator.validate(e.currentTarget.value.replaceAll(/\D/g, ""))
+					: true;
+				console.log(validationStatus);
 				if (!validationStatus) {
-					if (controllerAction) controllerAction({action: "setFieldError", fieldName: name, error: {message: "Something's not right on this field. Please check."}})
+					if (controllerAction)
+						controllerAction({
+							action: "setFieldError",
+							fieldName: name,
+							error: {
+								message: "Something's not right on this field. Please check.",
+							},
+						});
 				} else {
-					if (controllerAction) controllerAction({action: "cleanFieldError", fieldName: name})
+					if (controllerAction)
+						controllerAction({ action: "cleanFieldError", fieldName: name });
 				}
-				console.log("input is now out of focus! validate field and show errors here!")
-
+				console.log(
+					"input is now out of focus! validate field and show errors here!",
+				);
 			}}
 			{...basicInputParameters}
 			type={type}
@@ -124,6 +140,7 @@ export default function FormInput({
 		</div>
 	);
 
+	// reduce switch() for a lookup table if this gets too big
 	switch (type) {
 		case "time-range": {
 			SelectedInputElement = (
@@ -159,6 +176,10 @@ export default function FormInput({
 					<input {...basicInputParameters} type="search" className="w-full" />
 				</div>
 			);
+		}
+
+		case 'select': {
+			// insert select
 		}
 	}
 

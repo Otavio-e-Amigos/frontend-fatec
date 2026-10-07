@@ -10,7 +10,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 	const id = Number(params.id);
 	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
 	const prof = await ProfessorService.get(id, auth);
-	// const prof = professors.find((prof) => prof.id == id);
 	return { prof };
 }
 

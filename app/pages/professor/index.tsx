@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Form, Link, useNavigate } from "react-router";
-import DefaultTableModel from "~/classes/TableModel/DefaultTableModel";
+import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
@@ -115,7 +115,7 @@ export default function Page({ list }: { list: Professor[] }) {
 						type="search"
 						name={"search"}
 						onChange={(a: any) => {
-							// console.log("ijasiodasjdo");
+							// if this doesnt work, FormInput may have it's variable onChange commented for some reason
 							searchItem(a.currentTarget.value);
 						}}
 					/>

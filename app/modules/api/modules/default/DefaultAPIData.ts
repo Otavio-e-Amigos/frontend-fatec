@@ -8,6 +8,8 @@ export default class DefaultAPIData extends AbstractAPIData {
 	constructor(init: AbstractAPIDataInit) {
 		super(init)
 		this.rawData = init.data
+		// TODO insert requested data into rawData, whilst body needs to be on other attribute (this.body?)
+		// because of this when using parse(), DefaultAPIData will grab the returned data and convert into classes/other formats
 	}
 
 	parse<T>(options?: AbstractAPIDataParseOptions): T {

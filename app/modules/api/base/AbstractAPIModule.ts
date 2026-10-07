@@ -12,30 +12,30 @@ interface URLObject {
 
 }
 
+interface AbstractAPIModuleInit {
+	host: string
+	port?: number
+	https?: boolean
+	path?: string
+}
+
 /**
  * EXPERIMENT: Base class for handling API requests and resolving errors when necessary
  */
 export default abstract class AbstractAPIModule {
 	//TODO transfer http protocol variables to DefaultAPIModule for allowing flexibility between classes if viable
 	public host: string;
-	// port?: string;
+	port?: number;
 	https?: boolean;
 	path?: string; //if API's application layer lies on a specific path instead of the root of the server, you need to set this attribute too.
-	// url: URL;
 	url: string;
 
-	constructor(
-		host: string,
-		param?: { port?: string; https?: boolean; path?: string },
-	) {
-		this.host = host;
-		// this.port = param?.port;
-		this.https = param?.https;
-		this.path = param?.path;
-		// this.url = new URL(
-		// 	`${this.https ? "https" : "http"}://${host}${this.path && `/${this.path}`}`,
-		// );
-		this.url = `${this.https ? "https" : "http"}://${host}${this.path && `/${this.path}`}`
+	constructor(init: AbstractAPIModuleInit) {
+		this.host = init.host;
+		this.https = init.https;
+		this.port = init.port;
+		this.path = init.path;
+		this.url = `${this.https ? "https" : "http"}://${this.host}${this.port ? `:${this.port}` : ""}${this.path && `/${this.path}`}`
 	}
 
 	/**

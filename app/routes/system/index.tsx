@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function clientLoader({}: Route.LoaderArgs) {
-	const module = new DefaultAPIModule()
+	// const module = new DefaultAPIModule()
 	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
 	const users = await UserService.get(auth);
 	return { users };
