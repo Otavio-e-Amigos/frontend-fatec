@@ -7,17 +7,21 @@ import axios from "axios";
 // TODO change to localhost API if .env one is not available or by other means (var declaring to use localhost)
 const API_HOST = import.meta.env.VITE_API_HOST as string;
 const API_PATH = import.meta.env.VITE_API_PATH as string;
-const API_HTTPS = Boolean(import.meta.env.VITE_API_HTTPS);
+const API_HTTPS = import.meta.env.VITE_API_HTTPS === 'true' ? true : false;
+const API_PORT = Number(import.meta.env.VITE_API_PORT);
 
 /**
  * System's API Module
  */
 export class DefaultAPIModule extends AbstractAPIModule {
 	constructor() {
-		super(API_HOST, {
+		super({
+			host: API_HOST,
+			port: API_PORT,
 			https: API_HTTPS,
 			path: API_PATH,
 		});
+		console.log(this.url)
 	}
 
 	/**

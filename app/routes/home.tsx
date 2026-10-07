@@ -13,14 +13,14 @@ export function meta({}: Route.MetaArgs) {
 	];
 }
 
-export async function clientLoader({ }: Route.LoaderArgs) {
+export async function clientLoader({}: Route.LoaderArgs) {
 	if (!localStorage.getItem("auth")) {
-		throw redirect("/login")
+		throw redirect("/login");
 	}
-	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+	const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
 
-	// const list = await ProfessorService.get(auth);
-	const list = professors;
+	const list = await ProfessorService.get(auth);
+	// const list = professors;
 	return { list };
 }
 

@@ -1,40 +1,36 @@
-// import { useContext } from "react";
-import type { AbstractAPIDataInit } from "../api/base/AbstractAPIData";
+// import type { AbstractAPIDataInit } from "../api/base/AbstractAPIData";
 import type AbstractQueryObject from "../api/base/AbstractQueryObject";
-// import DefaultAPIData from "../api/modules/default/DefaultAPIData";
 import { DefaultAPIModule } from "../api/modules/default/DefaultAPIModule";
+import mapper from "./api/user.mapper";
+import userAPIRoutes from "./user.apiRoutes";
 import User, { type UserInterface } from "./user.class";
-// import { AuthUserContext } from "./components/AuthenticationService";
 
 export default class UserService {
+	static routes = userAPIRoutes;
+	static module = new DefaultAPIModule();
+
 	static async get(auth: User): Promise<User[]>;
 	static async get(id: number, auth: User): Promise<User>;
 	static async get(
-		id?: number | User,
-		auth?: User,
+		_id?: number | User,
+		_auth?: User,
 	): Promise<User[] | User | undefined> {
-		// const usrInit: UserInterface = {
-		// 	name: "",
-		// 	login: "",
-		// 	profile: "TI",
-		// 	active: false,
-		// 	createdAt: "",
-		// 	updatedAt: "",
-		// };
-		// const prof = new User(usrInit);
-		const req: AbstractQueryObject = {
-			method: "GET",
-			path: typeof id === "number" ? ["usuarios", id] : ["usuarios"],
-			credentials: auth ?? id,
-		};
+		const hasId: boolean = typeof _id === "number";
+		const id: number | undefined = typeof _id === "number" ? _id : undefined;
+		const auth: User | undefined =
+			_auth instanceof User ? _auth : (_id as User);
 
-		const module = new DefaultAPIModule();
+		const req: AbstractQueryObject = id
+			? this.routes.GET_BY_ID
+			: this.routes.GET_ALL;
+		req.credentials = auth;
+		if (id) req.path![1] = id;
 
 		try {
-			const res = await module.request(req);
+			const res = await this.module.request(req);
 			console.log(res);
 			if (res.ok) {
-				if (typeof id === "number") {
+				if (hasId) {
 					const usrInit: UserInterface = {
 						id: res.rawData.dados.id,
 						name: res.rawData.dados.nome,
@@ -46,18 +42,7 @@ export default class UserService {
 					};
 					return new User(usrInit);
 				} else {
-					return res.rawData.dados.map(
-						(user:any) =>
-							new User({
-								id: user.id,
-								name: user.nome,
-								login: user.login,
-								profile: user.perfil,
-								active: user.ativo,
-								createdAt: user.createdAt,
-								updatedAt: user.updatedAt,
-							}),
-					);
+					return res.rawData.dados.map(mapper);
 				}
 			}
 		} catch (e) {
@@ -77,17 +62,13 @@ export default class UserService {
 			novaSenha: data.password,
 		};
 
-		const req: AbstractQueryObject = {
-			method: "PUT",
-			body: form,
-			path: ["usuarios", id],
-			credentials: auth,
-		};
-
-		const module = new DefaultAPIModule();
+		const req: AbstractQueryObject = this.routes.EDIT;
+		req.body = form;
+		req.path![1] = id;
+		req.credentials = auth;
 
 		try {
-			const res = await module.request(req);
+			const res = await this.module.request(req);
 			console.log(res);
 			if (res.ok) {
 				console.log("user edited!");
@@ -113,10 +94,10 @@ export default class UserService {
 		return data;
 	}
 
-	static async save(data: User, credentials: User): Promise<User> {
-		console.log("saving user!");
-		console.log("checking user credentials!");
-		console.log(credentials);
+	static async save(data: User, auth: User): Promise<User> {
+		// console.log("saving user!");
+		// console.log("checking user credentials!");
+		// console.log(auth);
 
 		const form = {
 			nome: data.name,
@@ -124,23 +105,18 @@ export default class UserService {
 			perfil: data.profile,
 		};
 
-		const req: AbstractQueryObject = {
-			method: "POST",
-			body: form,
-			path: ["usuarios"],
-			credentials: credentials,
-		};
+		const req: AbstractQueryObject = this.routes.SAVE;
+		req.body = form;
+		req.credentials = auth;
 
-		const dataInit: AbstractAPIDataInit = {
-			status: 200,
-			ok: true,
-			data: undefined,
-		};
-
-		const module = new DefaultAPIModule();
+		// const dataInit: AbstractAPIDataInit = {
+		// 	status: 200,
+		// 	ok: true,
+		// 	data: undefined,
+		// };
 
 		try {
-			const res = await module.request(req);
+			const res = await this.module.request(req);
 			console.log(res);
 			if (res.ok) {
 				const usrInit: UserInterface = {
@@ -154,7 +130,6 @@ export default class UserService {
 				};
 				return new User(usrInit);
 			}
-			// const data = new DefaultAPIData(dataInit)
 		} catch (e) {
 			console.log(e);
 		}
@@ -166,25 +141,13 @@ export default class UserService {
 		return data;
 	}
 
-	static async delete(id: number): Promise<boolean> {
-		//sends request through APIModule to delete Professor #{id}
-		// if deleted, returns true
-		// if not found, returns NotFoundError (or return false?)
-		// if it cant be deleted by some astral reason, return false
-		return true;
-	}
-
 	static async activate(id: number, auth: User): Promise<boolean> {
-		const req: AbstractQueryObject = {
-			method: "PATCH",
-			path: ["usuarios", id, "ativar"],
-			credentials: auth,
-		};
-
-		const module = new DefaultAPIModule();
+		const req: AbstractQueryObject = this.routes.ACTIVATE;
+		req.path![1] = id;
+		req.credentials = auth;
 
 		try {
-			const res = await module.request(req);
+			const res = await this.module.request(req);
 
 			console.log(res);
 
@@ -196,16 +159,12 @@ export default class UserService {
 	}
 
 	static async deactivate(id: number, auth: User): Promise<boolean> {
-		const req: AbstractQueryObject = {
-			method: "PATCH",
-			path: ["usuarios", id, "desativar"],
-			credentials: auth,
-		};
-
-		const module = new DefaultAPIModule();
+		const req: AbstractQueryObject = this.routes.DEACTIVATE;
+		req.path![1] = id;
+		req.credentials = auth;
 
 		try {
-			const res = await module.request(req);
+			const res = await this.module.request(req);
 
 			console.log(res);
 
