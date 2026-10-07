@@ -21,10 +21,14 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	}
 
 	function search(event: ChangeEvent<HTMLInputElement>) {
-		const term = event.currentTarget.value.toLowerCase();
+		const term = event.currentTarget.value.toLowerCase().trim();
+		if (!term) {
+			setTable(makeTable(list));
+			return;
+		}
 		const filteredList = list.filter((item) =>
 			[item.nome, item.codigo, item.sigla].some((value) =>
-				value?.toLowerCase().includes(term),
+				value ? value.toLowerCase().includes(term) : false,
 			),
 		);
 

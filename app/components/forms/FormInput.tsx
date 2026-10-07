@@ -5,6 +5,8 @@ import AbstractValueFormatter, { type AbstractValueFormatterInterface } from "~/
 
 type FormInputTypesSupported =
 	React.HTMLInputTypeAttribute | "time-range" | "select";
+type SelectOption = string | number | { value: string | number; label: string };
+
 type FormInputProps = {
 	name: string;
 	label?: string;
@@ -17,6 +19,8 @@ type FormInputProps = {
 	required?: boolean;
 	ValueFormatter?: AbstractValueFormatter;
 	onChange?: any;
+	options?: SelectOption[];
+	children?: React.ReactNode;
 };
 
 // TODO optimize and refactor component returnings
@@ -32,6 +36,8 @@ export default function FormInput({
 	placeholder,
 	onChange,
 	required,
+	options,
+	children,
 }: FormInputProps) {
 	const controller = useContext(FormControllerContext);
 	const controllerAction = useContext(FormDispatcherContext);
@@ -174,13 +180,52 @@ export default function FormInput({
 			return (
 				<div className="form-input flex flex-row gap-3 items-center">
 					<img src="/favicon.ico" className="size-5" />
-					<input {...basicInputParameters} type="search" className="w-full" />
+					<input
+						{...basicInputParameters}
+						type="search"
+						className="w-full bg-transparent outline-none"
+						onChange={(e) => {
+							const currentValue = e.currentTarget.value;
+							if (controller) controller.setFieldValue(name, currentValue);
+							onChange?.(e);
+						}}
+					/>
 				</div>
 			);
 		}
 
 		case 'select': {
-			// insert select
+			SelectedInputElement = (
+				<select
+					{...basicInputParameters}
+					className="form-input"
+					onChange={(e) => {
+						const currentValue = e.currentTarget.value;
+						if (controller) controller.setFieldValue(name, currentValue);
+						onChange?.(e);
+					}}
+				>
+					{placeholder && <option value="">{placeholder}</option>}
+					{options
+						? options.map((opt) => {
+								const optValue = typeof opt === "object" ? opt.value : opt;
+								const optLabel = typeof opt === "object" ? opt.label : opt;
+								return (
+									<option key={String(optValue)} value={optValue}>
+										{optLabel}
+									</option>
+								);
+						  })
+						: children}
+				</select>
+			);
+			return (
+				<div className={`flex ${labelAlignLookup[labelAlign]}`}>
+					{DefaultLabelElement}
+					{SelectedInputElement}
+					{DefaultControllerLabel}
+				</div>
+			);
 		}
 	}
 

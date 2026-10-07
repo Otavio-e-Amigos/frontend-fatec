@@ -38,4 +38,21 @@ export default [
 			route("edit", "routes/disciplina/edit.tsx"),
 		]),
 	]),
+
+	route("curso", "routes/curso/router.outlet.tsx", [
+		index("routes/curso/index.tsx"),
+		route("add", "routes/curso/add.tsx"),
+		route(":id", "routes/curso/[id]/router.outlet.tsx", [
+			index("routes/curso/[id]/[id].tsx"),
+			route("edit", "routes/curso/edit.tsx"),
+		]),
+	]),
+
+	route("periodo-letivo", "routes/periodo-letivo/router.outlet.tsx", [
+		index("routes/periodo-letivo/index.tsx"),
+		route("add", "routes/periodo-letivo/add.tsx"),
+		route(":id", "routes/periodo-letivo/[id]/router.outlet.tsx", [
+			index("routes/periodo-letivo/[id]/[id].tsx"),
+		]),
+	]),
 ] satisfies RouteConfig;

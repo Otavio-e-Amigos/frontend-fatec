@@ -1,19 +1,19 @@
 import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
 import FormSection from "~/layouts/forms/FormSection";
-import type Disciplina from "~/modules/disciplina/disciplina.class";
+import type Curso from "~/modules/curso/curso.class";
 
-export default function SaveDisciplinaForm({
-  disciplina,
+export default function SaveCursoFrom({
+  curso,
   onSubmit,
 }: {
-  disciplina?: Disciplina;
+  curso?: Curso;
   onSubmit: any;
 }) {
   return (
     <FormContainer onSubmit={onSubmit} className="flex flex-col gap-8 m-5">
       <FormSection
-        section="Informações da disciplina"
+        section="Informações da curso"
         description="Dados acadêmicos usados nas grades e folhas de frequência."
       >
         <FormInput
@@ -21,25 +21,30 @@ export default function SaveDisciplinaForm({
           name="nome"
           type="text"
           label="Nome"
-          value={disciplina?.nome}
+          value={curso?.nome}
         />
         <FormInput
           required
-          name="codigo"
-          type="text"
-          label="Código"
-          value={disciplina?.codigo}
+          name="turno"
+          type="select"
+          label="Turno"
+          value={curso?.turno ?? "MANHA"}
+          options={[
+            { value: "MANHA", label: "MANHÃ" },
+            { value: "TARDE", label: "TARDE" },
+            { value: "NOITE", label: "NOITE" },
+          ]}
         />
         <FormInput
           required
           name="sigla"
           type="text"
           label="Sigla"
-          value={disciplina?.sigla}
+          value={curso?.sigla}
         />
       </FormSection>
       <button type="submit" className="btn btn-success">
-        {disciplina ? "Salvar alterações" : "Adicionar"}
+        {curso ? "Salvar alterações" : "Adicionar"}
       </button>
     </FormContainer>
   );

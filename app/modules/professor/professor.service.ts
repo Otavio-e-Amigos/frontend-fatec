@@ -9,44 +9,37 @@ export default class ProfessorService {
 	static routes: typeof professorAPIRoutes = professorAPIRoutes;
 	static module: DefaultAPIModule = new DefaultAPIModule();
 
-	static async get(auth: User): Promise<Professor[]>;
+	static async get(auth: User, params?: Record<string, any>): Promise<Professor[]>;
 	static async get(id: number, auth: User): Promise<Professor>;
 	static async get(
-		_id: number | User,
-		_auth?: User,
+		_idOrAuth: number | User,
+		_authOrParams?: User | Record<string, any>,
 	): Promise<Professor[] | Professor | undefined> {
-		const id = typeof _id === "number" ? _id : undefined;
-		const auth = typeof _id === "number" ? _auth : _id;
+		const id = typeof _idOrAuth === "number" ? _idOrAuth : undefined;
+		const auth = typeof _idOrAuth === "number" ? (_authOrParams as User) : (_idOrAuth as User);
+		const params = typeof _idOrAuth !== "number" && _authOrParams ? _authOrParams : undefined;
 
-		const req: AbstractQueryObject = id
-			? this.routes.GET_BY_ID
-			: this.routes.GET_ALL;
-		req.credentials = auth;
-		if (id) req.path![1] = id;
-
-		// ... o resto continua igual (try/catch, toProfessor etc.)
+		const route = id ? this.routes.GET_BY_ID : this.routes.GET_ALL;
+		const req: AbstractQueryObject = {
+			...route,
+			path: id ? ["professores", id] : ["professores"],
+			credentials: auth,
+			arguments: params,
+		};
 
 		try {
 			const res = await this.module.request(req);
-
-			console.log(res);
-
 			if (res.ok) {
 				if (typeof id === "number") {
-					return toProfessor(res.rawData.dados);
+					return toProfessor(res.rawData.dados ?? res.rawData);
 				}
-
-				if (!id) {
-					// TODO change to APIData pointer
-					return res.rawData.content.map(toProfessor);
-				} else {
-					// TODO change to APIData pointer
-					return res.rawData.dados.map(toProfessor);
-				}
+				const items = res.rawData.content ?? res.rawData.dados ?? (Array.isArray(res.rawData) ? res.rawData : []);
+				return items.map(toProfessor).filter(Boolean);
 			}
 		} catch (e) {
 			console.log(e);
 		}
+		return id ? undefined : [];
 	}
 
 	static async edit(
@@ -55,32 +48,26 @@ export default class ProfessorService {
 		auth: User,
 	): Promise<Professor> {
 		const form: any = {
-			nome: data.name,
-			matricula: data.registry,
+			nome: data.name?.trim(),
+			codigo: data.code?.trim() || null,
+			cpf: data.cpf ? data.cpf.replaceAll(/\D/g, "") : "",
+			matricula: data.registry?.trim(),
 			regimeContrato: data.contract,
-			status: data.status,
+			regimeJuridico: (data as any).regimeJuridico || "CLT",
 			titulacao: data.title,
-			codigo: data.code,
 		};
 
-		if (data.cpf) {
-			form["cpf"] = data.cpf;
-		}
-
-		const req:AbstractQueryObject = this.routes.EDIT;
-		req.body = form;
-		req.path![1] = String(id);
-		req.credentials = auth as any;
+		const req: AbstractQueryObject = {
+			...this.routes.EDIT,
+			path: ["professores", id],
+			body: form,
+			credentials: auth,
+		};
 
 		try {
 			const res = await this.module.request(req);
-
-			console.log(res);
-
 			if (res.ok) {
-				console.log("professor edited!");
-
-				return toProfessor(res.rawData.dados);
+				return toProfessor(res.rawData.dados ?? res.rawData);
 			}
 		} catch (e) {
 			console.log(e);
@@ -90,31 +77,27 @@ export default class ProfessorService {
 	}
 
 	static async save(data: Professor, auth: User): Promise<Professor> {
-		console.log("saving professor!");
-		console.log("checking user credentials!");
-		console.log(auth);
-
 		const form = {
-			nome: data.name,
-			cpf: data.cpf,
-			matricula: data.registry,
+			nome: data.name?.trim(),
+			codigo: data.code?.trim() || null,
+			cpf: data.cpf ? data.cpf.replaceAll(/\D/g, "") : "",
+			matricula: data.registry?.trim(),
 			regimeContrato: data.contract,
-			status: data.status,
+			regimeJuridico: (data as any).regimeJuridico || "CLT",
 			titulacao: data.title,
-			codigo: data.code,
 		};
 
-		const req: AbstractQueryObject = this.routes.SAVE;
-		req.body = form;
-		req.credentials = auth;
+		const req: AbstractQueryObject = {
+			...this.routes.SAVE,
+			path: ["professores"],
+			body: form,
+			credentials: auth,
+		};
 
 		try {
 			const res = await this.module.request(req);
-
-			console.log(res);
-
 			if (res.ok) {
-				return toProfessor(res.rawData.dados);
+				return toProfessor(res.rawData.dados ?? res.rawData);
 			}
 		} catch (e) {
 			console.log(e);
@@ -124,15 +107,14 @@ export default class ProfessorService {
 	}
 
 	static async activate(id: number, auth: User): Promise<boolean> {
-		const req: AbstractQueryObject = this.routes.ACTIVATE;
-		req.path![1] = String(id);
-		req.credentials = auth;
+		const req: AbstractQueryObject = {
+			...this.routes.ACTIVATE,
+			path: ["professores", id, "status"],
+			credentials: auth,
+		};
 
 		try {
 			const res = await this.module.request(req);
-
-			console.log(res);
-
 			return res.ok;
 		} catch (e) {
 			console.log(e);
@@ -141,15 +123,14 @@ export default class ProfessorService {
 	}
 
 	static async deactivate(id: number, auth: User): Promise<boolean> {
-		const req: AbstractQueryObject = this.routes.DEACTIVATE;
-		req.path![1] = String(id);
-		req.credentials = auth;
+		const req: AbstractQueryObject = {
+			...this.routes.DEACTIVATE,
+			path: ["professores", id, "status"],
+			credentials: auth,
+		};
 
 		try {
 			const res = await this.module.request(req);
-
-			console.log(res);
-
 			return res.ok;
 		} catch (e) {
 			console.log(e);

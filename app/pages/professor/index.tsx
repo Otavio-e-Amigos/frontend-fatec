@@ -92,11 +92,17 @@ export default function Page({ list }: { list: Professor[] }) {
 	// ]);
 
 	function searchItem(value: string) {
-		setProfessorsTable(
-			setList(list.filter((prof) => prof.name.includes(value) == true)),
-		);
-
-		console.log(professorsTable);
+		const term = value.toLowerCase().trim();
+		if (!term) {
+			setProfessorsTable(setList(list));
+			return;
+		}
+		const filtered = list.filter((prof) => {
+			const nameMatch = prof.name ? prof.name.toLowerCase().includes(term) : false;
+			const registryMatch = prof.registry ? prof.registry.toLowerCase().includes(term) : false;
+			return nameMatch || registryMatch;
+		});
+		setProfessorsTable(setList(filtered));
 	}
 
 	return (
