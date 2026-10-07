@@ -12,15 +12,15 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
-	const id = Number(params.id);
-	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
-	const prof = await ProfessorService.get(id, auth);
-	return { prof };
+  const id = Number(params.id);
+  const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
+  const prof = await ProfessorService.get(id, auth);
+  return { prof };
 }
 
 export default function Edit({ loaderData }: Route.ComponentProps) {
-	if (!loaderData.prof) {
-		return <p>Professor not found. Insert default not found page here</p>
-	}
-	return <Page professor={loaderData.prof}/>
+  if (!loaderData.prof) {
+    return <p>Professor not found. Insert default not found page here</p>;
+  }
+  return <Page professor={loaderData.prof} />;
 }

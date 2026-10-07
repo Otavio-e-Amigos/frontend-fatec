@@ -81,6 +81,7 @@ export default function FormInput({
 				e.currentTarget.value = currentValue;
 
 				if (controller) controller.setFieldValue(name, currentValue);
+				onChange?.(e);
 			}}
 			onBlur={(e) => {
 				// TODO change to dynamic validation
