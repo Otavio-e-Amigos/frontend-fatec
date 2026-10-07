@@ -24,12 +24,17 @@ As Regras de Negócio do projeto, ou seja, as características que compõem o pr
 		³Quando necessário, você pode agrupar objetos relacionados á outros módulos para facilitar sua identificação de funcionalidades e arquivos que facilitam a leitura e manutenção deles.
 ```
 
+|Conteúdo			|Descrição								|
+|---				|---									|
+|	`/@Components`	|Componentes Lógicos da Biblioteca React|
+
+
 ## Implementação de Módulos
 
 Por padrão, o desenvolvimento de novos módulos segue uma estrutura que para alguns tipos de módulos já são o suficiente, enquanto outros possui uma estrutura similar, o que é interessante aplicar uma padronização similar á estrutura mencionada acima e com a convenção de nomeação e estrutura de arquivos do sistema no geral. É recomendável para cada novo módulo siga uma estrutura similar á uma existente do sistema para facilitar sua leitura e desenvolvimento entre os desenvolvedores.
 
 ### Fluxo de implementação
 
-#### Classes e serviços
+#### Arquivos
 
-Por padrão, é aconselhável que cada
+Por padrão, é aconselhável que cada módulo siga uma estrutura base de arquivos e funcionalidades devido á forma do sistema realizar a comunicação entre os dados e aos layouts
