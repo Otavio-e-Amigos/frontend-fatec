@@ -35,14 +35,14 @@ const professorAPIRoutes = {
 		method: "PATCH",
 		path: ["professores", ":id", "status"],
 		credentials: undefined, //required
-		body: {status: "ATIVO"}
+		body: { status: "ATIVO" }
 	},
 
 	DEACTIVATE: {
 		method: "PATCH",
 		path: ["professores", ":id", "status"],
 		credentials: undefined, //required
-		body: {status: "INATIVO"}
+		body: { status: "INATIVO" }
 	},
 };
 

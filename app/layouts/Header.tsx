@@ -9,6 +9,9 @@ const links = [
     {label: "Gerenciar Professores"},
     {label: "Gerenciar Cursos"},
   ]},
+  {label: "Disciplinas", href: "/disciplina"},
+  {label: "Cursos", href: "/curso"},
+  {label: "Períodos", href: "/periodo-letivo"},
 ]
 
 function HeaderLink({label, href, active}: {label:string, href:string, active?:boolean}) {

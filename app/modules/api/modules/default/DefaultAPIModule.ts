@@ -55,18 +55,27 @@ export class DefaultAPIModule extends AbstractAPIModule {
 				method: req.method,
 				baseURL: this.url,
 				url: path,
+				params: req.arguments,
 				data: req.body,
 				headers: headers,
 			})
 			.then((res) => {
-				// console.log("res");
-				// console.log(res);
 				data.rawData = res.data;
 				data.status = res.status;
-				// init.ok = true
+				data.ok = res.status >= 200 && res.status < 300;
+				return data;
+			})
+			.catch((err) => {
+				if (err.response) {
+					data.rawData = err.response.data;
+					data.status = err.response.status;
+				} else {
+					data.status = 500;
+				}
+				data.ok = false;
 				return data;
 			});
 
-		return new Promise<DefaultAPIData>((resolve) => resolve(res));
+		return res;
 	}
 }

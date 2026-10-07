@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type AbstractTableModel from "~/classes/base/AbstractTableModel";
 import { isComplexRow } from "~/classes/TableModels/DefaultTableModel";
 
@@ -15,6 +15,10 @@ export default function ComplexTableModelView({
 		currentColumn: undefined,
 		order: "ASC",
 	});
+
+	useEffect(() => {
+		setRows(data.getRows() as Array<any[]>);
+	}, [data]);
 
 	function TriggerTableSort(idx: number) {
 		setRows(data.sortByColumn(idx, columnData.order as "ASC" | "DESC"));
