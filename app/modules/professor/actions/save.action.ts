@@ -1,7 +1,7 @@
 import type { SyntheticEvent } from "react";
 import type FormController from "~/components/forms/FormController";
 import User from "~/modules/user/user.class";
-import Professor from "../professor.class";
+import Professor, { type ProfessorInterface } from "../professor.class";
 import ProfessorService from "../professor.service";
 
 /**
@@ -23,7 +23,7 @@ export default async function save(
 	console.log("data from form: ", data);
 
 	// export form as plain object or class directly using mapper if viable
-	const profRaw = {
+	const profRaw:ProfessorInterface = {
 		name: data.nome as string,
 		cpf: data.cpf as string,
 		registry: data.matricula as string,
@@ -31,21 +31,12 @@ export default async function save(
 		status: data.status as string,
 		title: data.titulacao as string,
 		code: data.codigo as string,
-		// id: data.id as string,
+		id: id,
 	};
 
 	// TODO if classes throws errors, they must be inserted inside try..catch scope and treated properly
 	// TODO change constructor insertings
-	const prof = new Professor(
-		profRaw.name,
-		profRaw.cpf,
-		profRaw.registry,
-		profRaw.contract,
-		profRaw.status,
-		profRaw.title,
-		profRaw.code,
-		id,
-	);
+	const prof = new Professor(profRaw);
 
 	const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
 

@@ -1,4 +1,4 @@
-import Page from "~/pages/professor/add";
+import Page from "~/pages/professor/edit";
 import type { Route } from "./+types/edit";
 // import professors from "~/mock/db/professors.db";
 import ProfessorService from "~/modules/professor/professor.service";
@@ -19,9 +19,8 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 }
 
 export default function Edit({ loaderData }: Route.ComponentProps) {
-	// return <Page />
 	if (!loaderData.prof) {
-		return <p>Insert not found page here</p>
+		return <p>Professor not found. Insert default not found page here</p>
 	}
 	return <Page professor={loaderData.prof}/>
 }
