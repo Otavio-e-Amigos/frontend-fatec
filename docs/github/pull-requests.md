@@ -2,7 +2,7 @@
 
 [<- Voltar](../index.md)
 
-Este pequeno guia detalha o processo correto de abertura e gerenciamento de _Pull Requests_ (PRs) ao propor novas funções, correções de bugs ou melhorias na base de código do Appointer. A padronização no processo de PRs é crucial para garantir a qualidade, rastreabilidade e a manutenção coesa do projeto.
+Este pequeno guia detalha o processo correto de abertura e gerenciamento de _Pull Requests_ ao propor novas funcionalidades, correções de bugs ou melhorias na base de código do Appointer. A padronização no processo de criação delas é crucial para garantir a qualidade, rastreabilidade e a manutenção coesa do projeto, além de permitir a leitura e revisão fácil entre os colaboradores do projeto.
 
 ## Fluxo de Trabalho Sugerido
 
@@ -23,6 +23,6 @@ Antes de enviar sua Pull Request para revisão, garanta que os seguintes pontos 
 O título e a descrição da Pull Request devem ser claros com o que a sua branch oferece para o projeto.
 
 - **Título:** Descreva brevemente a mudança realizada, algo como `feat: Adicionar tipos de estilo para os Dragões`, para que seja fácil identificar do que a Pull se trata.
-- **Corpo:** Detalhe _o que_ foi feito e _como_ o código implementa essa solução. É recomendável que haja uma justificativa da implementação para maiores detalhes.
-  - Mencione a _issue_ relacionada sempre que houver (ex: `Fecha com #123`).
-  - Em correção de bugs, descreva o comportamento incorreto e o esperado do sistema.
+- **Corpo:** Detalhe _o que_ foi feito e _como_ o código implementa essa solução. Não é necessário, mas é recomendável que haja uma justificativa da implementação para maiores detalhes de casos mais específicos.
+  - Mencione a issue relacionada sempre que houver (ex: `Fecha com #123`).
+  - Em correção de bugs, descreva o comportamento incorreto e o esperado do sistema, além da solução realizada para esta correção.
