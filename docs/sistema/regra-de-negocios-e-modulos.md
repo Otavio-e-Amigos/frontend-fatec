@@ -23,21 +23,22 @@ Notas:
 	²Quando necessário, você pode agrupar objetos relacionados á outros módulos para facilitar sua identificação de funcionalidades e arquivos que facilitam a leitura e manutenção deles.
 ```
 
-|Conteúdo						|Descrição																											|
-|-------------------|---------------------------------------------------------------|
-|	`/@Components`		| Componentes Lógicos da Biblioteca React 											|
-|	`/actions`				| Camada itermediária entre o formulário e a camada de serviço 	|
-|	`/xxx.class.ts`		| Classe da regra de negócio							 											|
-|	`/xxx.service.ts`	| Camada de serviços da regra de negócio	 											|
-|	`/xxx.routes.ts`	| (W.I.P) Camada de rotas de páginas														|
-
+| Conteúdo          | Descrição                                                    |
+| ----------------- | ------------------------------------------------------------ |
+| `/@Components`    | Componentes Lógicos da Biblioteca React                      |
+| `/actions`        | Camada itermediária entre o formulário e a camada de serviço |
+| `/xxx.class.ts`   | Classe da regra de negócio                                   |
+| `/xxx.service.ts` | Camada de serviços da regra de negócio                       |
+| `/xxx.routes.ts`  | (W.I.P) Camada de rotas de páginas                           |
 
 ## Implementação de Módulos
+
 Por padrão, o desenvolvimento de novos módulos segue uma estrutura que para alguns tipos de módulos já são o suficiente, enquanto outros possui uma estrutura similar, o que é interessante aplicar uma padronização similar á estrutura mencionada acima e com a convenção de nomeação e estrutura de arquivos do sistema no geral. É recomendável para cada novo módulo siga uma estrutura similar á uma existente do sistema para facilitar sua leitura e desenvolvimento entre os desenvolvedores.
 
 ### Fluxo de implementação
 
 ### Estrutura de arquivos
+
 Por padrão, é aconselhável que cada módulo siga uma estrutura base de arquivos e funcionalidades em sua raiz devido á forma de como o sistema realiza a comunicação entre os dados e aos layouts, além de poder manter a padronização e fácil reconhecimento dos recursos que um módulo oferece para o sistema:
 
 - `xxx.class.ts`: Classe da regra de negócio, é neste arquivo onde os dados de determinado módulo são inseridos e utilizados ao redor do sistema, para realizar criações com a API ou simplesmente mostrar suas informações em determinado layout, provendo integridade e manipulação de seus dados ao redor das classes e com outros aspectos do sistema.
@@ -46,7 +47,111 @@ Por padrão, é aconselhável que cada módulo siga uma estrutura base de arquiv
 
 - `xxx.routes.ts`: (W.I.P) Classe (ou função/outro método prático e conveniente) de rotas de páginas do módulo. Isto será importado pela `/routes.ts` do sistema para cadastrar rotas navegáveis de páginas para o usuário.
 
-### Implementação de classes *(xxx.class.ts)*
-O padrão de implementação de classes ocorre através de interfaces por conta do sistema de tipagens do Typescript, onde você consiga utilizá-las tanto para criação de suas representações simples e validação delas, quanto para a criação de classes e facilidade de inserção e manipulação de dados para cada uma. A inserção diversa de dados pode acabar sendo uma dor de cabeça para classes com vários atributos quando criado através de argumentos em seu construtor.
+### Implementação de classes (_xxx.class.ts_)
 
-Seguindo este estilo,
+O padrão de implementação de classes ocorre através de interfaces por conta do sistema de tipagens do Typescript, onde você consigue utilizá-las tanto para criação de suas representações simples e validação delas ao redor do código, quanto para a criação de classes e facilidade de inserção e manipulação destes dados para cada uma. A inserção diversa de dados pode acabar sendo uma dor de cabeça para classes com vários atributos quando criado através de argumentos em seu construtor.
+
+Além desta recomendação básica, é preferível que você siga algumas convenções de interfaces para evitar conflitos de implementação ou padronização durante o processo de desenolvimento, como:
+
+- Sempre que um atributo for uma classe dentro de uma interface, aponte sua interface ao invés da classe caso ela possua uma.
+- Sempre construa construtores de classes que aceitam somente um objeto de sua interface como argumento, para que a implementação e inserção de dados seja facilitada e flexível.
+- É aconselhável que todo atributo seja marcado como "Opcional" (atributo que possui um tipo de valor ou `undefined`) para que você consiga criar um objeto sem precisar de todos seus atributos. As vezes, pode ocorrer situações onde uma funcionalidade de uma camada de serviço retorne parcialmente os dados de uma classe ou você precisa preencher alguns dados em específicos utilizando a classe para realizar alguma ação por parte dela.
+
+Seguindo essas práticas na implementação, a estrutura resultante ficará mais ou menos neste padrão observável entre os módulos:
+
+```ts
+// Dica: caso a interface de um módulo seja muito longa, você pode colocar a interface da classe em um arquivo separado como `xxx.interface.ts`
+export interface DragonInterface {
+	id?: number;
+	name?: string;
+	species?: string;
+	age?: number;
+	powers?: DraconicPowerInterface[];
+}
+
+export default class Dragon implements DragonInterface {
+	id?: number;
+	name?: string;
+	species?: string;
+	age?: number;
+	powers?: DraconicPower[];
+
+	construtor(init: DragonInterface) {
+		this.id = init.id;
+		this.name = init.name;
+		this.species = init.species;
+		this.age = init.age;
+		this.powers = FunctionThatConvertInterfaceArrayToClasses(
+			init.powers,
+			DraconicPower,
+		);
+	}
+}
+```
+
+### Implementação de Serviços (`xxx.service.ts`)
+
+A camada de serviços, por sua vez, não possui uma estrutura fixa ou mandatória para implementação por cada regra de negócio possuir suas funcionalidades próprias, entretanto ainda é possível seguir algumas convenções e padronizações de implementação para que seu código e manutenção tenha as menores taxas possíveis, além de usufruir da vantagem de outros aspectos do sistema que possa facilitar alguns processos no momento de extensão ou criação de funcionalidades.
+
+Em resumo sobre seu conceito e funcionalidade, ela serve somente como uma camada intermediária entre o sistema e outro programa/serviço no geral como uma API. Esta camada é responsável por controlar e "traduzir" as chamadas que esta pode requerir para um serviço para nível sistema, sempre retornando objetos de classes de negócios ou realizando alguma funcionalidade de algum sistema externo como se fosse uma aplicação nos olhos de um desenvolvedor. Uma camada de serviço não possui muitos critérios para ser considerada, desde que esta camada possui funcionalidades que controle as operações que o usuário requisita e realiza através de uma interface.
+
+Sua implementação pode variar de serviço para serviço, mas pode acabar possuindo padrões dependendo pelo tipo de regra de negócio que está trabalhando. O exemplo abaixo mostra uma implementação simples de camadas de serviços separadas sobre Dragões e Kobolds que possuem funcionalidades diferentes uns aos outros, porém seu estilo de implementação e padrão são similares em alguns aspectos:
+
+```ts
+/**
+ * Uma camada simples relacionada a dragões que possui um CRUD simples dentro 
+ * de si, possuindo implementações e funcionalidades mais complexas
+ * como requisição de APIs e bibliotecas externas
+ */
+export default class DragonService {
+	static routes: typeof DragonAPIRoutes = DragonAPIRoutes;
+	static module: DraconicAPIModule = new DraconicAPIModule();
+	static DragonClass: Dragon = Dragon;
+
+	static async get(id?: number): Promise<Dragon[] | Dragon> {
+		const req: AbstractQueryObject = this.routes.GET;
+
+		const res = this.module.request<Dragon>(req);
+
+		return res.getData().parse(DragonClass);
+	}
+
+	//sempre que possível, exija que os métodos necessitem de um objeto de 
+	//classe de negócio para realizar as operações internas da camada de maneira 
+	//segura e consistente, garantindo que o Typescript consiga interpretar e gerenciar 
+	//os tipos definidos nas propriedades corretamente, 
+	//além do desenvolvedor conseguir ler e manipulá-lo com facilidade.
+	static async register(data: Dragon) {
+		const req: AbstractQueryObject = this.routes.REGISTER;
+
+		const res = this.module.request<Dragon>(req);
+
+		return res.getData().parse(DragonClass);
+	}
+}
+
+/**
+ * Uma classe que segue o mesmo princípio de uma camada de serviço, porém sua implementação 
+ * é mais simples e as vezes algo interno do próprio sistema. Uma camada não precisa 
+ * necessariamente possuir funcionalidades ou implementações complexas para ser considerada uma, 
+ * desde que a classe possua funções e controle as operações que o usuário irá clicar e executar dentro de uma interface.
+ */
+export default class KoboldService {
+	static pet(kobold: Kobold): boolean {
+		const res = kobold.pet();
+
+		if (res.result === "happy") {
+			return true;
+		} else if ((res.result === "sad") | "angry") {
+			return false;
+		} else {
+			throw new KoboldError("uh oh.");
+		}
+	}
+}
+```
+
+Em resumo do exemplo acima e deste sub-tópico, além de algumas dicas:
+- Sempre que possível em operações onde dados de negócios são manipulados, prefira a utilização das classes de negócios ao invés de implementações alternativas ou "hard-coded", para que sua manutenção e leitura seja fácil.
+- Prefira criação de métodos estáticos ou uma estrutura que deve seguir um padrão fácil de implementar com o menor número de linhas possíveis, assim evitando criar fluxos redundantes e longo para cada seção de código.
+- Se possível, caso o padrão de implementação seja similar á uma camada existente na base de código, siga esta implementação e tente deixar sua assinatura o mais similar possível para que seu uso seja memorável de fácil reconhecimento ao redor do sistema.
