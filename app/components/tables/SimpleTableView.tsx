@@ -1,27 +1,44 @@
-import type AbstractTableModel from "~/classes/base/AbstractTableModel"
+import type AbstractTableModel from "~/classes/base/AbstractTableModel";
 
-export default function SimpleTableModelView({ data }: { data: AbstractTableModel }) {
-  const columns = data.getColumns()
-  const rows = data.getRows() as Array<any[]>
+// versão sem ordenação nem detalhes; usa o mesmo CSS da ComplexTableView
+export default function SimpleTableModelView({
+	data,
+	striped = true,
+}: {
+	data: AbstractTableModel;
+	striped?: boolean;
+}) {
+	const columns = data.getColumns();
+	const rows = data.getRows() as Array<any[]>;
 
-  // data.sortByColumn(0, "ASC")
-
-  return (
-    <table>
-      <thead>
-        <tr className="bg-slate-600">
-          {columns.map((column, idx) => (<th key={idx} className={`px-2 ${idx == 0 && "text-left"}`}>{column}</th>))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, idx) => {
-          return (
-          <tr key={idx} className={`${idx % 2 == 0 ? "bg-slate-500" : "bg-slate-600"}`}>
-              {row.map((data, idx) => (<td key={idx} className="px-2 text-left">{data}</td>))}
-            </tr>
-          )
-
-        })}
-      </tbody>
-    </table>)
+	return (
+		<div className="table-wrap">
+			<table className="table" data-striped={striped || undefined}>
+				<thead className="table-head">
+					<tr>
+						{columns.map((column, idx) => (
+							<th key={idx} scope="col" className="px-4 py-3">
+								{column}
+							</th>
+						))}
+					</tr>
+				</thead>
+				<tbody>
+					{rows.map((row, rowIdx) => (
+						<tr
+							key={rowIdx}
+							className="table-row"
+							data-odd={rowIdx % 2 === 1 || undefined}
+						>
+							{row.map((cell, cellIdx) => (
+								<td key={cellIdx} className="table-cell">
+									{cell}
+								</td>
+							))}
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
+	);
 }

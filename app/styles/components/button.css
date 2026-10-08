@@ -1,0 +1,111 @@
+@layer components {
+
+	/* Padrão = primário. Variante e tamanho vêm por data-attributes:
+	   <button class="btn" data-variant="secondary" data-size="sm"> */
+	.btn {
+		--btn-bg: var(--color-brand);
+		--btn-bg-hover: var(--color-brand-hover);
+		--btn-bg-active: var(--color-brand-pressed);
+		--btn-fg: #fff;
+		--btn-border: transparent;
+
+		@apply inline-flex w-fit cursor-pointer select-none items-center justify-center gap-1.5 rounded-control border px-3.5 py-1.5 text-sm font-medium leading-5;
+		background: var(--btn-bg);
+		color: var(--btn-fg);
+		border-color: var(--btn-border);
+		transition: background-color 0.12s, border-color 0.12s;
+
+		&:hover {
+			background: var(--btn-bg-hover);
+		}
+
+		&:active {
+			background: var(--btn-bg-active);
+		}
+
+		&[data-size="sm"] {
+			@apply px-2.5 py-1 text-xs;
+		}
+
+		&[data-variant="secondary"] {
+			--btn-bg: var(--color-surface);
+			--btn-bg-hover: var(--color-surface-sunken);
+			--btn-bg-active: var(--color-line);
+			--btn-fg: var(--color-ink);
+			--btn-border: var(--color-line-strong);
+		}
+
+		&[data-variant="ghost"] {
+			--btn-bg: transparent;
+			--btn-bg-hover: color-mix(in srgb, var(--color-ink) 7%, transparent);
+			--btn-bg-active: color-mix(in srgb, var(--color-ink) 12%, transparent);
+			--btn-fg: var(--color-ink-muted);
+		}
+
+		&[data-variant="danger"],
+		&.btn-cancel {
+			--btn-bg: var(--color-danger-bg);
+			--btn-bg-hover: color-mix(in srgb, var(--color-danger-dot) 18%, var(--color-danger-bg));
+			--btn-bg-active: color-mix(in srgb, var(--color-danger-dot) 28%, var(--color-danger-bg));
+			--btn-fg: var(--color-danger-fg);
+		}
+
+		&[data-variant="outline"] {
+			--btn-bg: var(--color-surface);
+			/* branco */
+			--btn-bg-hover: var(--color-brand-soft);
+			/* rosado bem claro */
+			--btn-bg-active: color-mix(in srgb, var(--color-brand) 14%, var(--color-surface));
+			--btn-fg: var(--color-brand);
+			/* texto vinho */
+			--btn-border: var(--color-brand);
+			/* contorno vinho */
+		}
+
+		/* só ícone (ações de tabela): mesmas cores do "outline" (fundo branco, contorno e
+		   ícone vinho, hover rosado). O texto do botão continua no HTML para leitores de
+		   tela, mas fica invisível; o desenho vem de data-icon:
+		   <button class="btn" data-variant="icon" data-icon="power" title="Desativar">Desativar</button> */
+		&[data-variant="icon"] {
+			--btn-bg: var(--color-surface);
+			--btn-bg-hover: var(--color-brand-soft);
+			--btn-bg-active: color-mix(in srgb, var(--color-brand) 14%, var(--color-surface));
+			--btn-fg: var(--color-brand);
+			--btn-border: var(--color-brand);
+
+			width: 1.75rem;
+			height: 1.75rem;
+			padding: 0;
+			gap: 0;
+			font-size: 0;
+
+			&::before {
+				content: "";
+				width: 1.0rem;
+				height: 1.0rem;
+				background: currentColor;
+				mask: var(--icon) center / contain no-repeat;
+			}
+
+			&[data-icon="edit"] {
+				--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.5 3 13 5.5 5.5 13H3v-2.5L10.5 3Z'/%3E%3Cpath d='m9 4.5 2.5 2.5'/%3E%3C/svg%3E");
+			}
+
+			&[data-icon="power"] {
+				--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2v5.5'/%3E%3Cpath d='M4.7 4.4a5 5 0 1 0 6.6 0'/%3E%3C/svg%3E");
+			}
+
+			&[data-icon="trash"] {
+				--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5h10'/%3E%3Cpath d='M6.5 4.5V3h3v1.5'/%3E%3Cpath d='m4.5 4.5.6 8.5h5.8l.6-8.5'/%3E%3Cpath d='M6.8 7v3.5M9.2 7v3.5'/%3E%3C/svg%3E");
+			}
+		}
+
+		&:disabled,
+		&[aria-disabled="true"],
+		&.btn-inactive,
+		&.btn-disabled {
+			@apply cursor-not-allowed opacity-50;
+			background: var(--btn-bg);
+		}
+	}
+}

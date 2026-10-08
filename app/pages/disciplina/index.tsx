@@ -50,11 +50,23 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 			{
 				value: "",
 				display: (
-					<div className="flex gap-2">
-						<Link className="btn btn-normal" to={`/disciplina/${item.id}/edit`}>
+					<div className="row-actions">
+						<Link
+							className="btn"
+							data-variant="icon"
+							data-icon="edit"
+							title="Editar"
+							to={`/disciplina/${item.id}/edit`}
+						>
 							Editar
 						</Link>
-						<button className="btn btn-normal" onClick={() => remove(item.id!)}>
+						<button
+							className="btn"
+							data-variant="icon"
+							data-icon="trash"
+							title="Excluir"
+							onClick={() => remove(item.id!)}
+						>
 							Excluir
 						</button>
 					</div>
@@ -66,7 +78,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 			"Disciplina",
 			"Código",
 			"Sigla",
-			"Ação",
+			"",
 		]);
 	}
 
@@ -77,7 +89,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 			<main className="mx-5 flex flex-1 flex-col">
 				<section className="flex flex-row justify-between items-center">
 					<PageSection name="Disciplinas" />
-					<Link to="add" className="btn btn-success h-fit">
+					<Link to="add" className="btn h-fit" data-variant="outline" data-size="sm">
 						+ Adicionar
 					</Link>
 				</section>

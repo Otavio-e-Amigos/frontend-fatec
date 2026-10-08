@@ -1,0 +1,34 @@
+@layer components {
+	/* serve tanto para <input> quanto para wrappers (busca com ícone) */
+	.form-input {
+		@apply h-9 rounded-control border border-line-strong bg-surface px-3 text-sm text-ink placeholder:text-ink-faint;
+		transition: border-color 0.12s, box-shadow 0.12s;
+
+		&:focus-within {
+			border-color: var(--color-brand);
+			box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 16%, transparent);
+			outline: none;
+		}
+
+		/* o wrapper já mostra o foco: o input interno fica sem contorno */
+		& input {
+			background: transparent;
+			outline: none;
+		}
+
+		&.input-checkbox {
+			@apply size-4 p-0 accent-brand;
+		}
+	}
+
+	/* botão pequeno dentro do campo (olhinho da senha) */
+	.input-toggle {
+		@apply grid size-7 shrink-0 cursor-pointer place-items-center rounded-control text-ink-faint;
+		transition: background-color 0.12s, color 0.12s;
+
+		&:hover {
+			@apply text-ink;
+			background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+		}
+	}
+}

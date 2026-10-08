@@ -1,0 +1,107 @@
+@layer components {
+	.card {
+		--card-pad: 1rem;
+
+		@apply relative flex flex-col rounded-card border border-line bg-surface shadow-card;
+		transition: border-color 0.15s, box-shadow 0.15s;
+
+		/* densidade: um único ajuste muda o espaçamento de header, body e footer */
+		&[data-density="compact"] {
+			--card-pad: 0.75rem;
+		}
+
+		/* indicador de marca: barra fina na borda esquerda */
+		&::before {
+			content: "";
+			position: absolute;
+			inset-block: 0.75rem;
+			left: -1px;
+			width: 3px;
+			border-radius: 0 3px 3px 0;
+			background: var(--color-brand);
+			opacity: 0;
+			transition: opacity 0.15s;
+		}
+
+		&[data-interactive]:hover {
+			@apply border-line-strong shadow-card-hover;
+		}
+		&[data-interactive]:hover::before,
+		&[data-selected]::before {
+			opacity: 1;
+		}
+		&[data-selected] {
+			@apply border-brand/40 bg-brand-soft/40;
+		}
+	}
+
+	.card-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: var(--card-pad) var(--card-pad) 0;
+	}
+
+	.card-title {
+		@apply text-[0.9375rem] font-semibold leading-snug text-accent;
+	}
+
+	.card-subtitle {
+		@apply mt-0.5 text-xs text-ink-muted;
+	}
+
+	/* torna o card inteiro clicável a partir de um único link (o título) */
+	.card-link {
+		@apply hover:text-brand;
+		outline: none;
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: var(--radius-card);
+		}
+		&:focus-visible::after {
+			outline: 2px solid var(--color-brand);
+			outline-offset: 2px;
+		}
+	}
+
+	.card-body {
+		flex: 1;
+		padding: 0.75rem var(--card-pad) var(--card-pad);
+	}
+
+	/* z-index acima do link esticado, para os botões continuarem clicáveis */
+	.card-footer {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		justify-content: flex-end;
+		gap: 0.5rem;
+		padding: 0.5rem var(--card-pad);
+		border-top: 1px solid var(--color-line);
+		background: var(--color-surface-sunken);
+		border-radius: 0 0 var(--radius-card) var(--radius-card);
+	}
+
+	/* pares rótulo/valor: o formato "campo: valor" do Compass */
+	.field-list {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.25rem 1rem;
+
+		& dt {
+			@apply text-xs text-ink-muted;
+		}
+		& dd {
+			@apply min-w-0 truncate text-sm;
+		}
+	}
+
+	/* compatibilidade com as páginas atuais */
+	.surface {
+		@apply border border-line bg-surface;
+	}
+}

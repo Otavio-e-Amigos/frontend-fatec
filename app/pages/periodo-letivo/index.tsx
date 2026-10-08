@@ -29,7 +29,7 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
       <main className="mx-5 flex flex-1 flex-col">
         <section className="flex flex-row justify-between items-center">
           <PageSection name="Períodos letivos" />
-          <Link to="add" className="btn btn-success h-fit">
+          <Link className="btn" data-variant="outline" data-size="sm" to="add">
             + Adicionar
           </Link>
         </section>

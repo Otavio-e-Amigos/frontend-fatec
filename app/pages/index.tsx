@@ -13,6 +13,9 @@ export default function Page({
 }) {
 	const quickActionLinks: Array<{ label: string; href: string }> = [
 		{ label: "Adicionar Professor", href: "/professor/add" },
+		{ label: "Adicionar Disciplina", href: "/disciplina/add" },
+		{ label: "Adicionar Curso", href: "/curso/add" },
+		{ label: "Adicionar Periodo Letivo", href: "/periodo-letivo/add" },
 		// { label: "Grade", href: "/" },
 		// { label: "Folha de Ponto", href: "/" },
 	];
@@ -73,6 +76,7 @@ export default function Page({
 	]);
 
 	return (
+
 		<div className="flex flex-1 flex-col max-h-screen">
 			<Header />
 			<main className="grid grid-cols-4 flex-1 gap-x-8 m-5 overflow-hidden">
