@@ -1,0 +1,123 @@
+@layer components {
+	/* moldura: borda fina e rolagem horizontal em telas estreitas */
+	.table-wrap {
+		@apply w-full overflow-x-auto rounded-card border border-line bg-surface;
+	}
+
+	.table {
+		--row-h: 3.5rem;
+
+		@apply w-full border-collapse text-left text-sm;
+
+		&[data-density="compact"] {
+			--row-h: 2.5rem;
+		}
+	}
+
+	/* -= cabeçalho: texto escuro sobre fundo prata, linha mais grossa embaixo =- */
+	.table-head th {
+		@apply whitespace-nowrap p-0 font-semibold text-ink;
+		background: var(--color-surface-sunken);
+		border-bottom: 2px solid var(--color-line-strong);
+	}
+
+	.table-sort {
+		@apply flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left font-semibold text-ink;
+		transition: background-color 0.12s;
+
+		&:hover {
+			background: var(--color-line);
+		}
+
+		& svg {
+			@apply size-4 shrink-0 text-ink-faint;
+			transition: color 0.12s, transform 0.12s;
+		}
+		&:hover svg {
+			@apply text-ink-muted;
+		}
+
+		/* coluna ordenada: ícone escuro; em ordem decrescente ele inverte na vertical */
+		&[data-sorted] svg {
+			@apply text-ink;
+		}
+		&[data-sorted="desc"] svg {
+			transform: scaleY(-1);
+		}
+	}
+
+	/* -= linhas =- */
+	.table-row {
+		height: var(--row-h);
+		border-bottom: 1px solid var(--color-line);
+		transition: background-color 0.12s;
+
+		&:hover {
+			background: var(--color-row-hover);
+		}
+		&[data-expanded] {
+			border-bottom-color: transparent;
+		}
+		&:last-child {
+			border-bottom: 0;
+		}
+	}
+
+	.table-cell {
+		@apply px-4 py-2 align-middle;
+	}
+
+	/* zebra: linhas ímpares (a 2ª, 4ª...) em prata; o hover é avermelhado.
+	   Usa data-odd em vez de :nth-child porque a linha de detalhes
+	   aberta também é um <tr> e bagunçaria a contagem. */
+	.table[data-striped] .table-row[data-odd] {
+		background: var(--color-row-alt);
+
+		&:hover {
+			background: var(--color-row-hover);
+		}
+	}
+
+	/* primeira célula quando a tabela tem detalhes: seta + conteúdo */
+	.table-lead {
+		@apply flex items-center gap-2;
+	}
+
+	.table-toggle {
+		@apply grid size-6 shrink-0 cursor-pointer place-items-center rounded-control text-ink-muted;
+		transition: background-color 0.12s;
+
+		&:hover {
+			background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+		}
+		& svg {
+			@apply size-4;
+			transition: transform 0.15s;
+		}
+		&[aria-expanded="false"] svg {
+			transform: rotate(-90deg);
+		}
+	}
+
+	/* linha de detalhes: faixa cinza clara, alinhada ao texto da primeira coluna */
+	.table-details td {
+		@apply py-3 pl-14 pr-4;
+		background: var(--color-surface-sunken);
+		border-bottom: 1px solid var(--color-line);
+	}
+
+	/* grupo de botões de ícone, alinhado à direita da linha */
+	.row-actions {
+		@apply flex items-center justify-end gap-1.5;
+	}
+
+	/* a coluna que tem botões de ícone encolhe para o tamanho deles */
+	.table-cell:has([data-variant="icon"]) {
+		width: 1%;
+		white-space: nowrap;
+	}
+
+	.table-empty {
+		@apply px-4 py-10 text-center text-ink-muted;
+	}
+}

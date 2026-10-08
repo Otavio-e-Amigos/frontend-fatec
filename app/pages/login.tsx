@@ -87,7 +87,7 @@ export default function Page() {
 						initialController={controller}
 					>
 						<FormInput name={"user"} type="text" label="Usuário" />
-						<FormInput name={"pass"} type="text" label="Senha" />
+						<FormInput name={"pass"} type="password" label="Senha" />
 						<p className="text-rose-500">{error}</p>
 						<button className="btn btn-success">Entrar</button>
 					</FormContainer>

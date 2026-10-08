@@ -1,0 +1,54 @@
+/* Tokens antigos ainda usados por outras páginas (tabelas, hints, botões antigos).
+   Apague linha a linha conforme cada página for migrada. */
+@theme {
+    --color-item-button: #005C6D;
+    --color-item-button-inactive: #005C6D;
+    --color-item-button-pressed: #003540;
+    --color-item-button-disabled: #6B939B;
+    --color-item-button-hover: #004854;
+    --color-item-button-text: #FFFFFF;
+    --color-item-button-text-dark: #000000;
+    --color-item-hyperlink: #005C6D;
+    --color-item-hyperlink-pressed: #003540;
+    --color-item-hyperlink-hover: #004854;
+    --color-item-hyperlink-inactive: #000000;
+    --color-hint-info: #4C7EFF;
+    --color-hint-alert: #FFC24C;
+    --color-hint-warning: #D32719;
+    --color-hint-warning-hover: #F95B4D;
+    --color-hint-warning-pressed: #7E0000;
+    --color-hint-warning-inactive: #000000;
+    --color-hint-cancelled: #D32719;
+    --color-hint-progress: #B78718;
+    --color-hint-unknown: #4C7EFF;
+    --color-hint-success: #3ACF1F;
+    --color-hint-success-hover: #80E96D;
+    --color-hint-success-pressed: #14A603;
+    --color-hint-success-inactive: #0B591A;
+    --color-text-main: #000000;
+    --color-text-alt: #000000;
+    --color-text-subtle: #000000;
+    --color-text-muted: #000000;
+    --color-text-highlight: #000000;
+    --color-text-highlight-bg: #000000;
+    --color-table-column: #B20000;
+    --color-table-column-hover: #D32719;
+    --color-table-column-pressed: #7E0000;
+    --color-table-column-outline: #420000;
+    --color-table-column-text: #FFFFFF;
+    --color-table-column-alt: #000000;
+    --color-table-column-alt-hover: #000000;
+    --color-table-column-alt-outline: #000000;
+    --color-table-row: #F8F8F8;
+    --color-table-row-hover: #000000;
+    --color-table-row-pressed: #000000;
+    --color-table-row-odd: #FDD5D1;
+    --color-table-row-odd-hover: #000000;
+    --color-table-row-odd-pressed: #000000;
+    --color-table-row-alt: #000000;
+    --color-table-row-alt-hover: #000000;
+    --color-table-row-alt-pressed: #000000;
+    --color-table-row-alt-odd: #F8F8F8;
+	--color-table-row-alt-odd-hover: #000000;
+	--color-table-row-alt-odd-pressed: #000000;
+}

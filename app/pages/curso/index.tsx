@@ -21,13 +21,21 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
       {
         value: "",
         display: (
-          <Link className="btn btn-normal" to={`/curso/${curso.id}/edit`}>
-            Editar
-          </Link>
+          <div className="row-actions">
+            <Link
+              className="btn"
+              data-variant="icon"
+              data-icon="edit"
+              title="Editar"
+              to={`/curso/${curso.id}/edit`}
+            >
+              Editar
+            </Link>
+          </div>
         ),
       },
     ]),
-    ["Curso", "Sigla", "Turno", "Ação"],
+    ["Curso", "Sigla", "Turno", "Ações"],
   );
 
   return (
@@ -36,7 +44,7 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
       <main className="mx-5 flex flex-1 flex-col">
         <section className="flex flex-row justify-between items-center">
           <PageSection name="Cursos" />
-          <Link to="add" className="btn btn-success h-fit">
+          <Link to="add" className="btn h-fit" data-variant="outline" data-size="sm">
             + Adicionar
           </Link>
         </section>

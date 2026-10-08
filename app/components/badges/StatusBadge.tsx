@@ -1,26 +1,48 @@
-type BadgeColors = "green" | "yellow" | "red" | "gray";
-const badgeColorsChart: Record<BadgeColors, string> = {
-	green: "bg-hint-success border-green-900/30",
-	yellow: "bg-hint-progress border-orange-800/30",
-	red: "bg-hint-warning border-rose-900/70",
-	gray: "bg-hint-unknown border-gray-900/30",
-};
+export type BadgeTone = "ok" | "warn" | "danger" | "neutral" | "solid";
+
+// aceita o formato antigo (status="green") para não quebrar a dev-area
+const legacyStatus = {
+	green: "ok",
+	yellow: "warn",
+	red: "danger",
+	gray: "neutral",
+} as const;
+
+function InfoIcon() {
+	return (
+		<svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden>
+			<path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm.75 10.5h-1.5V7h1.5v4.5ZM8 5.9a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8Z" />
+		</svg>
+	);
+}
 
 export default function StatusBadge({
 	value,
+	tone,
 	status,
-	fill,
+	tag,
+	hint,
 }: {
 	value: string;
-	status: BadgeColors;
-	fill?: boolean;
+	tone?: BadgeTone;
+	status?: keyof typeof legacyStatus;
+	fill?: boolean; // ignorado: todo badge agora é preenchido
+	tag?: boolean; // rótulo curto em caixa alta, sem ponto (READY, UNIQUE)
+	hint?: string; // mostra um ícone ⓘ com este texto no tooltip
 }) {
+	const resolved = tone ?? (status ? legacyStatus[status] : "neutral");
 	return (
-		<div className={`flex flex-row gap-2 items-center w-fit ${fill && `${badgeColorsChart[status]} border-3 rounded-lg px-2 py-0.5`}`}>
-			<span
-				className={`min-w-3 min-h-3 rounded-2xl border-2 ${badgeColorsChart[status]}`}
-			/>
-			<p>{value}</p>
-		</div>
+		<span
+			className="badge"
+			data-tone={resolved}
+			data-style={tag ? "tag" : undefined}
+		>
+			{value}
+			{hint && (
+				<span title={hint} className="inline-flex">
+					<InfoIcon />
+				</span>
+			)}
+		</span>
 	);
 }

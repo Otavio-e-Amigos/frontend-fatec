@@ -50,9 +50,21 @@ export default function Page({ list }: { list: Professor[] }) {
 				{
 					value: 0,
 					display: (
-						<div key={prof.id} className="flex flex-row gap-2 justify-center">
+						<div key={prof.id} className="row-actions">
+							<Link
+								className="btn"
+								data-variant="icon"
+								data-icon="edit"
+								title="Editar"
+								to={`/professor/${prof.id}/edit`}
+							>
+								Editar
+							</Link>
 							<button
-								className="btn btn-normal"
+								className="btn"
+								data-variant="icon"
+								data-icon="power"
+								title={prof.status === "ATIVO" ? "Desativar" : "Ativar"}
 								onClick={(e) => {
 									prof.status === "ATIVO"
 										? deactivate(prof.id!)
@@ -62,12 +74,6 @@ export default function Page({ list }: { list: Professor[] }) {
 							>
 								{prof.status === "ATIVO" ? "Desativar" : "Ativar"}
 							</button>
-							<Link
-								className="btn btn-normal"
-								to={`/professor/${prof.id}/edit`}
-							>
-								Editar
-							</Link>
 						</div>
 					),
 				},
@@ -79,7 +85,7 @@ export default function Page({ list }: { list: Professor[] }) {
 			"Matrícula",
 			"Tipo de Contrato",
 			"Status",
-			"Ação",
+			"",
 		]);
 	}
 
@@ -112,7 +118,7 @@ export default function Page({ list }: { list: Professor[] }) {
 			<main className="mx-5 flex flex-1 flex-col">
 				<section className="flex flex-row justify-between items-center">
 					<PageSection name={"Professores"} />
-					<Link to="add" className="btn btn-success h-fit">
+					<Link className="btn" data-variant="outline" data-size="sm" to="add">
 						+ Adicionar
 					</Link>
 				</section>

@@ -39,10 +39,21 @@ export default function Page({ users }: { users: User[] }) {
 		{
 			value: 0,
 			display: (
-				<div key={user.id} className="flex flex-row gap-2 justify-center">
+				<div key={user.id} className="row-actions">
+					<Link
+						className="btn"
+						data-variant="icon"
+						data-icon="edit"
+						title="Editar"
+						to={`/system/user/${user.id}/edit`}
+					>
+						Editar
+					</Link>
 					<button
-						key={user.id}
-						className="btn btn-normal"
+						className="btn"
+						data-variant="icon"
+						data-icon="power"
+						title={user.active ? "Desativar" : "Ativar"}
 						onClick={(e) => {
 							user.active ? deactivateUser(user.id!) : activateUser(user.id!);
 							e.currentTarget.disabled = true;
@@ -50,13 +61,6 @@ export default function Page({ users }: { users: User[] }) {
 					>
 						{user.active ? "Desativar" : "Ativar"}
 					</button>
-					<Link
-						key={user.id}
-						className="btn btn-normal"
-						to={`/system/user/${user.id}/edit`}
-					>
-						Editar
-					</Link>
 				</div>
 			),
 		},
@@ -67,7 +71,7 @@ export default function Page({ users }: { users: User[] }) {
 		"Login",
 		"Ativo?",
 		"Perfil",
-		"Estado",
+		"",
 	]);
 
 	return (
@@ -76,10 +80,15 @@ export default function Page({ users }: { users: User[] }) {
 			<main className="mt-5">
 				<h1 className="text-3xl mx-2">Gerenciamento do sistema</h1>
 				<section className="flex flex-col gap-2 mx-10 my-5">
-					<Link to={"/system/user/add"} className="btn btn-normal">
+					<Link
+						to={"/system/user/add"}
+						className="btn"
+						data-variant="outline"
+						data-size="sm"
+					>
 						Adicionar Usuário
 					</Link>
-					<ComplexTableModelView data={usersTable} />
+					<ComplexTableModelView data={usersTable} actionsColumn />
 				</section>
 			</main>
 		</div>

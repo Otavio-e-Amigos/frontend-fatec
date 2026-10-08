@@ -1,0 +1,43 @@
+@layer components {
+	/* -= cabeçalho do site =- */
+	.header {
+		@apply bg-brand text-white;
+	}
+	.header-link {
+		@apply rounded-control px-2.5 py-1 text-sm font-medium text-white/90 hover:bg-white/20 hover:text-white;
+	}
+
+	/* -= página =- */
+	.page {
+		@apply mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-5 py-6;
+	}
+	.page-header {
+		@apply flex flex-wrap items-end justify-between gap-3;
+	}
+	.page-title {
+		@apply text-xl font-semibold tracking-tight text-accent;
+	}
+	.page-description {
+		@apply mt-0.5 text-sm text-ink-muted;
+	}
+	.toolbar {
+		@apply flex flex-wrap items-center gap-2;
+	}
+
+	/* cards se distribuem sozinhos: sem media query, 1 coluna no celular */
+	.card-grid {
+		display: grid;
+		gap: 0.75rem;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+	}
+
+	.empty-state {
+		@apply flex flex-col items-center gap-1 rounded-card border border-dashed border-line-strong px-6 py-10 text-center;
+		& p:first-child {
+			@apply font-medium;
+		}
+		& p:last-child {
+			@apply text-ink-muted;
+		}
+	}
+}

@@ -1,0 +1,48 @@
+@theme {
+	--font-sans: "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	--font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+	/* -= marca (FATEC / guia de estilo CPS): vermelho como acento, azul como apoio =- */
+	--color-brand: #B20000;           /* vermelho-base */
+	--color-brand-hover: #7E0000;     /* vermelho-escuro-10 */
+	--color-brand-pressed: #5E0000;   /* derivado: um passo abaixo do vermelho-escuro-10 */
+	--color-brand-soft: #F9EBEB;      /* derivado: vermelho-base a ~8% sobre branco */
+	--color-brand-shade: #7E0000;     /* vermelho-escuro-10 */
+
+	--color-accent: #005C6D;          /* azul-base: títulos e apoio */
+	--color-accent-hover: #004854;    /* primario-titulos-hover */
+	--color-highlight: #00C1CF;       /* azul-destaque-base: só para realces, nunca texto sobre claro */
+
+	/* -= superfícies e linhas: neutros do guia. O fundo da página é mais escuro
+	   que os cards (branco) para os painéis se destacarem =- */
+	--color-floor: #E6E6E6;           /* cinza-hover: fundo da página */
+	--color-surface: #FFFFFF;         /* white: cards, painéis */
+	--color-surface-sunken: #F8F8F8;  /* prata-base: rodapés, cabeçalho de tabela, áreas secundárias */
+	--color-line: #DADADA;            /* cinza-claro: borda padrão (1px) */
+	--color-line-strong: #949494;     /* derivado: borda de campos e hover (3:1 sobre branco) */
+	--color-row-alt: #F8F8F8;         /* prata-base: linha alternada das tabelas */
+	--color-row-hover: #F4DBDB;       /* derivado: vermelho-base a ~14% sobre branco */
+
+	/* -= texto =- */
+	--color-ink: #1B1F24;
+	--color-ink-muted: #666666;       /* cinza-texto-base */
+	--color-ink-faint: #767676;       /* derivado: placeholder e ícones (4.5:1 sobre branco) */
+
+	/* -= status (cores de feedback do guia): fundo -light + texto escuro + ponto saturado =- */
+	--color-ok-bg: #E8FBE4;      --color-ok-fg: #166534;      --color-ok-dot: #3ACF1F;   /* concluido-light / concluido */
+	--color-warn-bg: #FFF5EA;    --color-warn-fg: #7A4F00;    --color-warn-dot: #B78718; /* andamento-light / andamento */
+	--color-danger-bg: #FDD5D1;  --color-danger-fg: #7E0000;  --color-danger-dot: #D32719; /* cancelado-light / cancelado */
+	--color-neutral-bg: #E6E6E6; --color-neutral-fg: #666666; --color-neutral-dot: #666666;
+	--color-solid-bg: #005C6D;   --color-solid-fg: #FFFFFF;   --color-solid-dot: #FFFFFF; /* azul-base */
+
+	/* -= forma =- */
+	--radius-card: 0.625rem;
+	--radius-control: 0.4375rem;
+	--shadow-card: 0 1px 2px rgb(20 24 31 / 0.08);
+	--shadow-card-hover: 0 6px 16px -6px rgb(20 24 31 / 0.14);
+
+	/* -= nomes antigos, apontando para os novos (para não quebrar outras páginas) =- */
+	--color-header-bg: var(--color-brand);
+	--color-header-bg-shade: var(--color-brand-shade);
+	--color-surface-outline: var(--color-line);
+}

@@ -1,12 +1,30 @@
-import { useContext, useEffect, useState } from "react";
+import { cloneElement, useContext, useEffect, useState } from "react";
 import { FormControllerContext, FormDispatcherContext } from "./FormContext";
 import { InputValidator } from "~/components/forms/FormController";
 import AbstractValueFormatter, { type AbstractValueFormatterInterface } from "~/classes/base/AbstractValueFormatter";
 
+function EyeIcon({ off }: { off?: boolean }) {
+	return (
+		<svg
+			width="18"
+			height="18"
+			viewBox="0 0 20 20"
+			fill="none"
+			stroke="currentColor"
+			strokeWidth="1.6"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			aria-hidden
+		>
+			<path d="M1.5 10s3-5.5 8.5-5.5S18.5 10 18.5 10 15.5 15.5 10 15.5 1.5 10 1.5 10Z" />
+			<circle cx="10" cy="10" r="2.5" />
+			{off && <path d="M3.5 3.5l13 13" />}
+		</svg>
+	);
+}
+
 type FormInputTypesSupported =
 	React.HTMLInputTypeAttribute | "time-range" | "select";
-type SelectOption = string | number | { value: string | number; label: string };
-
 type FormInputProps = {
 	name: string;
 	label?: string;
@@ -19,8 +37,6 @@ type FormInputProps = {
 	required?: boolean;
 	ValueFormatter?: AbstractValueFormatter;
 	onChange?: any;
-	options?: SelectOption[];
-	children?: React.ReactNode;
 };
 
 // TODO optimize and refactor component returnings
@@ -36,11 +52,10 @@ export default function FormInput({
 	placeholder,
 	onChange,
 	required,
-	options,
-	children,
 }: FormInputProps) {
 	const controller = useContext(FormControllerContext);
 	const controllerAction = useContext(FormDispatcherContext);
+	const [revealed, setRevealed] = useState(false); // usado só pelo type="password"
 	// const {error} = useState(controller && controller.getFieldErrorMessage(name))
 	const formatter = ValueFormatter && ValueFormatter as AbstractValueFormatterInterface
 
@@ -87,7 +102,6 @@ export default function FormInput({
 				e.currentTarget.value = currentValue;
 
 				if (controller) controller.setFieldValue(name, currentValue);
-				onChange?.(e);
 			}}
 			onBlur={(e) => {
 				// TODO change to dynamic validation
@@ -115,7 +129,8 @@ export default function FormInput({
 				);
 			}}
 			{...basicInputParameters}
-			type={type}
+			id={name}
+			type={type === "password" && revealed ? "text" : type}
 			className="form-input"
 		/>
 	);
@@ -176,56 +191,40 @@ export default function FormInput({
 			);
 		}
 
+		case "password": {
+			// reaproveita o input padrão (formatador, validação, controller) e só
+			// troca o contorno: o wrapper vira o campo, o input fica "nu" dentro dele
+			return (
+				<div className={`flex ${labelAlignLookup[labelAlign]}`}>
+					{DefaultLabelElement}
+					<div className="form-input flex items-center gap-1 pr-1">
+						{cloneElement(DefaultInputElement, { className: "w-full min-w-0" })}
+						<button
+							type="button"
+							className="input-toggle"
+							aria-label={revealed ? "Ocultar senha" : "Mostrar senha"}
+							aria-pressed={revealed}
+							onClick={() => setRevealed((r) => !r)}
+						>
+							<EyeIcon off={revealed} />
+						</button>
+					</div>
+					{DefaultControllerLabel}
+				</div>
+			);
+		}
+
 		case "search": {
 			return (
 				<div className="form-input flex flex-row gap-3 items-center">
 					<img src="/favicon.ico" className="size-5" />
-					<input
-						{...basicInputParameters}
-						type="search"
-						className="w-full bg-transparent outline-none"
-						onChange={(e) => {
-							const currentValue = e.currentTarget.value;
-							if (controller) controller.setFieldValue(name, currentValue);
-							onChange?.(e);
-						}}
-					/>
+					<input {...basicInputParameters} type="search" className="w-full" />
 				</div>
 			);
 		}
 
 		case 'select': {
-			SelectedInputElement = (
-				<select
-					{...basicInputParameters}
-					className="form-input"
-					onChange={(e) => {
-						const currentValue = e.currentTarget.value;
-						if (controller) controller.setFieldValue(name, currentValue);
-						onChange?.(e);
-					}}
-				>
-					{placeholder && <option value="">{placeholder}</option>}
-					{options
-						? options.map((opt) => {
-								const optValue = typeof opt === "object" ? opt.value : opt;
-								const optLabel = typeof opt === "object" ? opt.label : opt;
-								return (
-									<option key={String(optValue)} value={optValue}>
-										{optLabel}
-									</option>
-								);
-						  })
-						: children}
-				</select>
-			);
-			return (
-				<div className={`flex ${labelAlignLookup[labelAlign]}`}>
-					{DefaultLabelElement}
-					{SelectedInputElement}
-					{DefaultControllerLabel}
-				</div>
-			);
+			// insert select
 		}
 	}
 
