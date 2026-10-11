@@ -1,7 +1,7 @@
 @layer components {
 	/* moldura: borda fina e rolagem horizontal em telas estreitas */
 	.table-wrap {
-		@apply w-full overflow-x-auto rounded-card border border-line bg-surface;
+		@apply w-full overflow-x-auto rounded-card border-2 border-line bg-surface;
 	}
 
 	.table {
@@ -18,7 +18,10 @@
 	.table-head th {
 		@apply whitespace-nowrap p-0 font-semibold text-ink;
 		background: var(--color-surface-sunken);
-		border-bottom: 2px solid var(--color-line-strong);
+
+		box-shadow: 0 5px 6px rgba(0, 0, 0, 0.15);
+
+		border-right: 2px solid var(--color-line);
 	}
 
 	.table-sort {
@@ -49,7 +52,7 @@
 	/* -= linhas =- */
 	.table-row {
 		height: var(--row-h);
-		border-bottom: 1px solid var(--color-line);
+		border-bottom: 2px solid var(--color-line);
 		transition: background-color 0.12s;
 
 		&:hover {
@@ -65,6 +68,8 @@
 
 	.table-cell {
 		@apply px-4 py-2 align-middle;
+
+		border-right: 2px solid var(--color-line);
 	}
 
 	/* zebra: linhas ímpares (a 2ª, 4ª...) em prata; o hover é avermelhado.
