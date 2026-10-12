@@ -2,7 +2,7 @@ import Page from "~/pages/professor/edit";
 import type { Route } from "./+types/edit";
 // import professors from "~/mock/db/professors.db";
 import ProfessorService from "~/modules/professor/professor.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
   const id = Number(params.id);
-  const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
+  const auth = AuthService.getUserToken();
   const prof = await ProfessorService.get(id, auth);
   return { prof };
 }

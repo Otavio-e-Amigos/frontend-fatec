@@ -2,12 +2,13 @@ import { Link, useNavigate } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 import UserService from "~/modules/user/user.service";
+import User from "~/modules/user/user.class";
 
 export default function Page({ users }: { users: User[] }) {
 	const navigate = useNavigate();
-	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+	const auth = AuthService.getUserToken();
 
 
 	async function activateUser(id: number) {
@@ -23,6 +24,7 @@ export default function Page({ users }: { users: User[] }) {
 			navigate(0);
 		}
 	}
+
 	console.log(users);
 	const userTableList = users.map((user) => [
 		{

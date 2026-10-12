@@ -1,10 +1,10 @@
 import type { Route } from "./+types/[id]";
 import CursoService from "~/modules/curso/curso.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 import Page from "~/pages/curso/[id]";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
-	const auth = new User(JSON.parse(localStorage.getItem("auth") ?? "{}"));
+	const auth = AuthService.getUserToken();
 	return { curso: await CursoService.get(Number(params.id), auth) };
 }
 

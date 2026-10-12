@@ -1,6 +1,6 @@
 import type { Route } from "./+types/index";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 import Page from "~/pages/disciplina/index";
 
 export function meta() {
@@ -8,7 +8,7 @@ export function meta() {
 }
 
 export async function clientLoader() {
-  const auth = new User(JSON.parse(localStorage.getItem("auth") ?? "{}"));
+  const auth = AuthService.getUserToken();
   return { disciplinas: await DisciplinaService.get(auth) };
 }
 
