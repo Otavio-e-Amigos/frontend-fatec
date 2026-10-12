@@ -5,16 +5,19 @@ import FormController, {
 } from "~/components/forms/FormController";
 
 export const FormControllerContext = createContext<FormController | null>(null);
-export const FormDispatcherContext = createContext<any>(null);
+export const FormDispatcherContext = createContext<
+	React.ActionDispatch<[action: FormReducerAction]> | undefined
+>(undefined);
 
-type FormReducerAction = {
+export type FormReducerAction = {
 	action:
 		| "addField"
 		| "editField"
 		| "deleteField"
 		| "setFieldError"
+		| "setError"
 		| "cleanFieldError";
-	fieldName: string;
+	fieldName?: string;
 	value?: any;
 	validator?: InputValidator;
 	error?: FormError;
@@ -25,7 +28,7 @@ export function formReducer(
 	action: FormReducerAction,
 ) {
 	// object is created everytime the reducer is called, is this okay for resource usage or there is an efficient way of managing that?
-	const newController = Object.assign(
+	const newController: FormController = Object.assign(
 		Object.create(Object.getPrototypeOf(controller)),
 		controller,
 	);
@@ -33,7 +36,7 @@ export function formReducer(
 	switch (action.action) {
 		case "addField": {
 			// console.log("adding field! (sorry for the spam btw)")
-			newController.addField(action.fieldName, action.value, {
+			newController.addField(action.fieldName!, action.value, {
 				validator: action.validator,
 				error: action.error,
 			});
@@ -41,20 +44,39 @@ export function formReducer(
 		}
 
 		case "setFieldError": {
-			console.log("applying error!");
-			newController.setFieldError(action.fieldName, action.error);
+			console.log("applying field error!");
+			// console.log("before", newController);
+			console.log(action);
+			newController.setFieldError(action.fieldName as string, action.error);
+			console.log("after", newController);
 			break;
 		}
 
 		case "cleanFieldError": {
 			// console.log("cleaning error!")
-			newController.cleanFieldError(action.fieldName);
+			newController.cleanFieldError(action.fieldName!);
 			break;
 		}
+
+		case "setError": {
+			console.log("applying main error!");
+			newController.setError(action.error);
+			console.log(newController);
+			break;
+		}
+
+		// case "editField": {
+		// 	newController.editField(action.fieldName, action.value);
+		// 	break;
+		// }
+
+		// case "deleteField": {
+		// 	newController.deleteField(action.fieldName);
+		// 	break;
+		// }
+
+		// default: {}
 	}
 
-	// console.log(controller)
 	return newController;
 }
-
-// export default FormContext
