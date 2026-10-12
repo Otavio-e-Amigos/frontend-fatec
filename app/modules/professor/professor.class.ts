@@ -22,14 +22,7 @@ export default class Professor implements ProfessorInterface {
 	code?: string;
 	id?: number;
 
-	constructor(init: ProfessorInterface) {
-		this.name = init.name;
-		this.cpf = init.cpf;
-		this.registry = init.registry;
-		this.contract = init.contract;
-		this.status = init.status;
-		this.title = init.title;
-		this.code = init.code;
-		this.id = init.id;
+	constructor(data: ProfessorInterface) {
+		Object.assign(this, data);
 	}
 }
