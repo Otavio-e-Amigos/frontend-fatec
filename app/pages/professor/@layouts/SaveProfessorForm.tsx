@@ -1,14 +1,46 @@
+// import { useEffect } from "react";
+import CPFFormatter from "~/classes/ValueFormatters/CPFFormatter";
 import NameFormatter from "~/classes/ValueFormatters/NameFormatter";
-import FormContainer from "~/components/forms/FormContainer";
-import type FormController from "~/components/forms/FormController";
+// import FormContainer from "~/components/forms/FormContainer";
+// import type FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
+import useForm from "~/hooks/useForm";
 import FormSection from "~/layouts/forms/FormSection";
+import saveAction from "~/modules/professor/@actions/save.action";
+import type Professor from "~/modules/professor/professor.class";
 
-export default function SaveProfessorForm({controller, submit, edit}: {controller:FormController, submit:any, edit?:boolean}) {
+let added = false;
+
+export default function SaveProfessorForm({
+	professor,
+}: {
+	professor?: Professor;
+}) {
+	const { controller, FormContainer } = useForm({
+		actions: saveAction,
+		actionsExtras: { id: professor ?.id }
+	});
+	const edit = professor !== undefined;
+
+	if (professor && !added) {
+		// REFLECT i think i could transform those lines workflow into a single mapper function
+		controller.addField("nome", professor.name);
+		controller.addField("cpf", professor.cpf);
+
+		controller.addField("matricula", professor.registry);
+		controller.addField("regimeContrato", professor.contract);
+		controller.addField("status", professor.status);
+		controller.addField("codigo", professor.code);
+		controller.addField("titulacao", professor.title);
+		added = true;
+	}
+
+	console.log(professor);
+
 	return (
 		<FormContainer
-			initialController={controller}
-			onSubmit={submit}
+			// initialController={controller}
+			// onSubmit={submit}
 			className="flex flex-col gap-8 m-5"
 		>
 			{/*
@@ -26,12 +58,14 @@ export default function SaveProfessorForm({controller, submit, edit}: {controlle
 					type="text"
 					label="Nome Completo"
 					ValueFormatter={NameFormatter}
+					submitFormattedData
 				/>
 				<FormInput
 					required={!edit}
 					name={"cpf"}
 					type="text"
 					label="CPF"
+					ValueFormatter={CPFFormatter}
 				/>
 				{/*<FormInput required name={"professor"} type="text" label="Cursos" />*/
 				/* TO BE ADDED LATER */}
@@ -57,18 +91,33 @@ export default function SaveProfessorForm({controller, submit, edit}: {controlle
 					type="text"
 					label="Contrato"
 				/>*/}
-				<div className="flex flex-col">
+				<FormInput
+					name={"regimeContrato"}
+					type="select"
+					label="Contrato"
+					options={{
+						Determinado: "DETERMINADO",
+						Indeterminado: "INDETERMINADO",
+						Temporário: "TEMPORARIO",
+					}}
+					required={!edit}
+				/>
+				{/*<div className="flex flex-col">
 					<label>
 						Contrato {!edit && <span className="text-rose-500">*</span>}
 					</label>
-					<select name="regimeContrato" defaultValue={"DETERMINADO"} className="form-input">
+					<select
+						name="regimeContrato"
+						defaultValue={"DETERMINADO"}
+						className="form-input"
+					>
 						<option value={"DETERMINADO"} selected>
 							Determinado
 						</option>
 						<option value={"INDETERMINADO"}>Indeterminado</option>
 						<option value={"TEMPORARIO"}>Temporário</option>
 					</select>
-				</div>
+				</div>*/}
 
 				{/* TODO change to according value */}
 				{/*<FormInput
@@ -77,7 +126,19 @@ export default function SaveProfessorForm({controller, submit, edit}: {controlle
 					type="text"
 					label="Status"
 				/>*/}
-				<div className="flex flex-col">
+				<FormInput
+					name={"status"}
+					type="select"
+					label="Status"
+					options={{
+						Ativo: "ATIVO",
+						Inativo: "INATIVO",
+						Temporário: "AFASTADO",
+					}}
+					required={!edit}
+				/>
+
+				{/*<div className="flex flex-col">
 					<label>
 						Status {!edit && <span className="text-rose-500">*</span>}
 					</label>
@@ -88,11 +149,25 @@ export default function SaveProfessorForm({controller, submit, edit}: {controlle
 						<option value={"INATIVO"}>Inativo</option>
 						<option value={"AFASTADO"}>Afastado</option>
 					</select>
-				</div>
+				</div>*/}
 
 				{/* TODO change to according value */}
 				{/*<FormInput name={"titulacao"} type="text" label="Titulação" />*/}
-				<div className="flex flex-col">
+				<FormInput
+					name={"titulacao"}
+					type="select"
+					label="Titulação"
+					options={{
+						Graduado: "GRADUADO",
+						Especialista: "ESPECIALISTA",
+						Mestre: "MESTRE",
+						Doutor: "DOUTOR",
+						"Pós Doutorado": "POS_DOUTOR",
+					}}
+					required={!edit}
+				/>
+
+				{/*<div className="flex flex-col">
 					<label>
 						Titulação {!edit && <span className="text-rose-500">*</span>}
 					</label>
@@ -105,65 +180,18 @@ export default function SaveProfessorForm({controller, submit, edit}: {controlle
 						<option value={"DOUTOR"}>Doutor</option>
 						<option value={"POS_DOUTOR"}>Pós Doutorado</option>
 					</select>
-				</div>
+				</div>*/}
 
 				{/* TODO change to according value */}
 				<FormInput name={"codigo"} type="text" label="Código" />
 			</FormSection>
 
-			{/*<FormSection
-				section={"Extras"}
-				description={
-					"Informações extras que podem facilitar o contato do Docente ou para outros aspectos que possam te ajudar."
-				}
-			>
-				<FormInput name={"email"} type="text" label="E-Mail" />
-				<FormInput name={"teams"} type="text" label="Usuário Teams" />
-				<FormInput name={"telefone"} type="text" label="Telefone" />
-			</FormSection>*/}
-
-			{/* DELETE THIS ASAP */}
-			{/*
-				<FormContainer
-				controller={decoy}
-				className="flex flex-1 flex-col gap-10 my-5 mx-20"
-				>
-				<FormInput
-					type="text"
-					name={"formControllerField01"}
-					label="FormController Field #01"
-				/>
-				<FormInput
-					type="text"
-					InputFormatter={PhoneFormatter}
-					validator={new PhoneNumberValidator()}
-					name={"formControllerField02"}
-					label="FormController Field #02"
-				/>
-				<FormInput
-					type="text"
-					name={"formControllerField03"}
-					label="FormController Field #03"
-				/>
-
-				<FormInput
-					type="text"
-					name={"formControllerField04"}
-					InputFormatter={CPFFormatter}
-					label="FormController Field #03"
-				/>
-
-				<FormInput
-					type="text"
-					name={"formControllerField05"}
-					InputFormatter={LegalNameFormatter}
-					label="FormController Field #04"
-				/>
-				<button type="submit">Submit</button>
-			</FormContainer>*/}
+			<p className="text-hint-warning w-full text-right">
+				{controller.error?.message}
+			</p>
 			<button type="submit" className="flex btn btn-success">
 				{edit ? "Salvar Alterações" : "Adicionar"}
 			</button>
 		</FormContainer>
-	)
+	);
 }

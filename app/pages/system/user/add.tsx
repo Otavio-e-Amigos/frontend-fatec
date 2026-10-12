@@ -7,6 +7,7 @@ import Header from "~/layouts/Header";
 import FormSection from "~/layouts/forms/FormSection";
 // import { auth } from "~/mock/db/users.db";
 import User, { type UserInterface } from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 import UserService from "~/modules/user/user.service";
 
 export default function Page({ user }: { user?: User }) {
@@ -14,7 +15,7 @@ export default function Page({ user }: { user?: User }) {
 	const navigate = useNavigate();
 
 	const formMode = user ? "edit" : "add";
-	const userAuth = new User(JSON.parse(localStorage.getItem("auth") as string));
+	const userAuth = AuthService.getUserToken();
 
 	async function submitData(
 		event: SyntheticEvent<HTMLFormElement>,
