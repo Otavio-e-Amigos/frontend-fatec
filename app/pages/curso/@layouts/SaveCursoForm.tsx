@@ -1,17 +1,31 @@
-import FormContainer from "~/components/forms/FormContainer";
+// import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
+import useForm from "~/hooks/useForm";
 import FormSection from "~/layouts/forms/FormSection";
 import type Curso from "~/modules/curso/curso.class";
+import save from "~/modules/curso/@actions/save.action";
 
 export default function SaveCursoFrom({
   curso,
-  onSubmit,
 }: {
   curso?: Curso;
-  onSubmit: any;
 }) {
+  const { controller, FormContainer } = useForm({
+		actions: save,
+		actionsExtras: {
+			id: curso?.id
+    }
+  });
+
+  // if (curso && !controller.fieldExists("nome")) {
+  if (curso) {
+    controller.addField("nome", curso.nome);
+    controller.addField("turno", curso.turno ?? "MANHA");
+    controller.addField("sigla", curso.sigla);
+  }
+
   return (
-    <FormContainer onSubmit={onSubmit} className="flex flex-col gap-8 m-5">
+    <FormContainer className="flex flex-col gap-8 m-5">
       <FormSection
         section="Informações da curso"
         description="Dados acadêmicos usados nas grades e folhas de frequência."
@@ -21,28 +35,27 @@ export default function SaveCursoFrom({
           name="nome"
           type="text"
           label="Nome"
-          value={curso?.nome}
+          // value={curso?.nome}
         />
         <FormInput
           required
           name="turno"
           type="select"
           label="Turno"
-          value={curso?.turno ?? "MANHA"}
-          options={[
-            { value: "MANHA", label: "MANHÃ" },
-            { value: "TARDE", label: "TARDE" },
-            { value: "NOITE", label: "NOITE" },
-          ]}
+					options={{
+						"Manhã": "MANHA",
+						"Tarde": "TARDE",
+						"Noite": "NOITE",
+					}}
         />
         <FormInput
           required
           name="sigla"
           type="text"
           label="Sigla"
-          value={curso?.sigla}
         />
-      </FormSection>
+			</FormSection>
+			<p className="text-hint-warning">{ controller?.error?.message }</p>
       <button type="submit" className="btn btn-success">
         {curso ? "Salvar alterações" : "Adicionar"}
       </button>

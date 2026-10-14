@@ -2,7 +2,7 @@
 import type AbstractQueryObject from "../api/base/AbstractQueryObject";
 import { DefaultAPIModule } from "../api/modules/default/DefaultAPIModule";
 import mapper from "./api/user.mapper";
-import userAPIRoutes from "./user.apiRoutes";
+import userAPIRoutes from "./api/user.routes";
 import User, { type UserInterface } from "./user.class";
 
 export default class UserService {

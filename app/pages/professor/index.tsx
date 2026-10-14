@@ -7,14 +7,14 @@ import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 
 export default function Page({ list }: { list: Professor[] }) {
 	// TODO test and switch with ObjectTableModel
 	//
 	//
 	const navigate = useNavigate();
-	const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
+	const auth = AuthService.getUserToken();
 	// const [professorsTableList, setProfessorsTableList] = useState(setList(list));
 
 	const [professorsTable, setProfessorsTable] = useState(setList(list));

@@ -1,7 +1,17 @@
-import { cloneElement, useContext, useEffect, useState } from "react";
+import {
+	cloneElement,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+	type SyntheticEvent,
+} from "react";
 import { FormControllerContext, FormDispatcherContext } from "./FormContext";
 import { InputValidator } from "~/components/forms/FormController";
-import AbstractValueFormatter, { type AbstractValueFormatterInterface } from "~/classes/base/AbstractValueFormatter";
+import AbstractValueFormatter, {
+	type AbstractValueFormatterInterface,
+	// type AdvancedAbstractValueFormatterReturn,
+} from "~/classes/base/AbstractValueFormatter";
 
 function EyeIcon({ off }: { off?: boolean }) {
 	return (
@@ -37,6 +47,9 @@ type FormInputProps = {
 	required?: boolean;
 	ValueFormatter?: AbstractValueFormatter;
 	onChange?: any;
+	hideRequiredLabel?: boolean;
+	submitFormattedData?: boolean;
+	options?: Record<string, string>;
 };
 
 // TODO optimize and refactor component returnings
@@ -52,99 +65,138 @@ export default function FormInput({
 	placeholder,
 	onChange,
 	required,
+	hideRequiredLabel,
+	options,
+	submitFormattedData = false,
 }: FormInputProps) {
 	const controller = useContext(FormControllerContext);
 	const controllerAction = useContext(FormDispatcherContext);
 	const [revealed, setRevealed] = useState(false); // usado só pelo type="password"
-	// const {error} = useState(controller && controller.getFieldErrorMessage(name))
-	const formatter = ValueFormatter && ValueFormatter as AbstractValueFormatterInterface
+	const formatter =
+		ValueFormatter && (ValueFormatter as AbstractValueFormatterInterface);
+	// const [errorMessage, setErrorMessage] = useState<string | undefined>("");
+	const errorMessage = useMemo(() => {
+		return controller?.getFieldErrorMessage(name);
+	}, [controller]);
 
-	// useEffect(() => {
-	// 	console.log("controller changed!")
-	// 	console.log(controller)
-	// }, [controller])
 
-	if (controller) {
-		var formValue = value ?? controller.getFieldValue(name);
+	const [cursorPosition, setCursorPosition] = useState<{
+		start: number;
+		end: number;
+		inputElement: HTMLInputElement | undefined;
+	}>({ start: 0, end: 0, inputElement: undefined });
 
-		// if (!controller.fieldExists(name)) controller.addField(name, value);
-		if (!controller.fieldExists(name))
-			controllerAction({ action: "addField", fieldName: name });
-		if (validator) controller.setFieldValidator(name, validator);
-	}
+	const [currentValue, setCurrentValue] = useState<any>("");
+	// const [currentFormattedValue, setCurrentFormattedValue] = useMemo(() => { return ""}, [currentValue, formatter]);
+	const currentFormattedValue = useMemo(() => {
+		const formattedObject =
+			formatter &&
+			formatter.format(currentValue, {
+				originalCursorPosition: cursorPosition.start,
+			});
+		const formattedValue = formatter && formattedObject?.value;
+		const newCursorPosition =
+			formattedObject?.newCursorPosition ?? cursorPosition.start;
 
-	// const validator = new PhoneNumberValidator()
+		setCursorPosition({
+			start: newCursorPosition,
+			end: newCursorPosition,
+			inputElement: cursorPosition.inputElement,
+		});
+		return formatter ? formattedValue : currentValue;
+	}, [currentValue]);
+
+	useEffect(() => {
+		let overrideValue = value ?? controller?.getFieldValue(name) ?? "";
+		if (!controller?.fieldExists(name))
+			controller?.addField(name, overrideValue, { validator });
+
+		setCurrentValue(overrideValue);
+	}, []);
+
+	useEffect(() => {
+		if (cursorPosition.inputElement) {
+			const element = cursorPosition.inputElement;
+			controller?.setFieldValue(name, currentValue)
+			console.log(cursorPosition);
+			if (element.selectionStart && element.selectionEnd) {
+				if (element.selectionStart !== cursorPosition.start) {
+					element.selectionStart = cursorPosition.start;
+				}
+				if (element.selectionEnd !== cursorPosition.end) {
+					element.selectionEnd = cursorPosition.end;
+				}
+
+			}
+		}
+		console.log(controller)
+	}, [currentValue]);
 
 	const basicInputParameters = {
 		name: name,
 		disabled: disabled,
 		placeholder: placeholder,
-		defaultValue: formValue,
+		// defaultValue: currentFormattedValue,
+		value: currentFormattedValue,
 		// onChange: onChange ?? undefined,
 	};
 
 	const DefaultInputElement = (
 		<input
-			onChange={(e) => {
-				let currentValue = e.currentTarget.value;
+			onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+				let startCursorPosition = e.currentTarget.selectionStart ?? 0;
+				let endCursorPosition = e.currentTarget.selectionEnd ?? 0;
 
-				// TODO change this to class implementation
-				// TODO apply unformat() and then format() for the value since the display on <input> is same when passed here
-				if (formatter) {
-					// console.log("currentValue")
-					// console.log(currentValue)
-					// console.log("formatter.unformat(currentValue)")
-					// console.log(formatter.unformat(currentValue))
-					currentValue = formatter.format(formatter.unformat(currentValue))
-				}
+				setCursorPosition({
+					start: startCursorPosition,
+					end: endCursorPosition,
+					inputElement: e.currentTarget as any,
+				});
+				// console.log("before change", oldCursorPosition)
 
-				console.log(currentValue)
-				e.currentTarget.value = currentValue;
-
-				if (controller) controller.setFieldValue(name, currentValue);
-			}}
-			onBlur={(e) => {
-				// TODO change to dynamic validation
-				// TODO apply ValueFormatter.unformat() before validating value
-				// TODO make ValueValidator throw ValidationError if result is unsastifiable
-				const validationStatus = validator
-					? validator.validate(e.currentTarget.value.replaceAll(/\D/g, ""))
-					: true;
-				console.log(validationStatus);
-				if (!validationStatus) {
-					if (controllerAction)
-						controllerAction({
-							action: "setFieldError",
-							fieldName: name,
-							error: {
-								message: "Something's not right on this field. Please check.",
-							},
-						});
-				} else {
-					if (controllerAction)
-						controllerAction({ action: "cleanFieldError", fieldName: name });
-				}
-				console.log(
-					"input is now out of focus! validate field and show errors here!",
+				const inputValue = e.currentTarget.value;
+				setCurrentValue(
+					formatter ? formatter.unformat(inputValue) : inputValue,
 				);
+
+				// e.currentTarget.selectionStart = oldCursorPosition
+				// console.log("after change", oldCursorPosition)
 			}}
+
+			onKeyUp={(e: any) => {
+				console.log(e.currentTarget.selectionStart);
+			}}
+
+			onBlur={(e) => {
+				if (required && !e.currentTarget.value) {
+					if (controllerAction) {
+						controllerAction(
+							{
+								action: "setFieldError",
+								fieldName: name,
+								error: {message: "Este campo precisa ser preenchido"}
+							}
+						)
+
+					}
+				}
+			}}
+
 			{...basicInputParameters}
 			id={name}
 			type={type === "password" && revealed ? "text" : type}
 			className="form-input"
 		/>
 	);
-	let SelectedInputElement = DefaultInputElement;
 
-	const DefaultControllerLabel = (
-		<p className="text-sm text-hint-warning">
-			{controller && controller.getFieldErrorMessage(name)}
-		</p>
-	);
+	let SelectedInputElement = DefaultInputElement;
 
 	const DefaultLabelElement = label && (
 		<label htmlFor={name}>
-			{label} {required && <span className="text-hint-warning">*</span>}
+			{label}{" "}
+			{!hideRequiredLabel && required && (
+				<span className="text-hint-warning">*</span>
+			)}
 		</label>
 	);
 
@@ -154,11 +206,15 @@ export default function FormInput({
 		right: "flex-row-reverse gap-2 items-center",
 	};
 
+	let DefaultErrorMessage = (
+		<div className="text-sm text-hint-warning">{errorMessage}</div>
+	);
+
 	let DefaultWrapper = (
 		<div className={`flex ${labelAlignLookup[labelAlign]}`}>
 			{DefaultLabelElement}
 			{SelectedInputElement}
-			{DefaultControllerLabel}
+			{DefaultErrorMessage}
 		</div>
 	);
 
@@ -186,7 +242,7 @@ export default function FormInput({
 				<div className={`flex flex-row gap-2 items-center`}>
 					{SelectedInputElement}
 					{DefaultLabelElement}
-					{DefaultControllerLabel}
+					{DefaultErrorMessage}
 				</div>
 			);
 		}
@@ -209,7 +265,7 @@ export default function FormInput({
 							<EyeIcon off={revealed} />
 						</button>
 					</div>
-					{DefaultControllerLabel}
+					{DefaultErrorMessage}
 				</div>
 			);
 		}
@@ -223,8 +279,39 @@ export default function FormInput({
 			);
 		}
 
-		case 'select': {
-			// insert select
+		case "select": {
+			SelectedInputElement = (
+				<select name={name} className="form-input">
+					{options &&
+						Object.entries(options).map(([label, value], idx) => (
+							<option key={idx} value={value} selected={value === currentFormattedValue}>
+								{label}
+							</option>
+						))}
+				</select>
+			);
+			DefaultWrapper = (
+				<div className="flex flex-col">
+					{DefaultLabelElement}
+					{SelectedInputElement}
+					{DefaultErrorMessage}
+				</div>
+			);
+			return DefaultWrapper;
+			// return (
+			// 	<div className="flex flex-col">
+
+			// 		<select name="titulacao" className="form-input">
+			// 			<option value={"GRADUADO"} selected>
+			// 				Graduado
+			// 			</option>
+			// 			<option value={"ESPECIALISTA"}>Especialista</option>
+			// 			<option value={"MESTRE"}>Mestre</option>
+			// 			<option value={"DOUTOR"}>Doutor</option>
+			// 			<option value={"POS_DOUTOR"}>Pós Doutorado</option>
+			// 		</select>
+			// 	</div>
+			// );
 		}
 	}
 

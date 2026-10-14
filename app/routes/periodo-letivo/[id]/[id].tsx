@@ -1,10 +1,10 @@
 import type { Route } from "./+types/[id]";
 import PeriodoLetivoService from "~/modules/periodo-letivo/periodo-letivo.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 import Page from "~/pages/periodo-letivo/[id]";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
-  const auth = new User(JSON.parse(localStorage.getItem("auth") ?? "{}"));
+  const auth = AuthService.getUserToken();
   return { periodo: await PeriodoLetivoService.get(Number(params.id), auth) };
 }
 

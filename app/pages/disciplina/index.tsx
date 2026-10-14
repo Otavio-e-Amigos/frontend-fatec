@@ -7,14 +7,14 @@ import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const navigate = useNavigate();
 	const [table, setTable] = useState(makeTable(list));
 
 	async function remove(id: number) {
-		const auth = new User(JSON.parse(localStorage.getItem("auth") ?? "{}"));
+		const auth = AuthService.getUserToken();
 		const deleted = await DisciplinaService.delete(id, auth);
 
 		if (deleted) navigate(0);

@@ -8,13 +8,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import {
-	AuthUserContext,
-	SetAuthUserContext,
-} from "./modules/user/components/AuthenticationService";
 import "./app.css";
-import { useEffect, useState } from "react";
-import User from "./modules/user/user.class";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -50,20 +44,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	// const [auth, setAuth] = useState(new User({}));
-	// useEffect(() => {
-	// 	console.log("auth", auth);
-	// }, [auth, setAuth]);
-
-	return (
-		<>
-			{/*<AuthUserContext value={auth}>*/}
-				{/*<SetAuthUserContext value={setAuth}>*/}
-					<Outlet />
-				{/*</SetAuthUserContext>*/}
-			{/*</AuthUserContext>*/}
-		</>
-	);
+	return <Outlet />;
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

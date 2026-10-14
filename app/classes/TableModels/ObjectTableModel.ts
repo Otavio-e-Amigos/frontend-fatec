@@ -41,7 +41,6 @@ export default class ObjectTableModel<T extends Record<string, any>> extends Abs
 	 */
 	getColumns(): string[] {
 		return this.columns.map(column => column.display)
-		// throw new Error("Method not implemented.");
 	}
 
 	getColumnSize(): number {

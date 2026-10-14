@@ -1,10 +1,10 @@
 import type { Route } from "./+types/edit";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 import Page from "~/pages/disciplina/edit";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
-  const auth = new User(JSON.parse(localStorage.getItem("auth") ?? "{}"));
+  const auth = AuthService.getUserToken();
   return { disciplina: await DisciplinaService.get(Number(params.id), auth) };
 }
 
