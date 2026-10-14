@@ -32,6 +32,23 @@ export default class DisciplinaService {
 		return items.map(toDisciplina);
 	}
 
+	static async getAllForGrade(auth: User): Promise<Disciplina[]> {
+		const res = await this.module.request({
+			method: "GET",
+			path: ["disciplinas", "todas"],
+			credentials: auth,
+		});
+		if (!res.ok) {
+			throw new Error("Não foi possível carregar as disciplinas para a grade.");
+		}
+
+		const items = res.rawData.dados ?? res.rawData.content ?? res.rawData;
+		if (!Array.isArray(items)) {
+			throw new Error("A API retornou uma lista inválida de disciplinas.");
+		}
+		return items.map(toDisciplina);
+	}
+
 	static async save(
 		data: Disciplina,
 		auth: User,

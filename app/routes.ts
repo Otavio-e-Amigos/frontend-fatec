@@ -5,6 +5,7 @@ export default [
 	index("routes/home.tsx"),
 
 	route("login", "routes/login.tsx"),
+	route("grade", "routes/grade/index.tsx"),
 
 	route("system", "routes/system/router.outlet.tsx", [
 		index("routes/system/index.tsx"),
@@ -26,6 +27,7 @@ export default [
 		route(":id", "routes/professor/[id]/router.outlet.tsx", [
 			index("routes/professor/[id]/[id].tsx"),
 			route("edit", "routes/professor/edit.tsx"),
+			route("grades/new", "routes/professor/[id]/grades/new.tsx"),
 		]),
 		route("add", "routes/professor/add.tsx"),
 	]),

@@ -39,6 +39,13 @@ function ProfessorInfo({ professor }: { professor?: Professor }) {
 			<section className="flex flex-col gap-2">
 				<div className="flex flex-col">
 					<Link className="link" to={`/professor/${professor?.id}/edit`}>Editar</Link>
+					<Link
+						className="btn mt-2"
+						data-variant="outline"
+						to={`/professor/${professor?.id}/grades/new`}
+					>
+						Criar grade horária
+					</Link>
 
 					{/* TODO insert confirmation window here */}
 					{/*<Link to={"/"}>Excluir</Link>*/}

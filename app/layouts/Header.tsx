@@ -7,6 +7,7 @@ const staticLinks = [
   // {label: "Grades", href: "/"},
   // {label: "Login", href: "/login"},
   {label: "Gestão", href: "/system"},
+  {label: "Grade", href: "/grade"},
   {label: "Professores", href: "/professor", items: [
     {label: "Gerenciar Professores"},
     {label: "Gerenciar Cursos"},
