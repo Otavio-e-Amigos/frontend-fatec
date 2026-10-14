@@ -5,6 +5,7 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	useNavigation,
 } from "react-router";
 
 import type { Route } from "./+types/root";
@@ -13,8 +14,7 @@ import {
 	SetAuthUserContext,
 } from "./modules/user/components/AuthenticationService";
 import "./app.css";
-import { useEffect, useState } from "react";
-import User from "./modules/user/user.class";
+import { LoadingGeral } from "./components/loaders/LoadingGeral";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -50,10 +50,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-	// const [auth, setAuth] = useState(new User({}));
-	// useEffect(() => {
-	// 	console.log("auth", auth);
-	// }, [auth, setAuth]);
+	const navigation = useNavigation();
+	const isNavigating = Boolean(navigation.location);
 
 	return (
 		<>
@@ -62,6 +60,7 @@ export default function App() {
 					<Outlet />
 				{/*</SetAuthUserContext>*/}
 			{/*</AuthUserContext>*/}
+			{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
 		</>
 	);
 }

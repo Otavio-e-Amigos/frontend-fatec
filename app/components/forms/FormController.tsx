@@ -150,15 +150,24 @@ export default class FormController {
  */
 export abstract class InputValidator {
 	private criteria: RegExp;
+	private message: string;
 	/* REFLECT doesnt sound interesting if i put the error message here, so that ValidatorError gets thrown and sent to FormController or other object? */
 
-	constructor(criteria: RegExp) {
+	constructor(
+		criteria: RegExp,
+		message = "Campo inválido. Verifique e tente novamente.",
+	) {
 		this.criteria = criteria;
+		this.message = message;
 	}
 
 	validate(testValue: string | number) {
 		let value = typeof testValue === "number" ? String(testValue) : testValue;
 
 		return this.criteria.test(value);
+	}
+
+	getMessage() {
+		return this.message;
 	}
 }

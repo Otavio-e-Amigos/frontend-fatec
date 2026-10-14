@@ -37,6 +37,7 @@ type FormInputProps = {
 	required?: boolean;
 	ValueFormatter?: AbstractValueFormatter;
 	onChange?: any;
+	error?: string;
 };
 
 // TODO optimize and refactor component returnings
@@ -52,6 +53,7 @@ export default function FormInput({
 	placeholder,
 	onChange,
 	required,
+	error,
 }: FormInputProps) {
 	const controller = useContext(FormControllerContext);
 	const controllerAction = useContext(FormDispatcherContext);
@@ -80,65 +82,66 @@ export default function FormInput({
 		disabled: disabled,
 		placeholder: placeholder,
 		defaultValue: formValue,
-		// onChange: onChange ?? undefined,
 	};
+	const errorMessage = error ?? controller?.getFieldErrorMessage(name);
+	const errorId = `${name}-error`;
+
+	function setFieldError(message?: string) {
+		if (!controllerAction) return;
+
+		controllerAction({
+			action: message ? "setFieldError" : "cleanFieldError",
+			fieldName: name,
+			error: message ? { message } : undefined,
+		});
+	}
+
+	function validate(value: string) {
+		if (required && !value.trim()) return "Este campo é obrigatório.";
+		if (validator && !validator.validate(value.replaceAll(/\D/g, ""))) {
+			return validator.getMessage();
+		}
+	}
+
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+		let currentValue = e.currentTarget.value;
+
+		// TODO change this to class implementation
+		// TODO apply unformat() and then format() for the value since the display on <input> is same when passed here
+		if (formatter) {
+			// console.log("currentValue")
+			// console.log(currentValue)
+			// console.log("formatter.unformat(currentValue)")
+			// console.log(formatter.unformat(currentValue))
+			currentValue = formatter.format(formatter.unformat(currentValue));
+		}
+
+		console.log(currentValue);
+		e.currentTarget.value = currentValue;
+
+		if (controller) controller.setFieldValue(name, currentValue);
+		if (controller?.getFieldErrorMessage(name)) setFieldError(validate(currentValue));
+		onChange?.(e);
+	}
 
 	const DefaultInputElement = (
 		<input
-			onChange={(e) => {
-				let currentValue = e.currentTarget.value;
-
-				// TODO change this to class implementation
-				// TODO apply unformat() and then format() for the value since the display on <input> is same when passed here
-				if (formatter) {
-					// console.log("currentValue")
-					// console.log(currentValue)
-					// console.log("formatter.unformat(currentValue)")
-					// console.log(formatter.unformat(currentValue))
-					currentValue = formatter.format(formatter.unformat(currentValue))
-				}
-
-				console.log(currentValue)
-				e.currentTarget.value = currentValue;
-
-				if (controller) controller.setFieldValue(name, currentValue);
-			}}
-			onBlur={(e) => {
-				// TODO change to dynamic validation
-				// TODO apply ValueFormatter.unformat() before validating value
-				// TODO make ValueValidator throw ValidationError if result is unsastifiable
-				const validationStatus = validator
-					? validator.validate(e.currentTarget.value.replaceAll(/\D/g, ""))
-					: true;
-				console.log(validationStatus);
-				if (!validationStatus) {
-					if (controllerAction)
-						controllerAction({
-							action: "setFieldError",
-							fieldName: name,
-							error: {
-								message: "Something's not right on this field. Please check.",
-							},
-						});
-				} else {
-					if (controllerAction)
-						controllerAction({ action: "cleanFieldError", fieldName: name });
-				}
-				console.log(
-					"input is now out of focus! validate field and show errors here!",
-				);
-			}}
+			onChange={handleChange}
+			onBlur={(e) => setFieldError(validate(e.currentTarget.value))}
 			{...basicInputParameters}
 			id={name}
 			type={type === "password" && revealed ? "text" : type}
 			className="form-input"
+			aria-required={required || undefined}
+			aria-invalid={Boolean(errorMessage)}
+			aria-describedby={errorMessage ? errorId : undefined}
 		/>
 	);
 	let SelectedInputElement = DefaultInputElement;
 
 	const DefaultControllerLabel = (
-		<p className="text-sm text-hint-warning">
-			{controller && controller.getFieldErrorMessage(name)}
+		<p id={errorId} className="text-sm text-rose-500" role="alert">
+			{errorMessage}
 		</p>
 	);
 
@@ -218,7 +221,12 @@ export default function FormInput({
 			return (
 				<div className="form-input flex flex-row gap-3 items-center">
 					<img src="/favicon.ico" className="size-5" />
-					<input {...basicInputParameters} type="search" className="w-full" />
+					<input
+						{...basicInputParameters}
+						type="search"
+						className="w-full"
+						onChange={handleChange}
+					/>
 				</div>
 			);
 		}
