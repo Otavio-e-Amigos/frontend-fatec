@@ -1,4 +1,4 @@
-import AbstractValueFormatter from "../base/AbstractValueFormatter";
+import AbstractValueFormatter, { type AbstractValueFormatterOptionsInterface, type AdvancedAbstractValueFormatterReturn } from "../base/AbstractValueFormatter";
 
 export default class NameFormatter extends AbstractValueFormatter {
 	static regex = /^\w$|\s\w/g;
@@ -13,24 +13,32 @@ export default class NameFormatter extends AbstractValueFormatter {
 	 * // => Hello There! How Are You?
 	 * ```
 	 */
-	static format(value: string): string {
+	static format(value:string, options: AbstractValueFormatterOptionsInterface) : AdvancedAbstractValueFormatterReturn
+	static format(value: string, options?: AbstractValueFormatterOptionsInterface): string | AdvancedAbstractValueFormatterReturn {
 		let newValue = value;
+		console.log(options)
+		const advancedReturn: AdvancedAbstractValueFormatterReturn = {
+			value: undefined,
+			newCursorPosition: options?.originalCursorPosition,
+		}
 
-		//block number entries
-		// newValue = newValue.replaceAll(/\d/g, "");
-
-		//replace the first letter into UpperCase, for some reason, replaceAll doesn't replace when unformat() uses toLowerCase only()
 		if (newValue.length > 1)
 			newValue = newValue.replace(/^\w/g, (p) => p.toUpperCase());
-		return newValue.replaceAll(this.regex, (p) => {
+
+		newValue = newValue.replaceAll(this.regex, (p) => {
 			// console.log("p");
 			// console.log(p);
 			// TODO implement if name snippet has 2-3 characters long, remain low-case
 			return p.toUpperCase();
 		});
+
+		if (options) advancedReturn.value = newValue;
+
+		return options ? advancedReturn : newValue;
 	}
 
-	static unformat(value: string): string {
+	static unformat(value:string, options: AbstractValueFormatterOptionsInterface) : AdvancedAbstractValueFormatterReturn
+	static unformat(value: string, options?: AbstractValueFormatterOptionsInterface) : string | AdvancedAbstractValueFormatterReturn {
 		return value.toLowerCase();
 		// return value.replaceAll(this.regex, (p) => {
 		// 	console.log(p);

@@ -1,13 +1,14 @@
+import { APIValidationError } from "~/classes/errors/ValidationError";
 import type { AbstractAPIDataInit } from "../../base/AbstractAPIData";
 import AbstractAPIModule from "../../base/AbstractAPIModule";
 import type AbstractQueryObject from "../../base/AbstractQueryObject";
 import DefaultAPIData from "./DefaultAPIData";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 // TODO change to localhost API if .env one is not available or by other means (var declaring to use localhost)
 const API_HOST = import.meta.env.VITE_API_HOST as string;
 const API_PATH = import.meta.env.VITE_API_PATH as string;
-const API_HTTPS = import.meta.env.VITE_API_HTTPS === 'true' ? true : false;
+const API_HTTPS = import.meta.env.VITE_API_HTTPS === "true" ? true : false;
 const API_PORT = Number(import.meta.env.VITE_API_PORT);
 
 /**
@@ -21,7 +22,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 			https: API_HTTPS,
 			path: API_PATH,
 		});
-		console.log(this.url)
+		console.log(this.url);
 	}
 
 	/**
@@ -66,13 +67,41 @@ export class DefaultAPIModule extends AbstractAPIModule {
 				return data;
 			})
 			.catch((err) => {
-				if (err.response) {
-					data.rawData = err.response.data;
-					data.status = err.response.status;
-				} else {
-					data.status = 500;
-				}
+				// console.log("error when requesting!");
+				// console.log(err);
+
+				data.status = err.response.status;
 				data.ok = false;
+				if (err.response) data.rawData = err.response.data;
+
+				switch (data.status) {
+					case 400: {
+						data.error = new APIValidationError(data.rawData.mensagem, data);
+						throw data
+					}
+					case 401: { //send to login page or popup
+						data.error = new APIValidationError(data.rawData.mensagem, data);
+						throw data
+					}
+					case 409: {
+						data.error = new APIValidationError(data.rawData.mensagem, data);
+						throw data
+					}
+					default: {
+						//TODO switch to APIInternalError
+						data.error = new Error()
+						throw data
+					}
+				}
+				// REFLECT i could make DefaultAPIData an error attribute and map it accordingly in a generic way
+				// so services could react accordingly to the error in a simpler way
+
+				// switch (data.status) {
+				// 	case 400: {
+				// 		throw new APIValidationError(data.rawData.mensagem, [], data)
+				// 	}
+				// }
+				// throw data;
 				return data;
 			});
 

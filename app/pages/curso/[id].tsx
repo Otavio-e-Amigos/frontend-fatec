@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import Header from "~/layouts/Header";
 import type Curso from "~/modules/curso/curso.class";
+import formatTurno from "~/modules/curso/format-turno";
 
 export default function CursoDetailsPage({ curso }: { curso: Curso }) {
   return (
@@ -9,7 +10,7 @@ export default function CursoDetailsPage({ curso }: { curso: Curso }) {
       <main className="m-5">
         <h1 className="text-4xl">{curso.nome}</h1>
         <p>
-          <b>Turno:</b> {curso.turno}
+          <b>Turno:</b> {formatTurno(curso.turno)}
         </p>
         <p>
           <b>Sigla:</b> {curso.sigla}

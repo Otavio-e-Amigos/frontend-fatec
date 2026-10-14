@@ -16,44 +16,7 @@ export default function Page({
 		{ label: "Adicionar Disciplina", href: "/disciplina/add" },
 		{ label: "Adicionar Curso", href: "/curso/add" },
 		{ label: "Adicionar Periodo Letivo", href: "/periodo-letivo/add" },
-		// { label: "Grade", href: "/" },
-		// { label: "Folha de Ponto", href: "/" },
 	];
-
-	// const notifications = [
-	// 	{
-	// 		state: "info",
-	// 		description:
-	// 			"Notificações importantes do sistema ficam aqui, clique abaixo para saber mais.",
-	// 		action: (
-	// 			<Link to={"/"} className="link">
-	// 				Saiba mais
-	// 			</Link>
-	// 		),
-	// 	},
-	// 	{
-	// 		state: "alert",
-	// 		description:
-	// 			"Faltam 7 dias para renovar as grades dos professores para as folhas de ponto. Aproveite o tempo para renová-las e previnir futuros imprevistos.",
-	// 		action: (
-	// 			<Link to={"/"} className="link">
-	// 				Vamos lá! -&gt;
-	// 			</Link>
-	// 		),
-	// 	},
-	// 	{
-	// 		state: "info",
-	// 		description:
-	// 			"O professor [INSIRA NOME] não está completamente configurado para possuir sua folha de ponto gerada automaticamente",
-	// 		action: (
-	// 			<Link to={"/"} className="link">
-	// 				Vamos lá! -&gt;
-	// 			</Link>
-	// 		),
-	// 	},
-	// ];
-
-	const notifications: any[] = [];
 
 	const professorTableList = professorList.map((prof) => [
 		{
@@ -68,15 +31,13 @@ export default function Page({
 		prof.status,
 	]);
 
-	// TODO remove mock and change with real data
-	const professorMockTable = new DefaultTableModel(professorTableList, [
+	const professorMockTable = new DefaultTableModel(professorTableList as any, [
 		"Docente",
 		"Matrícula",
 		"Status",
 	]);
 
 	return (
-
 		<div className="flex flex-1 flex-col max-h-screen">
 			<Header />
 			<main className="grid grid-cols-4 flex-1 gap-x-8 m-5 overflow-hidden">
@@ -89,7 +50,7 @@ export default function Page({
 
 				<aside className="grid grid-rows-2 gap-y-5 surface rounded-xl p-2 text-black overflow-hidden">
 					{/* Resumo do dia */}
-					<section className="flex flex-col flex-1 overflow-hidden">
+					{/*<section className="flex flex-col flex-1 overflow-hidden">
 						<PageSection name="Resumo do dia" />
 
 						<section className="flex flex-1 flex-col max-h-full gap-2 overflow-y-scroll">
@@ -97,7 +58,7 @@ export default function Page({
 								<NotificationBadge key={idx} {...notification} />
 							))}
 						</section>
-					</section>
+					</section>*/}
 
 					{/* Ações Rápidas*/}
 					<section>

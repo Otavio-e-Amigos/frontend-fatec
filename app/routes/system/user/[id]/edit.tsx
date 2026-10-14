@@ -2,7 +2,7 @@ import Page from "~/pages/system/user/add";
 import UserService from "~/modules/user/user.service";
 // import { auth } from "~/mock/db/users.db";
 import type { Route } from "./+types/edit";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -13,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
 	const id = Number(params.id);
-	const auth = new User(JSON.parse(localStorage.getItem("auth") as string))
+	const auth = AuthService.getUserToken();
 	const user = await UserService.get(id, auth)
 	return { user };
 }

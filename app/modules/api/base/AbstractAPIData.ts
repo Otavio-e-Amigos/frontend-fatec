@@ -2,6 +2,7 @@ export interface AbstractAPIDataInit {
 	status: number;
 	ok: boolean;
 	data?: any
+	error?: Error
 }
 
 export interface AbstractAPIDataParseOptions {}
@@ -13,11 +14,13 @@ export default abstract class AbstractAPIData {
 	abstract rawData: unknown; //set of structures which API may return, it can be one or many ig
 	status: number; //return status (e.g. 200)
 	ok: boolean; //did the request got successfull?
+	error?: Error
 	//TODO add pointer to data coming from API. Take note that pointer may change based on structure
 
 	constructor(init: AbstractAPIDataInit) {
 		this.status = init.status;
 		this.ok = init.ok;
+		this.error = init.error;
 	}
 
 	/**

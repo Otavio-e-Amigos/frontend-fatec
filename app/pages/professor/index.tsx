@@ -1,23 +1,27 @@
 import { useState } from "react";
 import { Form, Link, useNavigate } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
+import ConfirmationDialog from "~/components/ConfirmationDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
-import User from "~/modules/user/user.class";
+import AuthService from "~/modules/user/auth.service";
 
 export default function Page({ list }: { list: Professor[] }) {
 	// TODO test and switch with ObjectTableModel
 	//
 	//
 	const navigate = useNavigate();
-	const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
+	const auth = AuthService.getUserToken();
 	// const [professorsTableList, setProfessorsTableList] = useState(setList(list));
 
 	const [professorsTable, setProfessorsTable] = useState(setList(list));
+	const [professorToDeactivate, setProfessorToDeactivate] =
+		useState<Professor | null>(null);
+	const [deactivationError, setDeactivationError] = useState<string>();
 
 	async function activate(id: number) {
 		const res = await ProfessorService.activate(id, auth);
@@ -27,9 +31,20 @@ export default function Page({ list }: { list: Professor[] }) {
 	}
 
 	async function deactivate(id: number) {
-		const res = await ProfessorService.deactivate(id, auth);
-		if (res) {
-			navigate(0);
+		try {
+			const res = await ProfessorService.deactivate(id, auth);
+			if (res) {
+				setProfessorToDeactivate(null);
+				navigate(0);
+			} else {
+				setDeactivationError("Não foi possível desativar o professor. Tente novamente.");
+			}
+		} catch (error) {
+			setDeactivationError(
+				error instanceof Error
+					? error.message
+					: "Ocorreu um erro ao desativar o professor.",
+			);
 		}
 	}
 
@@ -61,15 +76,18 @@ export default function Page({ list }: { list: Professor[] }) {
 								Editar
 							</Link>
 							<button
+								type="button"
 								className="btn"
 								data-variant="icon"
 								data-icon="power"
 								title={prof.status === "ATIVO" ? "Desativar" : "Ativar"}
-								onClick={(e) => {
-									prof.status === "ATIVO"
-										? deactivate(prof.id!)
-										: activate(prof.id!);
-									e.currentTarget.disabled = true;
+								onClick={() => {
+									if (prof.status === "ATIVO") {
+										setDeactivationError(undefined);
+										setProfessorToDeactivate(prof);
+									} else {
+										void activate(prof.id!);
+									}
 								}}
 							>
 								{prof.status === "ATIVO" ? "Desativar" : "Ativar"}
@@ -134,6 +152,16 @@ export default function Page({ list }: { list: Professor[] }) {
 				</section>
 				<ComplexTableModelView data={professorsTable} />
 			</main>
+			{professorToDeactivate && (
+				<ConfirmationDialog
+					title="Desativar professor?"
+					description={`O professor ${professorToDeactivate.name ?? ""} não ficará disponível enquanto estiver desativado.`}
+					confirmLabel="Desativar"
+					errorMessage={deactivationError}
+					onConfirm={() => deactivate(professorToDeactivate.id!)}
+					onCancel={() => setProfessorToDeactivate(null)}
+				/>
+			)}
 		</div>
 	);
 }

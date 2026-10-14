@@ -4,6 +4,7 @@ import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import type Curso from "~/modules/curso/curso.class";
+import formatTurno from "~/modules/curso/format-turno";
 
 export default function CursoIndexPage({ list }: { list: Curso[] }) {
   const table = new DefaultTableModel(
@@ -17,7 +18,7 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
         ),
       },
       curso.sigla ?? "",
-      curso.turno ?? "",
+      formatTurno(curso.turno),
       {
         value: "",
         display: (

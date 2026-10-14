@@ -1,9 +1,11 @@
 import { Link } from "react-router"
+import AuthService from "~/modules/user/auth.service"
+import User from "~/modules/user/user.class"
 
-const links = [
+const staticLinks = [
   // {label: "Página inicial", href: "/"},
   // {label: "Grades", href: "/"},
-  {label: "Login", href: "/login"},
+  // {label: "Login", href: "/login"},
   {label: "Gestão", href: "/system"},
   {label: "Professores", href: "/professor", items: [
     {label: "Gerenciar Professores"},
@@ -19,7 +21,18 @@ function HeaderLink({label, href, active}: {label:string, href:string, active?:b
 	return <Link to={href} className={`header-link`}>{label}</Link>
 }
 
-export default function Header({activeItem}: {activeItem?: string}) {
+const nonLoggedUser = new User({
+  id: 0,
+  name: "Não logado",
+  password: "123456",
+})
+
+export default function Header({ activeItem }: { activeItem?: string }) {
+	// console.log(localStorage.length)
+	// const auth = new AuthService()
+	const currentUser = AuthService.hasUserToken() ? AuthService.getUserToken() : nonLoggedUser
+	// const currentUser = null
+
 	return (
 		<>
 			<header className="header flex flex-col px-3 py-1">
@@ -31,9 +44,14 @@ export default function Header({activeItem}: {activeItem?: string}) {
 					</div>
 
 		      <nav className="flex flex-row gap-2 items-center">
-						{links.map(({ label, href }, idx) => <HeaderLink key={idx} label={label} href={href} active={label === activeItem ? true : false} /> )}
+						{staticLinks.map(({ label, href }, idx) => <HeaderLink key={idx} label={label} href={href} active={label === activeItem ? true : false} /> )}
 						{process.env.NODE_ENV === 'development' && <Link to={"/dev-area"} className="header-link">dev-area</Link>}
-		      </nav>
+					</nav>
+
+					<nav className="flex flex-1 justify-end items-center gap-2">
+						<HeaderLink label="Login" href="/login" active={false} />
+						{currentUser ? <p>{currentUser.name}</p> : <p className="text-amber-400">Não logado</p>}
+					</nav>
 				</div>
 	    </header>
 			<div className="min-h-3 bg-header-bg-shade w-42 -skew-x-25 -translate-x-4"/>

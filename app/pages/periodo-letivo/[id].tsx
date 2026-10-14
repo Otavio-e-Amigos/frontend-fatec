@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import Header from "~/layouts/Header";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
+import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
 
 export default function PeriodoLetivoDetailsPage({ periodo }: { periodo: PeriodoLetivo }) {
   return (
@@ -18,10 +19,10 @@ export default function PeriodoLetivoDetailsPage({ periodo }: { periodo: Periodo
             <b>Semestre:</b> {periodo.semestre}º Semestre
           </p>
           <p>
-            <b>Data de Início:</b> {periodo.dataInicio}
+            <b>Data de Início:</b> {formatPeriodoDate(periodo.dataInicio)}
           </p>
           <p>
-            <b>Data de Fim:</b> {periodo.dataFim}
+            <b>Data de Fim:</b> {formatPeriodoDate(periodo.dataFim)}
           </p>
         </div>
         <Link className="btn btn-normal mt-3" to="/periodo-letivo">

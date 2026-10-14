@@ -7,12 +7,18 @@ import {
 	formReducer,
 } from "./FormContext";
 
+type SubmitEventHandlerController<T> = (
+	event: React.SubmitEvent<T>,
+	controller: FormController,
+	dispatch: typeof formReducer,
+) => void;
+
 type FormContainerProps = {
 	initialController?: FormController;
 	children?: any;
 	className?: string;
-	onSubmit?: SubmitEventHandler<HTMLFormElement>;
-	action?: string;
+	onSubmit?: SubmitEventHandlerController<HTMLFormElement>;
+	// action?: string;
 };
 
 export default function FormContainer({
@@ -20,17 +26,19 @@ export default function FormContainer({
 	children,
 	className,
 	onSubmit,
-	action,
+	// action,
 }: FormContainerProps) {
 	const [controller, dispatch] = useReducer(
 		formReducer,
-		initialController ?? new FormController(),
+		initialController ? initialController : new FormController(),
 	);
 
-	const formProps = { className, onSubmit, action };
+	const formProps = { className,
+		// action,
+	};
 
 	return (
-		<Form {...formProps}>
+		<Form {...formProps} onSubmit={(e) => {if (onSubmit) onSubmit(e, controller, formReducer)}}>
 			<FormControllerContext value={controller}>
 				<FormDispatcherContext value={dispatch}>
 					{children}

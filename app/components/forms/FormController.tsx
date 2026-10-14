@@ -32,6 +32,7 @@ interface ExportableFormFormat {
 
 interface FormFieldController extends Record<string, any> {
 	value: any;
+	formattedValue?: any;
 	validator?: InputValidator;
 	error?: FormError;
 }
@@ -55,6 +56,7 @@ export default class FormController {
 			value,
 			validator: params?.validator,
 			error: params?.error,
+			formattedValue: undefined,
 		};
 	}
 
@@ -74,6 +76,11 @@ export default class FormController {
 		// console.log(this.fields);
 	}
 
+	setFormattedFieldValue(fieldName: string, value: any) {
+		if (!this.fieldExists(fieldName)) return;
+		this.fields[fieldName].value = value;
+	}
+
 	getFieldValue(fieldName: string) {
 		if (!this.fieldExists(fieldName)) return undefined;
 
@@ -88,9 +95,11 @@ export default class FormController {
 
 	setFieldError(fieldName: string, error?: FormError) {
 		if (!this.fieldExists(fieldName)) this.addField(fieldName);
-
-		this.fields[fieldName].error = error ?? {};
-		console.log(this.fields[fieldName].error);
+		console.log("<FormController> Field Error applied!");
+		console.log(error);
+		this.fields[fieldName].error = error;
+		// this.fields["user"].error = {message: "error!"};
+		console.log(this.fields[fieldName]);
 	}
 
 	cleanFieldError(fieldName: string) {
@@ -148,7 +157,7 @@ export default class FormController {
  * validates and blocks FormController from sending the form if a certain criteria has not been met.
  * Does it sounds interesting for the <input> to have value formatation too? absolutely.
  */
-export abstract class InputValidator {
+export class InputValidator {
 	private criteria: RegExp;
 	private message: string;
 	/* REFLECT doesnt sound interesting if i put the error message here, so that ValidatorError gets thrown and sent to FormController or other object? */

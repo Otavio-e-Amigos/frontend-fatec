@@ -9,10 +9,6 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
-import {
-	AuthUserContext,
-	SetAuthUserContext,
-} from "./modules/user/components/AuthenticationService";
 import "./app.css";
 import { LoadingGeral } from "./components/loaders/LoadingGeral";
 
@@ -55,11 +51,7 @@ export default function App() {
 
 	return (
 		<>
-			{/*<AuthUserContext value={auth}>*/}
-				{/*<SetAuthUserContext value={setAuth}>*/}
-					<Outlet />
-				{/*</SetAuthUserContext>*/}
-			{/*</AuthUserContext>*/}
+			<Outlet />
 			{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
 		</>
 	);

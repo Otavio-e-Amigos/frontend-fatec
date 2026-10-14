@@ -21,15 +21,7 @@ export default class User implements UserInterface {
 	createdAt?: string;
 	updatedAt?: string;
 
-	constructor(init: UserInterface) {
-		this.id = init.id;
-		this.name = init.name;
-		this.login = init.login;
-		this.token = init.token;
-		this.password = init.password;
-		this.profile = init.profile;
-		this.active = init.active;
-		this.createdAt = init.createdAt;
-		this.updatedAt = init.updatedAt;
+	constructor(data: UserInterface) {
+		Object.assign(this, data);
 	}
 }
