@@ -74,7 +74,11 @@ export default function FormInput({
 	const [revealed, setRevealed] = useState(false); // usado só pelo type="password"
 	const formatter =
 		ValueFormatter && (ValueFormatter as AbstractValueFormatterInterface);
-	const [errorMessage, setErrorMessage] = useState<string | undefined>("");
+	// const [errorMessage, setErrorMessage] = useState<string | undefined>("");
+	const errorMessage = useMemo(() => {
+		return controller?.getFieldErrorMessage(name);
+	}, [controller]);
+
 
 	const [cursorPosition, setCursorPosition] = useState<{
 		start: number;
@@ -163,7 +167,20 @@ export default function FormInput({
 				console.log(e.currentTarget.selectionStart);
 			}}
 
-			onBlur={(e) => {}}
+			onBlur={(e) => {
+				if (required && !e.currentTarget.value) {
+					if (controllerAction) {
+						controllerAction(
+							{
+								action: "setFieldError",
+								fieldName: name,
+								error: {message: "Este campo precisa ser preenchido"}
+							}
+						)
+
+					}
+				}
+			}}
 
 			{...basicInputParameters}
 			id={name}
