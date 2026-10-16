@@ -63,7 +63,16 @@ export default class AuthService {
 	}
 
 	static getUserToken(): User {
-		const auth = new User(JSON.parse(localStorage.getItem("auth") as string));
+		if (typeof window === "undefined") {
+			throw new Error("A sessão só pode ser lida no navegador.");
+		}
+
+		const storedAuth = window.localStorage.getItem("auth");
+		if (!storedAuth) {
+			throw new Error("Não há uma sessão autenticada neste dispositivo.");
+		}
+
+		const auth = new User(JSON.parse(storedAuth) as UserInterface);
 		return auth;
 	}
 
@@ -75,6 +84,9 @@ export default class AuthService {
 	}
 
 	static hasUserToken(): boolean {
-		return localStorage.getItem("auth") !== null;
+		return (
+			typeof window !== "undefined" &&
+			window.localStorage.getItem("auth") !== null
+		);
 	}
 }

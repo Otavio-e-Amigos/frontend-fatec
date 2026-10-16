@@ -24,7 +24,7 @@ async function action({
 	}
 	if (!dataInicio) fields.push({ name: "dataInicio", message: "Informe a data inicial." });
 	if (!dataFim) fields.push({ name: "dataFim", message: "Informe a data final." });
-	if (dataInicio && dataFim && dataFim < dataInicio) {
+	if (dataInicio && dataFim && dataFim <= dataInicio) {
 		fields.push({ name: "dataFim", message: "A data final deve ser posterior à inicial." });
 	}
 

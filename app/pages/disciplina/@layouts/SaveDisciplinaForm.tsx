@@ -5,8 +5,6 @@ import FormSection from "~/layouts/forms/FormSection";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import actions from "~/modules/disciplina/@actions/save.action";
 
-let added = false;
-
 export default function SaveDisciplinaForm({
   disciplina,
 }: {

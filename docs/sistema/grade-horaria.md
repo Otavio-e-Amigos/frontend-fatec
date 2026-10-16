@@ -36,9 +36,18 @@ app/
 │   ├── grade.service.ts        # Chamadas e tipos usados na API de grades
 │   └── api/grade.routes.ts     # Métodos e caminhos dos endpoints
 ├── pages/grade/
-│   ├── index.tsx               # Consulta de grades existentes
+│   ├── index.tsx               # Composição da consulta de grades existentes
+│   ├── grade-page.types.ts     # Tipos compartilhados pela consulta
+│   ├── grade-page.utils.ts     # Formatação de período, turno e dias
+│   ├── @hooks/
+│   │   └── useGradePage.ts     # Estado, carregamento e ações da consulta
 │   ├── GradeWizard.tsx         # Estado e coordenação do cadastro
 │   └── @layouts/
+│       ├── GradeSelectionPanel.tsx
+│       ├── GradeFocusPanel.tsx
+│       ├── GradeWeeklySchedule.tsx
+│       ├── GradeDisciplineCard.tsx
+│       ├── GradePageDialogs.tsx
 │       ├── GradeWizardDisciplineStep.tsx
 │       ├── GradeWizardNavigation.tsx
 │       ├── GradeWizardScheduleStep.tsx
@@ -403,9 +412,16 @@ do `GradeWizard`, que concentra as regras.
 ### Rotas da API
 
 [`grade.routes.ts`](../../app/modules/grade/api/grade.routes.ts) declara o
-método HTTP e o caminho relativo de cada operação: criar grade, consultar grades
-de um professor, listar disciplinas de uma grade, listar aulas de uma
-disciplina e criar disciplinas ou aulas.
+método HTTP e o caminho relativo das operações:
+
+| Recurso | Operações disponíveis |
+|---|---|
+| Grades | listar (`GET /grades`), criar (`POST /grades`), consultar por ID (`GET /grades/{id}`), atualizar (`PUT /grades/{id}`), listar por professor e listar disciplinas da grade |
+| Disciplinas da grade | criar (`POST /disciplinas-grade`), consultar por ID, atualizar (`PUT /disciplinas-grade/{id}`), excluir (`DELETE /disciplinas-grade/{id}`) e listar aulas associadas |
+| Aulas | criar (`POST /aulas-grade/disciplinas-grade/{id}/aulas`), listar por disciplina da grade (`GET /disciplinas-grade/{id}/aulas`) e excluir (`DELETE /aulas-grade/{id}`) |
+
+O contrato OpenAPI consultado não declara `DELETE /grades/{id}`; por isso essa
+operação não foi adicionada ao frontend.
 
 ### Tipos de dados enviados e recebidos
 
@@ -435,7 +451,8 @@ Lê o conteúdo útil da resposta. Algumas respostas vêm dentro da propriedade
 #### `responseList(response)`
 
 Normaliza listas que a API pode devolver diretamente ou dentro de `content`.
-Se a resposta não contiver uma dessas formas de lista, retorna uma lista vazia.
+Se a resposta não contiver uma dessas formas de lista, lança um erro para não
+tratar um formato inesperado como uma lista vazia válida.
 
 #### `responseId(response, label)`
 
@@ -446,14 +463,39 @@ positivo seguro, lança um erro com o nome do registro esperado.
 
 Cria o registro principal da grade e retorna o ID gerado.
 
+#### `getGrades(auth, options)`
+
+Lista grades com paginação. `options` aceita número da página, tamanho e
+critérios de ordenação, enviados na query string.
+
+#### `getGrade(id, auth)`, `updateGrade(id, payload, auth)` e `deleteGrade(id, auth)`
+
+Consultam, atualizam ou excluem uma grade pelo ID. A exclusão depende da
+integridade referencial: a API responde com conflito (`409`) se ainda houver
+disciplinas vinculadas. O serviço converte esse caso em uma mensagem que
+orienta a desvincular as disciplinas antes de tentar novamente.
+
 #### `createDiscipline(payload, auth)`
 
 Cria uma disciplina vinculada à grade e retorna o ID dessa associação.
+
+#### `getDisciplineGrade(id, auth)`, `updateDisciplineGrade(id, payload, auth)` e `deleteDisciplineGrade(id, auth)`
+
+Consultam e atualizam uma associação de disciplina com uma grade, ou removem
+somente essa associação. A exclusão não altera os status documentados
+(`MINISTRANDO` e `CANCELADA`) nem apaga o cadastro global da disciplina.
 
 #### `createLesson(disciplineGradeId, payload, auth)`
 
 Cria uma aula para uma associação de disciplina já criada. Não retorna um ID
 porque o fluxo do assistente não precisa dele para continuar.
+
+#### `getLesson(id, auth)`, `updateLesson(id, payload, auth)` e `deleteLesson(id, auth)`
+
+Consultam, atualizam ou excluem uma aula pelo identificador da própria aula.
+Antes de abrir a edição, a tela consulta novamente a aula por ID. A edição
+altera dia e intervalo; conflitos de horário retornados pela API são mostrados
+no formulário.
 
 #### `getOpOptions(professorId, auth)`
 
@@ -463,8 +505,7 @@ o usuário ainda pode informar um valor manualmente.
 
 #### `getProfessorGrades(professorId, auth)`
 
-Busca as grades do professor, converte os campos numéricos e descarta entradas
-sem identificadores válidos.
+Busca as grades do professor e valida/converte os campos numéricos retornados.
 
 #### `getGradeDisciplines(gradeId, auth)`
 
@@ -498,33 +539,42 @@ Em
 - `HydrateFallback()` mostra uma mensagem enquanto os dados da tela são
   carregados.
 
+### `/periodo-letivo/:id/edit`
+
+A rota carrega o período letivo pelo ID e reutiliza o formulário de criação
+com os dados existentes. O serviço envia `POST /periodos-letivos` no cadastro
+e `PUT /periodos-letivos/{id}` na edição. A tela de detalhes oferece acesso
+direto à edição.
+
 ## 12. Consulta de grades existentes
 
-[`app/pages/grade/index.tsx`](../../app/pages/grade/index.tsx) cuida da tela
-de consulta e de sua visualização semanal.
+[`app/pages/grade/index.tsx`](../../app/pages/grade/index.tsx) compõe a tela
+de consulta. O estado e as chamadas ficam em
+[`useGradePage.ts`](../../app/pages/grade/@hooks/useGradePage.ts), enquanto os
+componentes visuais estão separados em `@layouts/`.
 
-### Funções auxiliares
+### Tipos e funções auxiliares
 
+- `GradePageProps` e `ScheduleDiscipline` definem os dados recebidos pela tela e
+  a forma de exibir uma disciplina com seu curso, turno e horários.
 - `academicKey(period)`: converte ano e semestre em uma chave numérica para
   ordenar períodos cronologicamente.
 - `periodLabel(period)`: cria um rótulo legível para o período, ou uma mensagem
   quando o período não foi encontrado.
 - `displayDay(day)`: transforma o número do dia em nome; para um dia sem rótulo
   conhecido, exibe `Dia N`.
-- `selectProfessor(professor)`: seleciona o professor, preenche o campo de
-  pesquisa e fecha as sugestões.
-- `loadSchedule()`: função assíncrona interna de um efeito. Busca as disciplinas
-  da grade selecionada e as aulas de cada disciplina; usa nomes de disciplinas
-  e cursos já carregados para tornar os resultados legíveis.
-- `ProfileField`: componente interno que mostra um rótulo e seu valor na ficha
-  do professor.
+- `selectProfessor(professor)`: no hook, seleciona o professor, preenche o campo
+  de pesquisa e fecha as sugestões.
+- `loadSchedule()`: função assíncrona interna do hook. Busca as disciplinas da
+  grade selecionada e as aulas de cada disciplina; usa nomes de disciplinas e
+  cursos já carregados para tornar os resultados legíveis.
 
 ### Efeitos de carregamento
 
-O primeiro `useEffect` busca as grades quando o professor muda. Ordena as
-grades por período e ID, e seleciona a mais recente. Uma variável `active`
-evita atualizar a tela com a resposta de uma consulta antiga se o usuário mudar
-de professor antes da resposta chegar.
+Em `useGradePage.ts`, o primeiro `useEffect` busca as grades quando o professor
+muda. Ordena as grades por período e ID, e seleciona a mais recente. Uma
+variável `active` evita atualizar a tela com a resposta de uma consulta antiga
+se o usuário mudar de professor antes da resposta chegar.
 
 O segundo efeito garante que a grade selecionada pertença ao período que está
 visível. Se não pertencer, seleciona a primeira grade desse período.
@@ -543,6 +593,50 @@ As aulas consultadas são organizadas visualmente por turno, dia e horário. Uma
 legenda detalhada também mostra curso, disciplina, turno e horários cadastrados.
 Quando o professor não tem grade no período selecionado, a tela mostra essa
 situação e oferece o cadastro de uma grade.
+
+`GradeSelectionPanel` desenha os campos de pesquisa e seleção;
+`GradeWeeklySchedule` monta a tabela semanal; `GradeDisciplineCard` mostra cada
+disciplina e suas ações; e `GradePageDialogs` reúne os diálogos de edição e
+confirmação. `GradeFocusPanel` combina a tabela e os cartões na seção da grade.
+
+Na área **Grade em foco**, o botão **Editar grade** abre um formulário para
+alterar o período letivo e os totais semanais, mensais e gerais registrados. O
+professor aparece como somente leitura, pois a consulta e o contexto da página
+estão vinculados a ele. **Excluir grade** pede confirmação e chama
+`DELETE /grades/{id}`. Se ainda houver disciplinas associadas, a API retorna
+`409`; o frontend mantém a confirmação e informa que os vínculos precisam ser
+removidos antes.
+
+Cada disciplina da grade tem uma ação de edição:
+
+- **Editar** permite alterar disciplina, curso, semestre, carga semanal, OP e
+  status (`MINISTRANDO` ou `CANCELADA`). O turno acompanha o curso selecionado.
+  Os horários já cadastrados não são modificados por esse formulário.
+
+Cada disciplina também mostra ações de manutenção:
+
+- **Desvincular** remove a associação da disciplina com a grade pelo endpoint
+  em duas etapas. Para disciplinas `MINISTRANDO`, a primeira confirmação salva
+  o status `CANCELADA` pela rota `PUT /disciplinas-grade/{id}` e a ação passa a
+  se chamar **Excluir vínculo**. Se ainda houver horários, a exclusão fica
+  desabilitada e a tela orienta removê-los primeiro. Sem horários associados,
+  a segunda confirmação chama `DELETE /disciplinas-grade/{id}`. A operação
+  remove apenas o vínculo, não o cadastro global da disciplina.
+- **Editar horário** consulta o registro atualizado com `GET /aulas-grade/{id}`
+  e permite alterar dia da semana e horários de início e fim por
+  `PUT /aulas-grade/{id}`. A tela verifica se o horário final é posterior ao
+  inicial; a API também valida conflitos com outras aulas.
+- **Excluir horário** aparece junto a cada aula e remove somente aquele horário
+  pelo endpoint `DELETE /aulas-grade/{id}`. A confirmação identifica o dia e o
+  intervalo. Após sucesso, a grade visual e a lista de horários são atualizadas.
+
+Os horários são apresentados em linhas próprias, com dia e intervalo agrupados
+e ações consistentes de edição e exclusão. Isso deixa o vínculo entre cada
+horário e sua disciplina mais claro, inclusive em telas estreitas.
+
+Falhas da API mantêm a confirmação ou o formulário abertos e exibem a mensagem
+retornada. O `404` ao consultar ou excluir uma aula indica que aquele horário
+não foi encontrado ou já foi removido.
 
 ## 13. Por que o código está separado em vários arquivos?
 

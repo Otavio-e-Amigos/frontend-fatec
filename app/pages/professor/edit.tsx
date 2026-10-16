@@ -33,7 +33,7 @@ export default function EditPage({ professor }: { professor: Professor }) {
 
 			<h1 className="text-4xl my-5 mx-2">Editar dados de {professor.name}</h1>
 
-			<SaveProfessorForm professor={professor}/>
+			<SaveProfessorForm key={professor.id} professor={professor} />
 		</main>
 	);
 }

@@ -55,6 +55,7 @@ export default [
 		route("add", "routes/periodo-letivo/add.tsx"),
 		route(":id", "routes/periodo-letivo/[id]/router.outlet.tsx", [
 			index("routes/periodo-letivo/[id]/[id].tsx"),
+			route("edit", "routes/periodo-letivo/[id]/edit.tsx"),
 		]),
 	]),
 ] satisfies RouteConfig;

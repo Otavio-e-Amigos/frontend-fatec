@@ -25,9 +25,14 @@ export default function PeriodoLetivoDetailsPage({ periodo }: { periodo: Periodo
             <b>Data de Fim:</b> {formatPeriodoDate(periodo.dataFim)}
           </p>
         </div>
-        <Link className="btn btn-normal mt-3" to="/periodo-letivo">
-          Voltar para Lista
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link className="btn" to={`/periodo-letivo/${periodo.id}/edit`}>
+            Editar período
+          </Link>
+          <Link className="btn" data-variant="outline" to="/periodo-letivo">
+            Voltar para lista
+          </Link>
+        </div>
       </main>
     </div>
   );
