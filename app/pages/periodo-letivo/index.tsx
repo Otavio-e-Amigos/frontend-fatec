@@ -4,6 +4,7 @@ import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
+import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 	const table = new DefaultTableModel(
@@ -18,8 +19,8 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 			},
 			item.ano ?? "",
 			`${item.semestre}º`,
-			item.dataInicio ?? "",
-			item.dataFim ?? "",
+			formatPeriodoDate(item.dataInicio),
+			formatPeriodoDate(item.dataFim),
 		]),
 		["Período", "Ano", "Semestre", "Início", "Fim"],
 	);

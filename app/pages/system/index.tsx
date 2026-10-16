@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
+import ConfirmationDialog from "~/components/ConfirmationDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import AuthService from "~/modules/user/auth.service";
@@ -9,6 +11,8 @@ import User from "~/modules/user/user.class";
 export default function Page({ users }: { users: User[] }) {
 	const navigate = useNavigate();
 	const auth = AuthService.getUserToken();
+	const [userToDeactivate, setUserToDeactivate] = useState<User | null>(null);
+	const [deactivationError, setDeactivationError] = useState<string>();
 
 
 	async function activateUser(id: number) {
@@ -19,9 +23,20 @@ export default function Page({ users }: { users: User[] }) {
 	}
 
 	async function deactivateUser(id: number) {
-		const res = await UserService.deactivate(id, auth);
-		if (res) {
-			navigate(0);
+		try {
+			const res = await UserService.deactivate(id, auth);
+			if (res) {
+				setUserToDeactivate(null);
+				navigate(0);
+			} else {
+				setDeactivationError("Não foi possível desativar o usuário. Tente novamente.");
+			}
+		} catch (error) {
+			setDeactivationError(
+				error instanceof Error
+					? error.message
+					: "Ocorreu um erro ao desativar o usuário.",
+			);
 		}
 	}
 
@@ -52,13 +67,18 @@ export default function Page({ users }: { users: User[] }) {
 						Editar
 					</Link>
 					<button
+						type="button"
 						className="btn"
 						data-variant="icon"
 						data-icon="power"
 						title={user.active ? "Desativar" : "Ativar"}
-						onClick={(e) => {
-							user.active ? deactivateUser(user.id!) : activateUser(user.id!);
-							e.currentTarget.disabled = true;
+						onClick={() => {
+							if (user.active) {
+								setDeactivationError(undefined);
+								setUserToDeactivate(user);
+							} else {
+								void activateUser(user.id!);
+							}
 						}}
 					>
 						{user.active ? "Desativar" : "Ativar"}
@@ -93,6 +113,16 @@ export default function Page({ users }: { users: User[] }) {
 					<ComplexTableModelView data={usersTable} actionsColumn />
 				</section>
 			</main>
+			{userToDeactivate && (
+				<ConfirmationDialog
+					title="Desativar usuário?"
+					description={`O usuário ${userToDeactivate.name ?? ""} perderá o acesso ao sistema enquanto estiver desativado.`}
+					confirmLabel="Desativar"
+					errorMessage={deactivationError}
+					onConfirm={() => deactivateUser(userToDeactivate.id!)}
+					onCancel={() => setUserToDeactivate(null)}
+				/>
+			)}
 		</div>
 	);
 }

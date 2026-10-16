@@ -1,4 +1,11 @@
-import { useEffect, useReducer, useState, type SyntheticEvent } from "react";
+import {
+	useEffect,
+	useMemo,
+	useReducer,
+	useRef,
+	useState,
+	type SyntheticEvent,
+} from "react";
 import { Form, useNavigate, type NavigateFunction } from "react-router";
 import FormContainer from "~/components/forms/FormContainer";
 import {
@@ -82,7 +89,10 @@ export default function useForm(options?: FormHookOptions) {
 		formReducer,
 		options?.initialController || new FormController(),
 	);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
+	const formRuntime = useRef({ controller, dispatch, navigate, options });
+	formRuntime.current = { controller, dispatch, navigate, options };
 
 	useEffect(() => {
 		// console.log("controller changed!");
@@ -92,46 +102,57 @@ export default function useForm(options?: FormHookOptions) {
 	return {
 		controller,
 		controllerAction: dispatch,
-		FormContainer: (props: FormContainerProps) => {
-			const formProps = {
-				children: props.children,
-				className: props.className,
-				// TODO switch this to hooks function, to eliminate the necessity of handling and other things i believe
-				onSubmit: async (e: SyntheticEvent<HTMLFormElement>) => {
-					const actions = options?.actions;
+		isSubmitting,
+		FormContainer: useMemo(
+			() =>
+				function FormContainer(props: FormContainerProps) {
+					const { controller, dispatch, navigate, options } =
+						formRuntime.current;
+					const formProps = {
+						children: props.children,
+						className: props.className,
+						// TODO switch this to hooks function, to eliminate the necessity of handling and other things i believe
+						onSubmit: async (e: SyntheticEvent<HTMLFormElement>) => {
+							setIsSubmitting(true);
+							const actions = options?.actions;
 
-					const actionProps: FormSubmitEventHandlerProps = {
-						event: e,
-						controller,
-						dispatch,
-						navigate,
-						extras: {}
+							const actionProps: FormSubmitEventHandlerProps = {
+								event: e,
+								controller,
+								dispatch,
+								navigate,
+								extras: {},
+							};
+
+							if (options?.actionsExtras) {
+								actionProps.extras = options.actionsExtras;
+							}
+
+							try {
+								if (actions) await actions.action(actionProps);
+								if (actions?.onSuccess)
+									await actions.onSuccess(actionProps);
+							} catch (error) {
+								if (actions?.onFailure)
+									await actions.onFailure({
+										...actionProps,
+										error: error as Error,
+									});
+							} finally {
+								setIsSubmitting(false);
+							}
+						},
 					};
 
-					if (options?.actionsExtras) {
-						actionProps.extras = options?.actionsExtras;
-					}
-
-					try {
-						if (actions) await actions.action(actionProps);
-						if (actions?.onSuccess) await actions.onSuccess(actionProps);
-					} catch (error) {
-						if (actions?.onFailure)
-							await actions.onFailure({
-								...actionProps,
-								error: error as Error,
-							});
-					}
+					return (
+						<FormControllerContext value={controller}>
+							<FormDispatcherContext value={dispatch}>
+								<Form {...formProps} />
+							</FormDispatcherContext>
+						</FormControllerContext>
+					);
 				},
-			};
-
-			return (
-				<FormControllerContext value={controller}>
-					<FormDispatcherContext value={dispatch}>
-						<Form {...formProps} />
-					</FormDispatcherContext>
-				</FormControllerContext>
-			);
-		},
+			[],
+		),
 	};
 }

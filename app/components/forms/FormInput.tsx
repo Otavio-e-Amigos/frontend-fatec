@@ -50,6 +50,8 @@ type FormInputProps = {
 	hideRequiredLabel?: boolean;
 	submitFormattedData?: boolean;
 	options?: Record<string, string>;
+	lettersOnly?: boolean;
+	maxLength?: number;
 };
 
 // TODO optimize and refactor component returnings
@@ -68,6 +70,8 @@ export default function FormInput({
 	hideRequiredLabel,
 	options,
 	submitFormattedData = false,
+	lettersOnly = false,
+	maxLength,
 }: FormInputProps) {
 	const controller = useContext(FormControllerContext);
 	const controllerAction = useContext(FormDispatcherContext);
@@ -136,32 +140,38 @@ export default function FormInput({
 		name: name,
 		disabled: disabled,
 		placeholder: placeholder,
+		maxLength,
 		// defaultValue: currentFormattedValue,
 		value: currentFormattedValue,
 		// onChange: onChange ?? undefined,
 	};
 
+	function handleChange(e: SyntheticEvent<HTMLInputElement>) {
+		const startCursorPosition = e.currentTarget.selectionStart ?? 0;
+		const endCursorPosition = e.currentTarget.selectionEnd ?? 0;
+
+		setCursorPosition({
+			start: startCursorPosition,
+			end: endCursorPosition,
+			inputElement: e.currentTarget,
+		});
+
+		const inputValue = lettersOnly
+			? e.currentTarget.value.replace(/\d/g, "")
+			: e.currentTarget.value;
+		if (inputValue !== e.currentTarget.value) e.currentTarget.value = inputValue;
+		const nextValue = formatter ? formatter.unformat(inputValue) : inputValue;
+		controller?.setFieldValue(name, nextValue);
+		setCurrentValue(nextValue);
+		if (controller?.getFieldErrorMessage(name)) {
+			controllerAction?.({ action: "cleanFieldError", fieldName: name });
+		}
+		onChange?.(e);
+	}
+
 	const DefaultInputElement = (
 		<input
-			onChange={(e: SyntheticEvent<HTMLInputElement>) => {
-				let startCursorPosition = e.currentTarget.selectionStart ?? 0;
-				let endCursorPosition = e.currentTarget.selectionEnd ?? 0;
-
-				setCursorPosition({
-					start: startCursorPosition,
-					end: endCursorPosition,
-					inputElement: e.currentTarget as any,
-				});
-				// console.log("before change", oldCursorPosition)
-
-				const inputValue = e.currentTarget.value;
-				setCurrentValue(
-					formatter ? formatter.unformat(inputValue) : inputValue,
-				);
-
-				// e.currentTarget.selectionStart = oldCursorPosition
-				// console.log("after change", oldCursorPosition)
-			}}
+			onChange={handleChange}
 
 			onKeyUp={(e: any) => {
 				console.log(e.currentTarget.selectionStart);
@@ -192,12 +202,7 @@ export default function FormInput({
 	let SelectedInputElement = DefaultInputElement;
 
 	const DefaultLabelElement = label && (
-		<label htmlFor={name}>
-			{label}{" "}
-			{!hideRequiredLabel && required && (
-				<span className="text-hint-warning">*</span>
-			)}
-		</label>
+		<label htmlFor={name}>{label}</label>
 	);
 
 	const labelAlignLookup = {
@@ -274,7 +279,12 @@ export default function FormInput({
 			return (
 				<div className="form-input flex flex-row gap-3 items-center">
 					<img src="/favicon.ico" className="size-5" />
-					<input {...basicInputParameters} type="search" className="w-full" />
+					<input
+						{...basicInputParameters}
+						type="search"
+						className="w-full"
+						onChange={handleChange}
+					/>
 				</div>
 			);
 		}

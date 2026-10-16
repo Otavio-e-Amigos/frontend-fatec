@@ -5,6 +5,7 @@ export default [
 	index("routes/home.tsx"),
 
 	route("login", "routes/login.tsx"),
+	route("grade", "routes/grade/index.tsx"),
 
 	route("system", "routes/system/router.outlet.tsx", [
 		index("routes/system/index.tsx"),
@@ -26,6 +27,7 @@ export default [
 		route(":id", "routes/professor/[id]/router.outlet.tsx", [
 			index("routes/professor/[id]/[id].tsx"),
 			route("edit", "routes/professor/edit.tsx"),
+			route("grades/new", "routes/professor/[id]/grades/new.tsx"),
 		]),
 		route("add", "routes/professor/add.tsx"),
 	]),
@@ -53,6 +55,7 @@ export default [
 		route("add", "routes/periodo-letivo/add.tsx"),
 		route(":id", "routes/periodo-letivo/[id]/router.outlet.tsx", [
 			index("routes/periodo-letivo/[id]/[id].tsx"),
+			route("edit", "routes/periodo-letivo/[id]/edit.tsx"),
 		]),
 	]),
 ] satisfies RouteConfig;

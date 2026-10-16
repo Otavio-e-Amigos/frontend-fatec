@@ -9,16 +9,21 @@ import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 
 async function action({ event }: FormSubmitEventHandlerProps) {
 	event.preventDefault();
-	console.log(event);
 	const data = Object.fromEntries(new FormData(event.currentTarget));
-	console.log(data);
 	const form = {
-		login: data.user as string,
-		senha: data.pass as string,
+		login: String(data.user ?? "").trim(),
+		senha: String(data.pass ?? ""),
 	};
 
-	console.log(form);
-	const loggedIn = await AuthService.login(form.login, form.senha);
+	const fields = [];
+	if (!form.login) fields.push({ name: "user", message: "Informe seu usuário." });
+	if (!form.senha) fields.push({ name: "pass", message: "Informe sua senha." });
+
+	if (fields.length > 0) {
+		throw new FormValidationError("Verifique os campos informados.", fields);
+	}
+
+	await AuthService.login(form.login, form.senha);
 }
 
 async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
@@ -27,10 +32,13 @@ async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
 
 async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 	if (error instanceof FormValidationError) {
-		dispatch({
-			action: "setError",
-			error: { message: error.message },
-		});
+		error.fields.forEach((field) =>
+			dispatch({
+				action: "setFieldError",
+				fieldName: field.name,
+				error: { message: field.message },
+			}),
+		);
 	}
 }
 

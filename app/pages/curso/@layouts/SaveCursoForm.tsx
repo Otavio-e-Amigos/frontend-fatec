@@ -32,6 +32,7 @@ export default function SaveCursoFrom({
       >
         <FormInput
           required
+					lettersOnly
           name="nome"
           type="text"
           label="Nome"
@@ -50,12 +51,13 @@ export default function SaveCursoFrom({
         />
         <FormInput
           required
+					maxLength={10}
+					lettersOnly
           name="sigla"
           type="text"
           label="Sigla"
         />
 			</FormSection>
-			<p className="text-hint-warning">{ controller?.error?.message }</p>
       <button type="submit" className="btn btn-success">
         {curso ? "Salvar alterações" : "Adicionar"}
       </button>

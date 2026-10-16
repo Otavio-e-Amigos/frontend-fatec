@@ -10,14 +10,35 @@ async function action({
 }: FormSubmitEventHandlerProps) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.currentTarget));
+	const ano = Number(data.ano);
+	const semestre = Number(data.semestre);
+	const dataInicio = String(data.dataInicio ?? "");
+	const dataFim = String(data.dataFim ?? "");
+	const fields = [];
+
+	if (!Number.isInteger(ano) || ano < 2000 || ano > 2100) {
+		fields.push({ name: "ano", message: "Informe um ano entre 2000 e 2100." });
+	}
+	if (semestre !== 1 && semestre !== 2) {
+		fields.push({ name: "semestre", message: "Selecione o semestre." });
+	}
+	if (!dataInicio) fields.push({ name: "dataInicio", message: "Informe a data inicial." });
+	if (!dataFim) fields.push({ name: "dataFim", message: "Informe a data final." });
+	if (dataInicio && dataFim && dataFim <= dataInicio) {
+		fields.push({ name: "dataFim", message: "A data final deve ser posterior à inicial." });
+	}
+
+	if (fields.length > 0) {
+		throw new FormValidationError("Verifique os campos do período letivo.", fields);
+	}
 
 	// Note: edit is handled via save with id parameter
 	const periodo = {
 		id: extras.id,
-		semestre: Number(data.semestre),
-		ano: Number(data.ano),
-		dataInicio: data.dataInicio as string,
-		dataFim: data.dataFim as string,
+		semestre,
+		ano,
+		dataInicio,
+		dataFim,
 	};
 
 	const auth = AuthService.getUserToken();
@@ -31,10 +52,13 @@ async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
 async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 	console.log(error)
 	if (error instanceof FormValidationError) {
-		dispatch({
-			action: "setError",
-			error: { message: error.message },
-		});
+		error.fields.forEach((field) =>
+			dispatch({
+				action: "setFieldError",
+				fieldName: field.name,
+				error: { message: field.message },
+			}),
+		);
 	}
 }
 

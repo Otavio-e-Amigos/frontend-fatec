@@ -18,13 +18,19 @@ export default class PeriodoLetivoService {
 		const auth = typeof idOrAuth === "number" ? maybeAuth! : idOrAuth;
 
 		const req: AbstractQueryObject = id
-			? this.routes.GET_BY_ID
-			: this.routes.GET_ALL;
-
-		if (id) req.path![1] = id;
+			? { ...this.routes.GET_BY_ID, path: ["periodos-letivos", id] }
+			: { ...this.routes.GET_ALL };
 		req.credentials = auth;
 
-		const res = await this.module.request(req);
+		let res: DefaultAPIData;
+		try {
+			res = await this.module.request(req);
+		} catch (error) {
+			if (id && error instanceof DefaultAPIData && error.status === 404) {
+				return undefined;
+			}
+			throw error;
+		}
 		if (!res.ok) return id ? undefined : [];
 
 		if (id) return mapper(res.rawData.dados ?? res.rawData);
@@ -44,8 +50,13 @@ export default class PeriodoLetivoService {
 		// if (!data.dataInicio || !data.dataFim || data.dataInicio >= data.dataFim)
 		// 	throw new Error("A data inicial deve ser anterior à final.");
 
-		const req: AbstractQueryObject = this.routes.SAVE;
-		req.credentials = auth;
+		const req: AbstractQueryObject = data.id
+			? {
+					...this.routes.UPDATE,
+					path: ["periodos-letivos", data.id],
+					credentials: auth,
+				}
+			: { ...this.routes.SAVE, credentials: auth };
 		req.body = {
 			semestre: Number(data.semestre),
 			ano: Number(data.ano),
@@ -53,17 +64,6 @@ export default class PeriodoLetivoService {
 			dataFim: data.dataFim,
 		};
 
-		// const req: AbstractQueryObject = {
-		// 	method: "POST",
-		// 	path: ["periodos-letivos"],
-		// 	credentials: auth,
-		// 	body: {
-		// 		semestre: Number(data.semestre),
-		// 		ano: Number(data.ano),
-		// 		dataInicio: data.dataInicio,
-		// 		dataFim: data.dataFim,
-		// 	},
-		// };
 		try {
 			const res = await this.module.request(req);
 			return res.ok ? mapper(res.rawData.dados ?? res.rawData) : undefined;
@@ -80,8 +80,12 @@ export default class PeriodoLetivoService {
 						throw new FormValidationError(message ?? "Não autorizado", [
 							message,
 						]);
+					case 409:
+						throw new FormValidationError(message ?? "Conflito ao salvar período letivo", [
+							message,
+						]);
 					default:
-						throw new Error("Erro ao salvar dados");
+						throw new Error(message ?? "Erro ao salvar dados");
 				}
 			}
 			throw e;

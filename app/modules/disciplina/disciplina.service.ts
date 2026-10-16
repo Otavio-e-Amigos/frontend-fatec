@@ -32,6 +32,23 @@ export default class DisciplinaService {
 		return items.map(toDisciplina);
 	}
 
+	static async getAllForGrade(auth: User): Promise<Disciplina[]> {
+		const res = await this.module.request({
+			method: "GET",
+			path: ["disciplinas", "todas"],
+			credentials: auth,
+		});
+		if (!res.ok) {
+			throw new Error("Não foi possível carregar as disciplinas para a grade.");
+		}
+
+		const items = res.rawData.dados ?? res.rawData.content ?? res.rawData;
+		if (!Array.isArray(items)) {
+			throw new Error("A API retornou uma lista inválida de disciplinas.");
+		}
+		return items.map(toDisciplina);
+	}
+
 	static async save(
 		data: Disciplina,
 		auth: User,
@@ -53,8 +70,25 @@ export default class DisciplinaService {
 			path: ["disciplinas", id],
 			credentials: auth,
 		};
-		const res = await this.module.request(req);
-		return res.ok;
+		try {
+			const res = await this.module.request(req);
+			return res.ok;
+		} catch (error) {
+			if (error instanceof DefaultAPIData) {
+				if (error.status === 409) {
+					throw new Error(
+						"Não é possível excluir esta disciplina porque ela está associada a uma grade.",
+					);
+				}
+
+				const message = error.rawData?.mensagem;
+				if (typeof message === "string" && message.trim()) {
+					throw new Error(message);
+				}
+			}
+
+			throw error;
+		}
 	}
 
 	private static async write(

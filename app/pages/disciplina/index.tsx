@@ -1,6 +1,7 @@
 import { useState, type ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
+import ConfirmationDialog from "~/components/ConfirmationDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
@@ -12,12 +13,30 @@ import AuthService from "~/modules/user/auth.service";
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const navigate = useNavigate();
 	const [table, setTable] = useState(makeTable(list));
+	const [disciplineToDelete, setDisciplineToDelete] = useState<Disciplina | null>(null);
+	const [deleteError, setDeleteError] = useState<string>();
 
-	async function remove(id: number) {
-		const auth = AuthService.getUserToken();
-		const deleted = await DisciplinaService.delete(id, auth);
+	async function removeSelectedDiscipline() {
+		if (!disciplineToDelete?.id) return;
 
-		if (deleted) navigate(0);
+		try {
+			const deleted = await DisciplinaService.delete(
+				disciplineToDelete.id,
+				AuthService.getUserToken(),
+			);
+			if (deleted) {
+				setDisciplineToDelete(null);
+				navigate(0);
+			} else {
+				setDeleteError("Não foi possível excluir a disciplina. Tente novamente.");
+			}
+		} catch (error) {
+			setDeleteError(
+				error instanceof Error
+					? error.message
+					: "Ocorreu um erro ao excluir a disciplina.",
+			);
+		}
 	}
 
 	function search(event: ChangeEvent<HTMLInputElement>) {
@@ -61,11 +80,15 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 							Editar
 						</Link>
 						<button
+							type="button"
 							className="btn"
 							data-variant="icon"
 							data-icon="trash"
 							title="Excluir"
-							onClick={() => remove(item.id!)}
+							onClick={() => {
+								setDeleteError(undefined);
+								setDisciplineToDelete(item);
+							}}
 						>
 							Excluir
 						</button>
@@ -100,6 +123,16 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 
 				<ComplexTableModelView data={table} />
 			</main>
+			{disciplineToDelete && (
+				<ConfirmationDialog
+					title="Excluir disciplina?"
+					description={`A disciplina ${disciplineToDelete.nome ?? ""} será excluída. Esta ação não pode ser desfeita.`}
+					confirmLabel="Excluir"
+					errorMessage={deleteError}
+					onConfirm={removeSelectedDiscipline}
+					onCancel={() => setDisciplineToDelete(null)}
+				/>
+			)}
 		</div>
 	);
 }

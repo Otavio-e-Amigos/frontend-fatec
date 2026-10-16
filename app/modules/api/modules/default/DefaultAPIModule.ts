@@ -44,6 +44,11 @@ export class DefaultAPIModule extends AbstractAPIModule {
 
 		const path = parsePath(req.path);
 		const headers: Record<string, any> = { "Content-Type": "application/json" };
+		const params = req.arguments
+			? new URLSearchParams(
+					req.arguments.map(({ param, value }) => [param, String(value)]),
+				)
+			: undefined;
 
 		if (req.credentials) {
 			headers["Authorization"] = `Bearer ${req.credentials.token}`;
@@ -56,7 +61,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 				method: req.method,
 				baseURL: this.url,
 				url: path,
-				params: req.arguments,
+				params,
 				data: req.body,
 				headers: headers,
 			})

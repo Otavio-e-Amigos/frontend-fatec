@@ -26,12 +26,33 @@ async function action({
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
 	const { id } = extras;
+	const nome = String(form.nome ?? "").trim();
+	const codigo = String(form.codigo ?? "").trim();
+	const sigla = String(form.sigla ?? "").trim().toUpperCase();
+	const fields = [];
+
+	if (!nome) fields.push({ name: "nome", message: "Informe o nome da disciplina." });
+	else if (!/^[\p{L}\s.'-]+$/u.test(nome)) {
+		fields.push({ name: "nome", message: "O nome não pode conter números." });
+	}
+	if (!codigo) fields.push({ name: "codigo", message: "Informe o código da disciplina." });
+	else if (!/^[A-Za-z0-9-]+$/.test(codigo)) {
+		fields.push({ name: "codigo", message: "Use apenas letras, números e hífen no código." });
+	}
+	if (!sigla) fields.push({ name: "sigla", message: "Informe a sigla da disciplina." });
+	else if (!/^[A-Z]{2,10}$/.test(sigla)) {
+		fields.push({ name: "sigla", message: "A sigla deve ter de 2 a 10 letras." });
+	}
+
+	if (fields.length > 0) {
+		throw new FormValidationError("Verifique os campos da disciplina.", fields);
+	}
 
 	const disciplina = new Disciplina({
 		id,
-		nome: form.nome as string,
-		codigo: form.codigo as string,
-		sigla: form.sigla as string,
+		nome,
+		codigo,
+		sigla,
 	});
 
 	if (id) {
@@ -51,10 +72,13 @@ async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
 async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 	console.log(error)
 	if (error instanceof FormValidationError) {
-		dispatch({
-			action: "setError",
-			error: { message: error.message },
-		});
+		error.fields.forEach((field) =>
+			dispatch({
+				action: "setFieldError",
+				fieldName: field.name,
+				error: { message: field.message },
+			}),
+		);
 	}
 }
 

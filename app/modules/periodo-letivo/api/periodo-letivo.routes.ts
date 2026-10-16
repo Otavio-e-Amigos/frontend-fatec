@@ -19,6 +19,12 @@ const periodosLetivosAPIRoutes = {
 		body: undefined, //This body structure would need runtime population
 		credentials: undefined, //required
 	},
+	UPDATE: {
+		method: "PUT",
+		path: ["periodos-letivos", undefined],
+		body: undefined,
+		credentials: undefined, //required
+	},
 };
 
 export default periodosLetivosAPIRoutes

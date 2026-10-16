@@ -83,15 +83,15 @@ export default class UserService {
 				};
 				return new User(usrInit);
 			}
-		} catch (e) {
-			console.log(e);
+		} catch (error) {
+			throw error;
 		}
 
 		//parse data to defined schema by API route
 		// send request to API through DefaultAPIModule (apply MockAPIModule here when on development mode?)
 		// if success (2xx), returns edited object with extra parameters to caller
 		// if error (4xx/5xx), throws corresponding error messages
-		return data;
+		throw new Error("Não foi possível atualizar o usuário.");
 	}
 
 	static async save(data: User, auth: User): Promise<User> {
@@ -130,15 +130,15 @@ export default class UserService {
 				};
 				return new User(usrInit);
 			}
-		} catch (e) {
-			console.log(e);
+		} catch (error) {
+			throw error;
 		}
 
 		//parse data to defined schema by API route
 		// send request to API through DefaultAPIModule (apply MockAPIModule here when on development mode?)
 		// if success (2xx), returns newly created object to caller
 		// if error (4xx/5xx), throws corresponding error messages
-		return data;
+		throw new Error("Não foi possível cadastrar o usuário.");
 	}
 
 	static async activate(id: number, auth: User): Promise<boolean> {

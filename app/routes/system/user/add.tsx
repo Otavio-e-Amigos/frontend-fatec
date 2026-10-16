@@ -8,11 +8,6 @@ export function meta({}: Route.MetaArgs) {
 	];
 }
 
-export async function clientLoader({}: Route.LoaderArgs) {
-	// const list = professors;
-	// return { list };
-}
-
-export default function AddUser({ loaderData }: Route.ComponentProps) {
+export default function AddUser() {
 	return <Page />;
 }

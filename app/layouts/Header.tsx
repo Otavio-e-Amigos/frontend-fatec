@@ -1,12 +1,14 @@
-import { Link } from "react-router"
-import AuthService from "~/modules/user/auth.service"
-import User from "~/modules/user/user.class"
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
+import AuthService from "~/modules/user/auth.service";
+import User from "~/modules/user/user.class";
 
 const staticLinks = [
   // {label: "Página inicial", href: "/"},
   // {label: "Grades", href: "/"},
   // {label: "Login", href: "/login"},
   {label: "Gestão", href: "/system"},
+  {label: "Grade", href: "/grade"},
   {label: "Professores", href: "/professor", items: [
     {label: "Gerenciar Professores"},
     {label: "Gerenciar Cursos"},
@@ -28,10 +30,13 @@ const nonLoggedUser = new User({
 })
 
 export default function Header({ activeItem }: { activeItem?: string }) {
-	// console.log(localStorage.length)
-	// const auth = new AuthService()
-	const currentUser = AuthService.hasUserToken() ? AuthService.getUserToken() : nonLoggedUser
-	// const currentUser = null
+	const [currentUser, setCurrentUser] = useState(nonLoggedUser);
+
+	useEffect(() => {
+		setCurrentUser(
+			AuthService.hasUserToken() ? AuthService.getUserToken() : nonLoggedUser,
+		);
+	}, []);
 
 	return (
 		<>
