@@ -79,7 +79,6 @@ export default function FormInput({
 		return controller?.getFieldErrorMessage(name);
 	}, [controller]);
 
-
 	const [cursorPosition, setCursorPosition] = useState<{
 		start: number;
 		end: number;
@@ -117,7 +116,7 @@ export default function FormInput({
 	useEffect(() => {
 		if (cursorPosition.inputElement) {
 			const element = cursorPosition.inputElement;
-			controller?.setFieldValue(name, currentValue)
+			controller?.setFieldValue(name, currentValue);
 			console.log(cursorPosition);
 			if (element.selectionStart && element.selectionEnd) {
 				if (element.selectionStart !== cursorPosition.start) {
@@ -126,10 +125,9 @@ export default function FormInput({
 				if (element.selectionEnd !== cursorPosition.end) {
 					element.selectionEnd = cursorPosition.end;
 				}
-
 			}
 		}
-		console.log(controller)
+		console.log(controller);
 	}, [currentValue]);
 
 	const basicInputParameters = {
@@ -170,14 +168,18 @@ export default function FormInput({
 			onBlur={(e) => {
 				if (required && !e.currentTarget.value) {
 					if (controllerAction) {
-						controllerAction(
-							{
-								action: "setFieldError",
-								fieldName: name,
-								error: {message: "Este campo precisa ser preenchido"}
-							}
-						)
-
+						controllerAction({
+							action: "setFieldError",
+							fieldName: name,
+							error: { message: "Este campo precisa ser preenchido" },
+						});
+					}
+				} else {
+					if (controllerAction) {
+						controllerAction({
+							action: "cleanFieldError",
+							fieldName: name,
+						});
 					}
 				}
 			}}
@@ -195,7 +197,7 @@ export default function FormInput({
 		<label htmlFor={name}>
 			{label}{" "}
 			{!hideRequiredLabel && required && (
-				<span className="text-hint-warning">*</span>
+				<span className="text-hint-alert-dot">*</span>
 			)}
 		</label>
 	);
@@ -207,7 +209,7 @@ export default function FormInput({
 	};
 
 	let DefaultErrorMessage = (
-		<div className="text-sm text-hint-warning">{errorMessage}</div>
+		<div className="text-sm text-hint-alert-dot">{errorMessage}</div>
 	);
 
 	let DefaultWrapper = (
@@ -284,7 +286,11 @@ export default function FormInput({
 				<select name={name} className="form-input">
 					{options &&
 						Object.entries(options).map(([label, value], idx) => (
-							<option key={idx} value={value} selected={value === currentFormattedValue}>
+							<option
+								key={idx}
+								value={value}
+								selected={value === currentFormattedValue}
+							>
 								{label}
 							</option>
 						))}
