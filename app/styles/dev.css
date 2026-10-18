@@ -1,0 +1,106 @@
+@theme {
+	/* -= Brand elements =- */
+	--color-brand: #b20000;
+	--color-brand-hover: #7e0000;
+	--color-brand-highlight: #000000;
+	--color-brand-pressed: #5e0000;
+	--color-brand-soft: #f9ebeb;
+	--color-brand-shade: #7e0000;
+
+	/*--color-brand-blue: #005C6D;
+	--color-brand-blue-hover: #004854;
+
+	--color-brand-blue-highlight:#00C1CF;
+	--color-brand-blue-highlight-hover:#00D8E8;*/
+
+	--color-brand-accent: #000000;
+	--color-brand-accent-hover: #000000;
+	--color-brand-accent-highlight: #000000;
+	/* -=                =- */
+
+
+	/* -= Page colors =- */
+	--color-page-bg: #e2e6e9;
+
+	--color-page-floor: #fdf8f7;
+	--color-page-floor-accent: #ebe0e0;
+	--color-page-floor-outline: #800000;
+
+	--color-page-surface: #f0f2f4;
+	--color-page-surface-accent: #e2e5e9;
+	--color-page-surface-outline: #0f3670;
+	/* -=             =- */
+
+	/* -= Text elements =- */
+	--color-text: #000000;
+	--color-text-hyperlink: #000000;
+	--color-text-faint: #000000;
+	--color-text-muted: #000000;
+	/*--color-text-highlight: #000000;*/
+	/* -=               =- */
+
+	/* -= Visual hints elements =- */
+	--color-hint-info: #000000;
+	--color-hint-neutral: #000000;
+
+	--color-hint-success: #E8FBE4;
+	--color-hint-success-fg: #166534;
+	--color-hint-success-dot: #3ACF1F;
+
+	--color-hint-warning: #FFF5EA;
+	--color-hint-warning-fg: #7A4F00;
+	--color-hint-warning-dot: #B78718;
+
+	--color-hint-alert: #FDD5D1;
+	--color-hint-alert-fg: #7E0000;
+	--color-hint-alert-dot: #D32719;
+
+	/* -=                       =- */
+
+	/* -= Table elements =- */
+	--color-table-column: #000000;
+	--color-table-row: #000000;
+	--color-table-row-odd: #000000;
+	/* -=                =- */
+}
+
+/*
+page:
+	- brand (main, accents)
+	- surface/floor/line (main, sunken)
+	- scrollbar
+	- divider
+	- cursor? to laugh?
+text:
+	- normal
+	- hyperlink
+	- faint
+	- muted
+	- highlight?
+components:
+	- header
+	- chip
+	- badge
+	- dialog
+	- button:
+		- normal
+		- secondary
+		- big
+		- small
+		- cancel
+		- loading
+		- disabled
+		- w/ icon
+		- icon only
+	- table
+	- card
+	- form
+	- input
+	- table
+hints:
+	- ok
+	- alert
+	- warning
+	- pending
+	- unknown
+*/
