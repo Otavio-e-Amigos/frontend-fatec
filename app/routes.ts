@@ -19,6 +19,7 @@ export default [
 
 	route("dev-area", "routes/dev-area/router.outlet.tsx", [
 		index("routes/dev-area/index.tsx"),
+		route("style-testing", 'routes/dev-area/style-testing.tsx')
 	]),
 
 	route("professor", "routes/professor/router.outlet.tsx", [
