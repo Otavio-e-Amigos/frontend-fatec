@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+
+@import "./styles/dev.css";
+@import "./styles/components-dev.css";
+
+
 /* 1. tokens: decisões de design (cores, formas, fontes) */
 @import "./styles/tokens.css";
 /*@import "./styles/legacy.css";*/
