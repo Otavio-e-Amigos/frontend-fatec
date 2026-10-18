@@ -7,7 +7,7 @@ export default function AddDisciplinaPage() {
   return (
     <main className="flex flex-1 flex-col">
       <Header activeItem="Disciplinas" />
-      <h1 className="text-4xl my-5 mx-2">Adicionar disciplina</h1>
+      {/*<h1 className="text-4xl my-5 mx-2">Adicionar disciplina</h1>*/}
       <SaveDisciplinaForm />
     </main>
   );

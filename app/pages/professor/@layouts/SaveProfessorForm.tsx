@@ -5,6 +5,7 @@ import NameFormatter from "~/classes/ValueFormatters/NameFormatter";
 // import type FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
 import useForm from "~/hooks/useForm";
+import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 import FormSection from "~/layouts/forms/FormSection";
 import saveAction from "~/modules/professor/@actions/save.action";
 import type Professor from "~/modules/professor/professor.class";
@@ -18,7 +19,7 @@ export default function SaveProfessorForm({
 }) {
 	const { controller, FormContainer } = useForm({
 		actions: saveAction,
-		actionsExtras: { id: professor ?.id }
+		actionsExtras: { id: professor?.id },
 	});
 	const edit = professor !== undefined;
 
@@ -38,19 +39,16 @@ export default function SaveProfessorForm({
 	console.log(professor);
 
 	return (
-		<FormContainer
-			// initialController={controller}
-			// onSubmit={submit}
-			className="flex flex-col gap-8 m-5"
+		<BasicFormLayout
+			title={"Cadastrar novo Docente"}
+			description={
+				"Preencha as informações requeridas pelo formulário para realizar um cadastro de um novo docente para o sistema."
+			}
+			Form={FormContainer}
 		>
-			{/*
-				REFLECT i think i can use hidden value inputs for managing states between formatted value objects,
-				or i could just go object-based on FormController
-				*/}
-			{/*<input type="hidden" disabled name="disabled_value_shouldnt_be_here" value={"i believe this value shouldn't appear on console log since it's disabled?"}/>*/}
 			<FormSection
 				section={"Informações Básicas"}
-				description={"Informações basicas sobre o Professor à ser adicionado"}
+				description={"Informações basicas sobre o Docente à ser adicionado"}
 			>
 				<FormInput
 					required={!edit}
@@ -67,12 +65,10 @@ export default function SaveProfessorForm({
 					label="CPF"
 					ValueFormatter={CPFFormatter}
 				/>
-				{/*<FormInput required name={"professor"} type="text" label="Cursos" />*/
-				/* TO BE ADDED LATER */}
 			</FormSection>
 
 			<FormSection
-				section={"Dados de Docente"}
+				section={"Dados de Docência"}
 				description={
 					"Dados relacionados a vida acadêmica deste Professor dentro da institução"
 				}
@@ -84,13 +80,6 @@ export default function SaveProfessorForm({
 					label="Matrícula"
 				/>
 
-				{/* TODO change to select with restricted options (DETERMIADO, INDETERMINADO, TEMPORARIO) */}
-				{/*<FormInput
-					required={!editMode}
-					name={"contrato"}
-					type="text"
-					label="Contrato"
-				/>*/}
 				<FormInput
 					name={"regimeContrato"}
 					type="select"
@@ -102,30 +91,7 @@ export default function SaveProfessorForm({
 					}}
 					required={!edit}
 				/>
-				{/*<div className="flex flex-col">
-					<label>
-						Contrato {!edit && <span className="text-rose-500">*</span>}
-					</label>
-					<select
-						name="regimeContrato"
-						defaultValue={"DETERMINADO"}
-						className="form-input"
-					>
-						<option value={"DETERMINADO"} selected>
-							Determinado
-						</option>
-						<option value={"INDETERMINADO"}>Indeterminado</option>
-						<option value={"TEMPORARIO"}>Temporário</option>
-					</select>
-				</div>*/}
 
-				{/* TODO change to according value */}
-				{/*<FormInput
-					required={!editMode}
-					name={"status"}
-					type="text"
-					label="Status"
-				/>*/}
 				<FormInput
 					name={"status"}
 					type="select"
@@ -138,21 +104,6 @@ export default function SaveProfessorForm({
 					required={!edit}
 				/>
 
-				{/*<div className="flex flex-col">
-					<label>
-						Status {!edit && <span className="text-rose-500">*</span>}
-					</label>
-					<select name="status" className="form-input">
-						<option value={"ATIVO"} selected>
-							Ativo
-						</option>
-						<option value={"INATIVO"}>Inativo</option>
-						<option value={"AFASTADO"}>Afastado</option>
-					</select>
-				</div>*/}
-
-				{/* TODO change to according value */}
-				{/*<FormInput name={"titulacao"} type="text" label="Titulação" />*/}
 				<FormInput
 					name={"titulacao"}
 					type="select"
@@ -167,31 +118,19 @@ export default function SaveProfessorForm({
 					required={!edit}
 				/>
 
-				{/*<div className="flex flex-col">
-					<label>
-						Titulação {!edit && <span className="text-rose-500">*</span>}
-					</label>
-					<select name="titulacao" className="form-input">
-						<option value={"GRADUADO"} selected>
-							Graduado
-						</option>
-						<option value={"ESPECIALISTA"}>Especialista</option>
-						<option value={"MESTRE"}>Mestre</option>
-						<option value={"DOUTOR"}>Doutor</option>
-						<option value={"POS_DOUTOR"}>Pós Doutorado</option>
-					</select>
-				</div>*/}
-
-				{/* TODO change to according value */}
 				<FormInput name={"codigo"} type="text" label="Código" />
 			</FormSection>
-
-			<p className="text-hint-warning w-full text-right">
+			<p className="text-hint-alert-dot w-full text-right">
 				{controller.error?.message}
 			</p>
 			<button type="submit" className="flex btn btn-success">
 				{edit ? "Salvar Alterações" : "Adicionar"}
 			</button>
-		</FormContainer>
+		</BasicFormLayout>
 	);
 }
+
+// REFLECT i think i can use hidden value inputs for managing states between formatted value objects,
+// 				or i could just go object-based on FormController
+
+// 			<input type="hidden" disabled name="disabled_value_shouldnt_be_here" value={"i believe this value shouldn't appear on console log since it's disabled?"}/>

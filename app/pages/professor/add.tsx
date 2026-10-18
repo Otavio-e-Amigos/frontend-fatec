@@ -29,7 +29,7 @@ export default function Page({ professor }: { professor?: Professor }) {
 		<main className="flex flex-1 flex-col">
 			<Header activeItem="Professores" />
 
-			<h1 className="text-4xl my-5 mx-2">Adicionar novo professor</h1>
+			{/*<h1 className="text-4xl my-5 mx-2">Adicionar novo professor</h1>*/}
 
 			<SaveProfessorForm
 			// professor={professor}
