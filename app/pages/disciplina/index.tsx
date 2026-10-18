@@ -63,7 +63,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 						<button
 							className="btn"
 							data-variant="icon"
-							data-icon="trash"
+							data-icon="delete"
 							title="Excluir"
 							onClick={() => remove(item.id!)}
 						>
