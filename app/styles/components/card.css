@@ -1,4 +1,5 @@
 @layer components {
+	/* TODO check before removing for being unused */
 	.card {
 		--card-pad: 1rem;
 

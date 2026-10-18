@@ -1,4 +1,5 @@
 @layer components {
+	/* looks like this one is being unused, test and remove this w/ new one */
 	/* -= cabeçalho do site =- */
 	.header {
 		@apply bg-brand text-white;
