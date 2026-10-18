@@ -2,7 +2,7 @@
 
 /* 1. tokens: decisões de design (cores, formas, fontes) */
 @import "./styles/tokens.css";
-@import "./styles/legacy.css";
+/*@import "./styles/legacy.css";*/
 
 /* 2. base: reset de elementos (html, body, foco) */
 @import "./styles/base.css";
