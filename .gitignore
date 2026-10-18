@@ -1,5 +1,6 @@
 .DS_Store
 .env
+.zed
 /node_modules/
 
 # React Router
@@ -8,3 +9,4 @@
 
 # Temporary
 # /app/mock
+*.ignore
