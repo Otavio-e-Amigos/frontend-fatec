@@ -1,7 +1,11 @@
+@theme {
+	--font-roboto: "Roboto", sans-serif;
+}
+
 @layer base {
 	html,
 	body {
-		@apply bg-floor text-ink antialiased;
+		@apply bg-floor text-ink antialiased font-roboto;
 	}
 
 	body {
@@ -18,5 +22,21 @@
 @layer components {
 	.link {
 		@apply text-brand underline-offset-2 hover:underline hover:text-brand-hover;
+	}
+
+	.floor {
+		@apply bg-page-floor rounded-lg border border-page-floor-outline;
+	}
+
+	.surface {
+		@apply bg-page-surface rounded-lg border border-page-surface-outline;
+	}
+
+	.floor-accent {
+		@apply bg-page-floor-accent rounded-lg border border-page-floor-outline;
+	}
+
+	.surface-accent {
+		@apply bg-page-surface-accent rounded-lg border border-page-surface-outline;
 	}
 }
