@@ -1,6 +1,4 @@
 @layer components {
-	/* O tom (ok, warn, danger, neutral) só troca três variáveis.
-	   Para criar um tom novo, basta mais um bloco. */
 	.badge {
 		--badge-bg: var(--color-neutral-bg);
 		--badge-fg: var(--color-neutral-fg);
@@ -19,19 +17,21 @@
 		}
 
 		&[data-tone="ok"] {
-			--badge-bg: var(--color-ok-bg);
-			--badge-fg: var(--color-ok-fg);
-			--badge-dot: var(--color-ok-dot);
+			--badge-bg: var(--color-hint-success);
+			--badge-fg: var(--color-hint-success-fg);
+			--badge-dot: var(--color-hint-success-dot);
 		}
+
 		&[data-tone="warn"] {
-			--badge-bg: var(--color-warn-bg);
-			--badge-fg: var(--color-warn-fg);
-			--badge-dot: var(--color-warn-dot);
+			--badge-bg: var(--color-hint-warning);
+			--badge-fg: var(--color-hint-warning-fg);
+			--badge-dot: var(--color-hint-warning-dot);
 		}
+
 		&[data-tone="danger"] {
-			--badge-bg: var(--color-danger-bg);
-			--badge-fg: var(--color-danger-fg);
-			--badge-dot: var(--color-danger-dot);
+			--badge-bg: var(--color-hint-alert);
+			--badge-fg: var(--color-hint-alert-fg);
+			--badge-dot: var(--color-hint-alert-dot);
 		}
 	}
 }

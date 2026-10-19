@@ -29,40 +29,6 @@ type FormSubmitEventHandler = (
 	props: FormSubmitEventHandlerProps,
 ) => Promise<void> | void;
 
-// type FormSubmitSuccessEventHandler = (
-// 	props: FormSubmitEventHandlerProps & {
-// 		controller: FormController;
-// 		navigate: NavigateFunction;
-// 	},
-// ) => Promise<void> | void;
-
-// type FormSubmitFailureEventHandler = (
-// 	props: FormSubmitEventHandlerProps & {
-// 		error: Error;
-// 		controller: FormController;
-// 		dispatch: React.ActionDispatch<[action: FormReducerAction]>;
-// 		navigate: NavigateFunction,
-// 	},
-// ) => Promise<void> | void;
-
-// type SubmitEventHandlerController<T> = (
-// 	event: SyntheticEvent<T>,
-// 	controller: FormController,
-// 	dispatch: React.ActionDispatch<[action: FormReducerAction]>,
-// ) => Promise<void> | void;
-
-// type SubmitSuccessEventHandler = (
-// 	controller: FormController,
-// 	navigate: NavigateFunction,
-// ) => Promise<void> | void;
-
-// type SubmitFailureEventHandler = (
-// 	error: Error,
-// 	controller: FormController,
-// 	dispatch: React.ActionDispatch<[action: FormReducerAction]>,
-// 	navigate: NavigateFunction,
-// ) => Promise<void> | void;
-
 type FormContainerProps = {
 	initialController?: FormController;
 	children?: any;
@@ -80,8 +46,6 @@ type SubmitActionObject = {
 	action: FormSubmitEventHandler;
 	onSuccess?: FormSubmitEventHandler;
 	onFailure?: FormSubmitEventHandler;
-	// onSuccess?: FormSubmitSuccessEventHandler;
-	// onFailure?: FormSubmitFailureEventHandler;
 };
 
 export default function useForm(options?: FormHookOptions) {

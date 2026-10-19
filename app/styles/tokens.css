@@ -28,10 +28,9 @@
 	--color-ink-muted: #666666;       /* cinza-texto-base */
 	--color-ink-faint: #767676;       /* derivado: placeholder e ícones (4.5:1 sobre branco) */
 
-	/* -= status (cores de feedback do guia): fundo -light + texto escuro + ponto saturado =- */
+	/* -= status (cores de feedback do guia): fundo -light + texto escuro + ponto saturado =-
 	--color-ok-bg: #E8FBE4;      --color-ok-fg: #166534;      --color-ok-dot: #3ACF1F;   /* concluido-light / concluido */
-	--color-warn-bg: #FFF5EA;    --color-warn-fg: #7A4F00;    --color-warn-dot: #B78718; /* andamento-light / andamento */
-	--color-danger-bg: #FDD5D1;  --color-danger-fg: #7E0000;  --color-danger-dot: #D32719; /* cancelado-light / cancelado */
+
 	--color-neutral-bg: #E6E6E6; --color-neutral-fg: #666666; --color-neutral-dot: #666666;
 	--color-solid-bg: #005C6D;   --color-solid-fg: #FFFFFF;   --color-solid-dot: #FFFFFF; /* azul-base */
 

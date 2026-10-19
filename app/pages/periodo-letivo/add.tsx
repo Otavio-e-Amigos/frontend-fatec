@@ -1,10 +1,13 @@
-import { Link } from "react-router";
+// import { useNavigate } from "react-router";
+import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 // import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
+
 import useForm from "~/hooks/useForm";
 import Header from "~/layouts/Header";
-import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
+import PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import actions from "~/modules/periodo-letivo/@actions/save.action";
+import FormSection from "~/layouts/forms/FormSection";
 
 export default function AddPeriodo({
 	periodo,
@@ -18,16 +21,21 @@ export default function AddPeriodo({
 	return (
 		<main className="flex flex-1 flex-col">
 			<Header activeItem="Períodos" />
-			<div className="mx-5 mt-5 flex flex-wrap items-center justify-between gap-3">
-				<h1 className="text-4xl">
-					{periodo ? "Editar período letivo" : "Adicionar período letivo"}
-				</h1>
-				<Link className="btn" data-variant="outline" to="/periodo-letivo">
-					Voltar para períodos
-				</Link>
-			</div>
-			<FormContainer className="surface m-5 flex max-w-2xl flex-col gap-4 rounded-card border border-line p-5">
-				<FormInput
+
+			{/*<h1 className="text-4xl my-5 mx-2">Adicionar período letivo</h1>*/}
+
+			<BasicFormLayout
+				title={"Cadastrar Período Letivo"}
+				description={
+					"Use este formulário para realizar o cadastro de um novo período letivo"
+				}
+				Form={FormContainer}
+			>
+				<FormSection
+					section={"Informações Básicas"}
+					description={"Dados para o cadastro de períodos letivos da instituição, importantes para a geração dos documentos."}
+				>
+					<FormInput
 					required
 					name="ano"
 					type="number"
@@ -62,7 +70,7 @@ export default function AddPeriodo({
 				<button type="submit" className="btn self-start" disabled={isSubmitting}>
 					{periodo ? "Salvar alterações" : "Adicionar período"}
 				</button>
-			</FormContainer>
+			</BasicFormLayout>
 		</main>
 	);
 }

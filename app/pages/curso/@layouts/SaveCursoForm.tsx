@@ -1,6 +1,6 @@
-// import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
 import useForm from "~/hooks/useForm";
+import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 import FormSection from "~/layouts/forms/FormSection";
 import type Curso from "~/modules/curso/curso.class";
 import save from "~/modules/curso/@actions/save.action";
@@ -24,12 +24,16 @@ export default function SaveCursoFrom({
     controller.addField("sigla", curso.sigla);
   }
 
-  return (
-    <FormContainer className="flex flex-col gap-8 m-5">
-      <FormSection
-        section="Informações da curso"
-        description="Dados acadêmicos usados nas grades e folhas de frequência."
-      >
+  	return (
+  		<BasicFormLayout
+  			title={"Cadastrar Curso"}
+  			description={"Use este formulário para realizar o cadastro de um novo curso"}
+  			Form={FormContainer}
+  		>
+  			<FormSection
+  				section="Informações da curso"
+  				description="Dados acadêmicos usados nas grades e folhas de frequência."
+  			>
         <FormInput
           required
 					lettersOnly
@@ -61,6 +65,6 @@ export default function SaveCursoFrom({
       <button type="submit" className="btn btn-success">
         {curso ? "Salvar alterações" : "Adicionar"}
       </button>
-    </FormContainer>
+    </BasicFormLayout>
   );
 }

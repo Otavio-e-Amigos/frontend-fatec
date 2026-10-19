@@ -25,9 +25,14 @@ function ProfessorInfo({ professor }: { professor?: Professor }) {
 		<div className="flex flex-row justify-between">
 			<summary className="flex flex-col">
 				<p className="text-3xl">{professor?.name ?? "Professor"}</p>
-				<p className="text-slate-300 text-xs">
+				<div className="flex flex-row items-center gap-1.5">
+					<p className="text-gray-400 text-xs">Docente |</p>
+					<p className="badge" data-tone={professor?.status === "ATIVO" ? "ok" : undefined}>{professor?.status}</p>
+					<p className="chip">{professor?.contract}</p>
+				</div>
+				{/*<p className="text-gray-400 text-xs">
 					Docente | {professor?.status} | {professor?.contract}
-				</p>
+				</p>*/}
 				<section className="flex flex-row gap-4">
 					{/*<InfoBadge icon={"/"} info={<Link to={"mailto:PROFESSOR.EMAIL@EMAIL.DOMAIN"}>PROFESSOR.EMAIL@EMAIL.DOMAIN</Link>} />*/}
 					{/*<InfoBadge icon={"/"} info={"(11) 12345-6789"} />*/}
@@ -66,37 +71,42 @@ export default function About({ professor }: { professor: Professor }) {
 		<>
 			<main className="flex flex-1 flex-col">
 				{/* cool background */}
-				<div className="flex flex-col bg-indigo-200 min-h-60">
+				<div className="flex flex-col bg-page-floor min-h-60">
 					<Header activeItem="Professores" />
 				</div>
 
 				{/*about page*/}
-				<section className="flex flex-col px-10 py-3 bg-item-button">
+				<section className="floor-accent border-x-0 rounded-none flex flex-col px-10 py-3">
 					<ProfessorInfo professor={professor} />
 				</section>
 
 				<section className="flex flex-col px-10 py-3 pt-6 gap-5">
 					<div className="flex flex-row gap-3">
-						<button className="btn btn-normal">Geral</button>
+						<button className="btn">Geral</button>
 						{/*<button className="btn btn-inactive">Grades</button>*/}
 						{/*<button className="btn btn-inactive">Folhas de Ponto</button>*/}
 					</div>
-					<section className="surface rounded-lg px-3 py-1 text-black flex flex-col">
-						<PageSection name={"Informações Gerais"} />
-						<ul className="list-disc ml-5">
-							<li>
-								<b>Status</b>: {professor.status}
-							</li>
-							<li>
-								<b>Tipo de Contrato</b>: {professor.contract}
-							</li>
-							<li>
-								<b>Matrícula</b>: {professor.registry}
-							</li>
-							<li>
-								<b>Código do Professor</b>: {professor.code}
-							</li>
-						</ul>
+					<section className="floor rounded-lg text-black flex flex-col">
+						<div className="floor-accent p-2 border-x-0 border-t-0 rounded-b-none">
+							<h1 className="text-3xl font-medium">Informações Gerais</h1>
+						</div>
+						{/*<PageSection name={"Informações Gerais"} />*/}
+						<main className="px-3 py-4">
+							<ul className="list-disc ml-5">
+								<li>
+									<b>Status</b>: {professor.status}
+								</li>
+								<li>
+									<b>Tipo de Contrato</b>: {professor.contract}
+								</li>
+								<li>
+									<b>Matrícula</b>: {professor.registry}
+								</li>
+								<li>
+									<b>Código do Professor</b>: {professor.code}
+								</li>
+							</ul>
+						</main>
 					</section>
 				</section>
 			</main>

@@ -103,11 +103,12 @@ export default function Page() {
 		<main>
 			<Header activeItem="dev-area" />
 			<section className="mt-5 flex flex-col mx-5">
-				<PageSection name="Dynamic table layouts with same table model" />
+				<Link to={"style-testing"}>Styles</Link>
+				{/*<PageSection name="Dynamic table layouts with same table model" />*/}
 
 				{/*<SimpleTableModelView data={defaultTableTest} />*/}
 				{/*<br/>*/}
-				<ComplexTableModelView data={defaultTableTest} />
+				{/*<ComplexTableModelView data={defaultTableTest} />*/}
 
 				<PageSection name="Components Area" />
 
@@ -119,6 +120,15 @@ export default function Page() {
 					<button className="btn btn-disabled" disabled>
 						Inactive
 					</button>
+					<button className="btn">Create</button>
+
+				</section>
+				<br />
+
+				<p className="mb-3">Others</p>
+				<section className="grid grid-cols-3 gap-3 w-fit">
+					<div className="chip">hello</div>
+
 				</section>
 				<br />
 
@@ -131,17 +141,17 @@ export default function Page() {
 						<StatusBadge value={"Unknown"} status={"gray"} />
 					</section>
 
-					<section className="flex flex-col gap-1 w-fit">
+					{/*<section className="flex flex-col gap-1 w-fit">
 						<StatusBadge value={"Completed"} status={"green"} fill />
 						<StatusBadge value={"Pending"} status={"yellow"} fill />
 						<StatusBadge value={"Not Completed"} status={"red"} fill />
 						<StatusBadge value={"Unknown"} status={"gray"} fill />
-					</section>
+					</section>*/}
 				</section>
 
 				<br />
 
-				<PageSection name={"Forms"} />
+				{/*<PageSection name={"Forms"} />
 
 				<h1 className="mb-2">Random</h1>
 				<section className="flex flex-col gap-1 w-fit">
@@ -190,7 +200,7 @@ export default function Page() {
 				</section>
 				<br />
 
-				<PageSection name={"Random Tests Area"} />
+				<PageSection name={"Random Tests Area"} />*/}
 
 				{/* TODO text need to fit entire words or descriptions inside badge */}
 				{/*<p>as components</p>

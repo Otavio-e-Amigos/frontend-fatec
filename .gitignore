@@ -1,5 +1,6 @@
 .DS_Store
 .env
+.zed
 /node_modules/
 .zed
 
@@ -9,3 +10,4 @@
 
 # Temporary
 # /app/mock
+*.ignore

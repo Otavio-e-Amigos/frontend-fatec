@@ -4,6 +4,7 @@ import NameFormatter from "~/classes/ValueFormatters/NameFormatter";
 import FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
 import useForm from "~/hooks/useForm";
+import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 import FormSection from "~/layouts/forms/FormSection";
 import saveAction from "~/modules/professor/@actions/save.action";
 import type Professor from "~/modules/professor/professor.class";
@@ -30,7 +31,7 @@ export default function SaveProfessorForm({
 	const [initialController] = useState(() =>
 		createInitialController(professor),
 	);
-	const { FormContainer } = useForm({
+	const { controller, FormContainer } = useForm({
 		initialController,
 		actions: saveAction,
 		actionsExtras: { id: professor?.id },
@@ -38,7 +39,13 @@ export default function SaveProfessorForm({
 	const edit = professor !== undefined;
 
 	return (
-		<FormContainer className="flex flex-col gap-8 m-5">
+		<BasicFormLayout
+			title={"Cadastrar novo Docente"}
+			description={
+				"Preencha as informações requeridas pelo formulário para realizar um cadastro de um novo docente para o sistema."
+			}
+			Form={FormContainer}
+		>
 			<FormSection
 				section={"Informações Básicas"}
 				description={"Informações basicas sobre o Professor à ser adicionado"}
@@ -86,6 +93,7 @@ export default function SaveProfessorForm({
 					}}
 					required={!edit}
 				/>
+
 				<FormInput
 					name={"status"}
 					type="select"
@@ -112,12 +120,20 @@ export default function SaveProfessorForm({
 					required={!edit}
 				/>
 
-				<FormInput name="codigo" type="text" label="Código" />
+				<FormInput name={"codigo"} type="text" label="Código" />
 			</FormSection>
 
+			<p className="text-hint-alert-dot w-full text-right">
+				{controller.error?.message}
+			</p>
 			<button type="submit" className="flex btn btn-success">
 				{edit ? "Salvar Alterações" : "Adicionar"}
 			</button>
-		</FormContainer>
+		</BasicFormLayout>
 	);
 }
+
+// REFLECT i think i can use hidden value inputs for managing states between formatted value objects,
+// 				or i could just go object-based on FormController
+
+// 			<input type="hidden" disabled name="disabled_value_shouldnt_be_here" value={"i believe this value shouldn't appear on console log since it's disabled?"}/>
