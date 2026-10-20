@@ -1,4 +1,4 @@
-import Page from "~/pages/professor/edit";
+import Page from "~/pages/professor/[id]/edit";
 import type { Route } from "./+types/edit";
 // import professors from "~/mock/db/professors.db";
 import ProfessorService from "~/modules/professor/professor.service";

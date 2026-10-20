@@ -1,7 +1,7 @@
 import type { Route } from "./+types/edit";
 import CursoService from "~/modules/curso/curso.service";
 import AuthService from "~/modules/user/auth.service";
-import Page from "~/pages/curso/edit";
+import Page from "~/pages/curso/[id]/edit";
 export async function clientLoader({ params }: Route.LoaderArgs) {
   return {
     curso: await CursoService.get(

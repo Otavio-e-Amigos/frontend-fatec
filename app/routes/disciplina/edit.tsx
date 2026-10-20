@@ -1,7 +1,7 @@
 import type { Route } from "./+types/edit";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
-import Page from "~/pages/disciplina/edit";
+import Page from "~/pages/disciplina/[id]/edit";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
   const auth = AuthService.getUserToken();
