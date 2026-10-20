@@ -5,6 +5,7 @@ import ConfirmationDialog from "~/components/ConfirmationDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
+import PageHeader from "~/layouts/PageHeader";
 import PageSection from "~/layouts/PageSection.layout";
 import Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
@@ -133,22 +134,35 @@ export default function Page({ list }: { list: Professor[] }) {
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Professores" />
 
-			<main className="mx-5 flex flex-1 flex-col">
+			<main className="mx-5 flex flex-1 flex-col my-4 gap-3">
 				<section className="flex flex-row justify-between items-center">
-					<PageSection name={"Professores"} />
-					<Link className="btn" data-variant="outline" data-size="sm" to="add">
-						+ Adicionar
-					</Link>
+					{/* <PageSection name={"Professores"} /> */}
+					<PageHeader
+						title={"Professores"}
+						subTitle={"Gestão de Docentes"}
+						description={"Explore e visualize as opções disponíveis para cada docente"}
+						headerItems={(
+							<Link className="btn w-fit" data-variant="outline" data-size="sm" to="add">
+								+ Adicionar
+							</Link>
+						)}
+					/>
 				</section>
-				<section className="flex flex-row my-4 justify-end">
+				<section className="flex flex-row my-4 justify-end items-center gap-5">
 					<FormInput
 						type="search"
 						name={"search"}
+						placeholder="Pesquisar..."
 						onChange={(a: any) => {
 							// if this doesnt work, FormInput may have it's variable onChange commented for some reason
 							searchItem(a.currentTarget.value);
 						}}
+
 					/>
+					{/* <Link className="btn" data-variant="outline" data-size="sm" to="add">
+						+ Adicionar
+					</Link> */}
+
 				</section>
 				<ComplexTableModelView data={professorsTable} />
 			</main>
