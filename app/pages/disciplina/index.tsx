@@ -14,7 +14,8 @@ import PageHeader from "~/layouts/PageHeader";
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const navigate = useNavigate();
 	const [table, setTable] = useState(makeTable(list));
-	const [disciplineToDelete, setDisciplineToDelete] = useState<Disciplina | null>(null);
+	const [disciplineToDelete, setDisciplineToDelete] =
+		useState<Disciplina | null>(null);
 	const [deleteError, setDeleteError] = useState<string>();
 
 	async function removeSelectedDiscipline() {
@@ -29,7 +30,9 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 				setDisciplineToDelete(null);
 				navigate(0);
 			} else {
-				setDeleteError("Não foi possível excluir a disciplina. Tente novamente.");
+				setDeleteError(
+					"Não foi possível excluir a disciplina. Tente novamente.",
+				);
 			}
 		} catch (error) {
 			setDeleteError(
@@ -98,12 +101,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 			},
 		]);
 
-		return new DefaultTableModel(rows, [
-			"Disciplina",
-			"Código",
-			"Sigla",
-			"",
-		]);
+		return new DefaultTableModel(rows, ["Disciplina", "Código", "Sigla", ""]);
 	}
 
 	return (

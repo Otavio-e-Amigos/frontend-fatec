@@ -13,8 +13,6 @@ import AuthService from "~/modules/user/auth.service";
 
 export default function Page({ list }: { list: Professor[] }) {
 	// TODO test and switch with ObjectTableModel
-	//
-	//
 	const navigate = useNavigate();
 	const auth = AuthService.getUserToken();
 	// const [professorsTableList, setProfessorsTableList] = useState(setList(list));
@@ -38,7 +36,9 @@ export default function Page({ list }: { list: Professor[] }) {
 				setProfessorToDeactivate(null);
 				navigate(0);
 			} else {
-				setDeactivationError("Não foi possível desativar o professor. Tente novamente.");
+				setDeactivationError(
+					"Não foi possível desativar o professor. Tente novamente.",
+				);
 			}
 		} catch (error) {
 			setDeactivationError(
@@ -108,14 +108,6 @@ export default function Page({ list }: { list: Professor[] }) {
 		]);
 	}
 
-	// const professorsTable = new DefaultTableModel(setList(list), [
-	// 	"Docente",
-	// 	"Matrícula",
-	// 	"Tipo de Contrato",
-	// 	"Status",
-	// 	"Ação",
-	// ]);
-
 	function searchItem(value: string) {
 		const term = value.toLowerCase().trim();
 		if (!term) {
@@ -123,8 +115,12 @@ export default function Page({ list }: { list: Professor[] }) {
 			return;
 		}
 		const filtered = list.filter((prof) => {
-			const nameMatch = prof.name ? prof.name.toLowerCase().includes(term) : false;
-			const registryMatch = prof.registry ? prof.registry.toLowerCase().includes(term) : false;
+			const nameMatch = prof.name
+				? prof.name.toLowerCase().includes(term)
+				: false;
+			const registryMatch = prof.registry
+				? prof.registry.toLowerCase().includes(term)
+				: false;
 			return nameMatch || registryMatch;
 		});
 		setProfessorsTable(setList(filtered));
@@ -164,12 +160,10 @@ export default function Page({ list }: { list: Professor[] }) {
 							// if this doesnt work, FormInput may have it's variable onChange commented for some reason
 							searchItem(a.currentTarget.value);
 						}}
-
 					/>
 					{/* <Link className="btn" data-variant="outline" data-size="sm" to="add">
 						+ Adicionar
 					</Link> */}
-
 				</section>
 				<ComplexTableModelView data={professorsTable} />
 			</main>
