@@ -2,9 +2,10 @@ import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
+// import PageSection from "~/layouts/PageSection.layout";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
+import PageHeader from "~/layouts/PageHeader";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 	const table = new DefaultTableModel(
@@ -28,12 +29,28 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 	return (
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Períodos" />
-			<main className="mx-5 flex flex-1 flex-col">
+			<main className="mx-5 my-4 flex flex-1 flex-col">
 				<section className="flex flex-row justify-between items-center">
-					<PageSection name="Períodos letivos" />
-					<Link className="btn" data-variant="outline" data-size="sm" to="add">
+					<PageHeader
+						title={"Períodos Letivos"}
+						subTitle={"Recursos Acadêmicos"}
+						description={
+							"Visualize os períodos letivos cadastrados e crie-os se necessário"
+						}
+						headerItems={
+							<Link
+								className="btn w-fit"
+								data-variant="outline"
+								data-size="sm"
+								to="add"
+							>
+								+ Novo Período Letivo
+							</Link>
+						}
+					/>
+					{/*<Link className="btn" data-variant="outline" data-size="sm" to="add">
 						+ Adicionar
-					</Link>
+					</Link>*/}
 				</section>
 				<section className="my-4">
 					<ComplexTableModelView data={table} />

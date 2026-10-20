@@ -134,18 +134,25 @@ export default function Page({ list }: { list: Professor[] }) {
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Professores" />
 
-			<main className="mx-5 flex flex-1 flex-col my-4 gap-3">
+			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
 				<section className="flex flex-row justify-between items-center">
 					{/* <PageSection name={"Professores"} /> */}
 					<PageHeader
 						title={"Professores"}
-						subTitle={"Gestão de Docentes"}
-						description={"Explore e visualize as opções disponíveis para cada docente"}
-						headerItems={(
-							<Link className="btn w-fit" data-variant="outline" data-size="sm" to="add">
-								+ Adicionar
+						subTitle={"Recursos Acadêmicos"}
+						description={
+							"Explore e visualize as opções disponíveis para cada docente"
+						}
+						headerItems={
+							<Link
+								className="btn w-fit"
+								data-variant="outline"
+								data-size="sm"
+								to="add"
+							>
+								+ Novo Professor
 							</Link>
-						)}
+						}
 					/>
 				</section>
 				<section className="flex flex-row my-4 justify-end items-center gap-5">
