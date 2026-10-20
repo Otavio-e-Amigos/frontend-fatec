@@ -7,6 +7,7 @@ import PageSection from "~/layouts/PageSection.layout";
 import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
 import SaveProfessorForm from "../professor/@layouts/SaveProfessorForm";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 // import EditPage from "../professor/edit";
 // import Professor from "~/modules/professor/professor.class";
 
@@ -125,12 +126,24 @@ function ComponentSectionTest() {
 	);
 }
 
+
+function HeaderComponent() {
+	return <p>Hello!</p>
+}
+
 export default function Page() {
 	return (
 		<main>
 			<Header activeItem="dev-area" />
 			<PageSection name={"Style laboratory"} />
 			<section className="mt-5 flex flex-col mx-5">
+				<PageSection name={"Generic Floors"} />
+				<GenericFloor
+					header={<HeaderComponent/>}
+				>
+					asodk
+				</GenericFloor>
+
 				<PageSection name={"Page Layouts"} />
 				<div className="flex flex-col w-full gap-5 p-2 rounded-lg">
 					<div className="bg-page-floor min-h-100 flex flex-col border border-page-floor-outline/25 rounded-lg">
@@ -153,9 +166,7 @@ export default function Page() {
 								<div className="p-5 py-3 bg-page-surface-accent rounded-lg rounded-e-none min-h-10 border-r  border-page-surface-outline/25">
 									Uma Seção com formato diferente
 								</div>
-								<p className="flex-1">
-									AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-								</p>
+								<p className="flex-1">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
 							</div>
 
 							<div className="bg-page-surface border border-slate-800/25 rounded-lg">
