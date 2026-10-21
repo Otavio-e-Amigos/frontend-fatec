@@ -56,6 +56,9 @@ export default function SaveDisciplinaForm({
 					label="Sigla"
 				/>
 			</FormSection>
+			<p className="text-hint-alert-dot w-full text-right">
+				{controller.error?.message}
+			</p>
 			<button type="submit" className="btn btn-success">
 				{disciplina ? "Salvar alterações" : "Adicionar"}
 			</button>

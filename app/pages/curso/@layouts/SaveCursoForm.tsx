@@ -22,7 +22,7 @@ export default function SaveCursoFrom({ curso }: { curso?: Curso }) {
 
 	return (
 		<BasicFormLayout
-			title={curso ? `Editar Professor "${curso?.nome}"` : `Cadastrar Curso`}
+			title={curso ? `Editar Curso "${curso?.nome}"` : `Cadastrar Curso`}
 			description={
 				"Use este formulário para realizar o cadastro de um novo curso"
 			}
@@ -62,6 +62,9 @@ export default function SaveCursoFrom({ curso }: { curso?: Curso }) {
 					label="Sigla"
 				/>
 			</FormSection>
+			<p className="text-hint-alert-dot w-full text-right">
+				{controller.error?.message}
+			</p>
 			<button type="submit" className="btn btn-success">
 				{curso ? "Salvar alterações" : "Adicionar"}
 			</button>
