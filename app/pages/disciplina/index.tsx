@@ -121,7 +121,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 				</section>
 
 				<section className="flex flex-row my-4 justify-end">
-					<FormInput type="search" name="busca" onChange={search} />
+					<FormInput type="search" name="busca" placeholder="Pesquisar..." onChange={search} />
 				</section>
 
 				<ComplexTableModelView data={table} />

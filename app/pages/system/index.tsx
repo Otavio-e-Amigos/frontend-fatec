@@ -142,7 +142,7 @@ export default function Page({ users }: { users?: User[] }) {
 							className="btn w-fit"
 							data-variant="outline"
 							data-size="sm"
-							to="add"
+							to="user/add"
 						>
 							+ Novo Usuário
 						</Link>

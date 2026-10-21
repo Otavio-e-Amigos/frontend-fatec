@@ -10,14 +10,20 @@ export default function PageHeader({
 	headerItems?: any;
 }) {
 	return (
-		<header className="flex flex-wrap items-end justify-between gap-3 w-full">
+		<div className="flex flex-col items-end justify-between gap-3 w-full">
 			<div className="flex flex-row w-full h-full">
 				<div className="flex flex-col w-3/4">
-					<p className="text-xs font-semibold uppercase tracking-wide text-brand">
-						{subTitle}
-					</p>
+					{subTitle && (
+						<p className="text-xs font-semibold uppercase tracking-wide text-brand">
+							{subTitle}
+						</p>
+					)}
+
 					<h1 className="mt-1 text-3xl font-semibold text-ink">{title}</h1>
-					<p className="mt-1 text-sm text-slate-600">{description}</p>
+
+					{description && (
+						<p className="mt-1 text-sm text-slate-600">{description}</p>
+					)}
 				</div>
 				<div className="flex flex-col w-1/4 justify-end items-end">
 					{headerItems}
@@ -30,7 +36,7 @@ export default function PageHeader({
 				<div className="min-h-3 bg-brand-shade/75 rounded-xl w-1/4" />
 				<div className="min-h-1 bg-brand-shade/50 rounded-xl  rounded-s-none w-full" />
 			</div>
-		</header>
+		</div>
 	);
 }
 
