@@ -83,6 +83,12 @@ async function onFailure({
 				error: { message: field.message },
 			}),
 		);
+		if (error.message) {
+			dispatch({
+				action: "setError",
+				error: { message: error.message },
+			});
+		}
 		dialogs.toast.error(error.message);
 		return;
 	}

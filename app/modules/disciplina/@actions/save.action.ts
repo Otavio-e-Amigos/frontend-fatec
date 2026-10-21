@@ -19,20 +19,32 @@ async function action({
 	const { id } = extras;
 	const nome = String(form.nome ?? "").trim();
 	const codigo = String(form.codigo ?? "").trim();
-	const sigla = String(form.sigla ?? "").trim().toUpperCase();
+	const sigla = String(form.sigla ?? "")
+		.trim()
+		.toUpperCase();
 	const fields = [];
 
-	if (!nome) fields.push({ name: "nome", message: "Informe o nome da disciplina." });
+	// TODO transform inline validator to input-level
+	if (!nome)
+		fields.push({ name: "nome", message: "Informe o nome da disciplina." });
 	else if (!/^[\p{L}\s.'-]+$/u.test(nome)) {
 		fields.push({ name: "nome", message: "O nome não pode conter números." });
 	}
-	if (!codigo) fields.push({ name: "codigo", message: "Informe o código da disciplina." });
+	if (!codigo)
+		fields.push({ name: "codigo", message: "Informe o código da disciplina." });
 	else if (!/^[A-Za-z0-9-]+$/.test(codigo)) {
-		fields.push({ name: "codigo", message: "Use apenas letras, números e hífen no código." });
+		fields.push({
+			name: "codigo",
+			message: "Use apenas letras, números e hífen no código.",
+		});
 	}
-	if (!sigla) fields.push({ name: "sigla", message: "Informe a sigla da disciplina." });
+	if (!sigla)
+		fields.push({ name: "sigla", message: "Informe a sigla da disciplina." });
 	else if (!/^[A-Z]{2,10}$/.test(sigla)) {
-		fields.push({ name: "sigla", message: "A sigla deve ter de 2 a 10 letras." });
+		fields.push({
+			name: "sigla",
+			message: "A sigla deve ter de 2 a 10 letras.",
+		});
 	}
 
 	if (fields.length > 0) {
@@ -76,7 +88,7 @@ async function onFailure({
 	error,
 	dispatch,
 	dialogs,
-}: FormSubmitEventHandlerProps<DisciplinaExtras>) {
+}: FormSubmitEventHandlerProps<DisciplinaExtras>) {;
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
 			dispatch({
@@ -85,6 +97,12 @@ async function onFailure({
 				error: { message: field.message },
 			}),
 		);
+		if (error.message) {
+			dispatch({
+				action: "setError",
+				error: { message: error.message },
+			});
+		}
 		dialogs.toast.error(error.message);
 		return;
 	}

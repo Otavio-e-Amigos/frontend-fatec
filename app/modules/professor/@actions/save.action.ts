@@ -79,6 +79,7 @@ async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
 }
 
 async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
+	console.log(error)
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
 			dispatch({
@@ -87,6 +88,12 @@ async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 				error: { message: field.message },
 			}),
 		);
+		if (error.message) {
+			dispatch({
+				action: "setError",
+				error: { message: error.message },
+			});
+		}
 	}
 }
 

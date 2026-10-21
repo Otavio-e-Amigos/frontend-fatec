@@ -111,7 +111,7 @@ export default class DisciplinaService {
 			const res = await this.module.request(req);
 			return res.ok ? toDisciplina(res.rawData.dados) : undefined;
 		} catch (e) {
-			console.log(e)
+			console.log(e);
 			if (e instanceof DefaultAPIData) {
 				const message = e.rawData.mensagem;
 				switch (e.status) {
@@ -121,6 +121,10 @@ export default class DisciplinaService {
 						]);
 					case 401:
 						throw new FormValidationError(message ?? "Não autorizado", [
+							message,
+						]);
+					case 409:
+						throw new FormValidationError(message ?? "Há um conflito entre os dados.", [
 							message,
 						]);
 					default:
