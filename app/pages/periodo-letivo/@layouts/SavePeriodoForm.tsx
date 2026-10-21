@@ -7,19 +7,27 @@ import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 
 export default function SavePeriodoForm({
 	periodo,
+	onSaved,
 }: {
 	periodo?: PeriodoLetivo;
+	onSaved?: () => void;
 }) {
 	const { FormContainer, isSubmitting } = useForm({
 		actions,
-		actionsExtras: { id: periodo?.id },
+		actionsExtras: { id: periodo?.id, onSaved },
 	});
 
 	return (
 		<BasicFormLayout
-			title={"Cadastrar Período Letivo"}
+			title={
+				periodo
+					? `Editar Período Letivo ${periodo.ano}/${periodo.semestre}`
+					: "Cadastrar Período Letivo"
+			}
 			description={
-				"Use este formulário para realizar o cadastro de um novo período letivo"
+				periodo
+					? "Altere os dados do período letivo e salve."
+					: "Use este formulário para realizar o cadastro de um novo período letivo"
 			}
 			Form={FormContainer}
 		>

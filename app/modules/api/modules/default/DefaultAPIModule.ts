@@ -4,6 +4,8 @@ import AbstractAPIModule from "../../base/AbstractAPIModule";
 import type AbstractQueryObject from "../../base/AbstractQueryObject";
 import DefaultAPIData from "./DefaultAPIData";
 import axios, { AxiosError } from "axios";
+import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
+import { apiStatus } from "../../api-status";
 
 // TODO change to localhost API if .env one is not available or by other means (var declaring to use localhost)
 const API_HOST = import.meta.env.VITE_API_HOST as string;
@@ -46,8 +48,8 @@ export class DefaultAPIModule extends AbstractAPIModule {
 		const headers: Record<string, any> = { "Content-Type": "application/json" };
 		const params = req.arguments
 			? new URLSearchParams(
-					req.arguments.map(({ param, value }) => [param, String(value)]),
-				)
+				req.arguments.map(({ param, value }) => [param, String(value)]),
+			)
 			: undefined;
 
 		if (req.credentials) {
@@ -64,22 +66,29 @@ export class DefaultAPIModule extends AbstractAPIModule {
 				params,
 				data: req.body,
 				headers: headers,
+				timeout: 15000,
 			})
 			.then((res) => {
+				apiStatus.report(true);
 				data.rawData = res.data;
 				data.status = res.status;
 				data.ok = res.status >= 200 && res.status < 300;
 				return data;
 			})
 			.catch((err) => {
-				// console.log("error when requesting!");
-				// console.log(err);
+				// sem err.response: servidor fora do ar, sem rede ou timeout
+				if (!err.response) {
+					apiStatus.report(false);
+					throw new ApiUnavailableError();
+				}
+				apiStatus.report(true);
 
 				data.status = err.response.status;
 				data.ok = false;
-				if (err.response) data.rawData = err.response.data;
+				data.rawData = err.response.data;
 
 				switch (data.status) {
+					// ... (mantenha o switch exatamente como está)
 					case 400: {
 						data.error = new APIValidationError(data.rawData.mensagem, data);
 						throw data

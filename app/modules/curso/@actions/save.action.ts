@@ -3,11 +3,17 @@ import AuthService from "~/modules/user/auth.service";
 import Curso from "../curso.class";
 import CursoService from "../curso.service";
 import { FormValidationError } from "~/classes/errors/ValidationError";
+import { FormCancelledError } from "~/classes/errors/FormCancelledError";
+import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
+import getErrorMessage from "~/classes/errors/get-error-message";
+
+type CursoExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-}: FormSubmitEventHandlerProps) {
+	dialogs,
+}: FormSubmitEventHandlerProps<CursoExtras>) {
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
 	const nome = String(form.nome ?? "").trim();
@@ -31,25 +37,44 @@ async function action({
 		throw new FormValidationError("Verifique os campos do curso.", fields);
 	}
 
-	const curso = new Curso({
-		id: extras.id,
-		nome,
-		turno,
-		sigla,
-	});
+	if (extras.id) {
+		const confirmed = await dialogs.confirm({
+			title: "Salvar alterações?",
+			description: `As alterações no curso ${nome} serão aplicadas.`,
+			confirmLabel: "Salvar",
+			tone: "primary",
+		});
+		if (!confirmed) throw new FormCancelledError();
+	}
 
+	const curso = new Curso({ id: extras.id, nome, turno, sigla });
 	const auth = AuthService.getUserToken();
-	const res = extras.id
-		? await CursoService.edit(extras.id, curso, auth)
-		: await CursoService.save(curso, auth);
+	if (extras.id) {
+		await CursoService.edit(extras.id, curso, auth);
+	} else {
+		await CursoService.save(curso, auth);
+	}
 }
 
-async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
-	navigate("/curso");
+async function onSuccess({
+	navigate,
+	dialogs,
+	extras,
+}: FormSubmitEventHandlerProps<CursoExtras>) {
+	dialogs.toast.success(
+		extras.id
+			? "Curso atualizado com sucesso."
+			: "Curso cadastrado com sucesso.",
+	);
+	if (extras.onSaved) extras.onSaved();
+	else navigate("/curso");
 }
 
-async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
-	console.log(error);
+async function onFailure({
+	error,
+	dispatch,
+	dialogs,
+}: FormSubmitEventHandlerProps<CursoExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
 			dispatch({
@@ -58,11 +83,13 @@ async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 				error: { message: field.message },
 			}),
 		);
+		dialogs.toast.error(error.message);
+		return;
 	}
+	if (error instanceof ApiUnavailableError) return;
+	dialogs.toast.error(
+		getErrorMessage(error, "Não foi possível salvar o curso."),
+	);
 }
 
-export default {
-	action,
-	onSuccess,
-	onFailure,
-};
+export default { action, onSuccess, onFailure };

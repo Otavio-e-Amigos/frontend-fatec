@@ -1,107 +1,136 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useMemo } from "react";
+import { Link, useRevalidator } from "react-router";
+import getErrorMessage from "~/classes/errors/get-error-message";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import ConfirmationDialog from "~/components/ConfirmationDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
+import useBlockedPage from "~/hooks/useBlockedPage";
+import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
-import AuthService from "~/modules/user/auth.service";
-import UserService from "~/modules/user/user.service";
-import User from "~/modules/user/user.class";
 import PageHeader from "~/layouts/PageHeader";
+import AuthService from "~/modules/user/auth.service";
+import type User from "~/modules/user/user.class";
+import UserService from "~/modules/user/user.service";
 
-export default function Page({ users }: { users: User[] }) {
-	const navigate = useNavigate();
-	const auth = AuthService.getUserToken();
-	const [userToDeactivate, setUserToDeactivate] = useState<User | null>(null);
-	const [deactivationError, setDeactivationError] = useState<string>();
+// No sistema, quem administra é o perfil "TI". "RESPONSAVEL" não acessa a Gestão.
+const ADMIN_PROFILE = "TI";
 
+// users pode chegar undefined: o UserService.get devolve undefined quando a API recusa a listagem.
+export default function Page({ users }: { users?: User[] }) {
+	const dialogs = useDialogs();
+	const { revalidate } = useRevalidator();
 
-	async function activateUser(id: number) {
-		const res = await UserService.activate(id, auth);
-		if (res) {
-			navigate(0);
-		}
-	}
+	const currentUser = AuthService.hasUserToken()
+		? AuthService.getUserToken()
+		: null;
 
-	async function deactivateUser(id: number) {
+	const isBlocked = useBlockedPage(currentUser?.profile !== ADMIN_PROFILE, {
+		title: "Gestão restrita",
+		description:
+			"Apenas usuários do perfil TI podem acessar a gestão do sistema.",
+	});
+
+	async function activateUser(user: User) {
 		try {
-			const res = await UserService.deactivate(id, auth);
-			if (res) {
-				setUserToDeactivate(null);
-				navigate(0);
-			} else {
-				setDeactivationError("Não foi possível desativar o usuário. Tente novamente.");
-			}
+			const res = await UserService.activate(
+				user.id!,
+				AuthService.getUserToken(),
+			);
+			if (!res) throw new Error();
+			dialogs.toast.success(`${user.name} foi ativado.`);
+			revalidate();
 		} catch (error) {
-			setDeactivationError(
-				error instanceof Error
-					? error.message
-					: "Ocorreu um erro ao desativar o usuário.",
+			dialogs.toast.error(
+				getErrorMessage(error, "Não foi possível ativar o usuário."),
 			);
 		}
 	}
 
-	console.log(users);
-	const userTableList = users.map((user) => [
-		{
-			value: user.name,
-			display: (
-				<p key={user.id}>
-					{user.name}
-				</p>
-			),
-		},
-		user.login,
-		user.active ? "Ativo" : "Inativo",
-		user.profile,
-		{
-			value: 0,
-			display: (
-				<div key={user.id} className="row-actions">
-					<Link
-						className="btn"
-						data-variant="icon"
-						data-icon="edit"
-						title="Editar"
-						to={`/system/user/${user.id}/edit`}
-					>
-						Editar
-					</Link>
-					<button
-						type="button"
-						className="btn"
-						data-variant="icon"
-						data-icon="power"
-						title={user.active ? "Desativar" : "Ativar"}
-						onClick={() => {
-							if (user.active) {
-								setDeactivationError(undefined);
-								setUserToDeactivate(user);
-							} else {
-								void activateUser(user.id!);
-							}
-						}}
-					>
-						{user.active ? "Desativar" : "Ativar"}
-					</button>
-				</div>
-			),
-		},
-	]);
+	async function deactivateUser(user: User) {
+		const done = await dialogs.confirm({
+			title: "Desativar usuário?",
+			description: `O usuário ${user.name ?? ""} perderá o acesso ao sistema enquanto estiver desativado.`,
+			confirmLabel: "Desativar",
+			tone: "danger",
+			onConfirm: async () => {
+				const res = await UserService.deactivate(
+					user.id!,
+					AuthService.getUserToken(),
+				);
+				if (!res) {
+					throw new Error(
+						"Não foi possível desativar o usuário. Tente novamente.",
+					);
+				}
+			},
+		});
+		if (done) {
+			dialogs.toast.success(`${user.name} foi desativado.`);
+			revalidate();
+		}
+	}
 
-	const usersTable = new DefaultTableModel(userTableList, [
-		"Usuário",
-		"Login",
-		"Ativo?",
-		"Perfil",
-		"",
-	]);
+	const usersTable = useMemo(() => {
+		const rows = (users ?? []).map((user) => [
+			{
+				value: user.name,
+				display: <p key={user.id}>{user.name}</p>,
+			},
+			user.login,
+			user.active ? "Ativo" : "Inativo",
+			user.profile,
+			{
+				value: 0,
+				display: (
+					<div key={user.id} className="row-actions">
+						<Link
+							className="btn"
+							data-variant="icon"
+							data-icon="edit"
+							title="Editar"
+							to={`/system/user/${user.id}/edit`}
+						>
+							Editar
+						</Link>
+						<button
+							type="button"
+							className="btn"
+							data-variant="icon"
+							data-icon="power"
+							title={user.active ? "Desativar" : "Ativar"}
+							onClick={() =>
+								user.active ? void deactivateUser(user) : void activateUser(user)
+							}
+						>
+							{user.active ? "Desativar" : "Ativar"}
+						</button>
+					</div>
+				),
+			},
+		]);
+
+		return new DefaultTableModel(rows as any, [
+			"Usuário",
+			"Login",
+			"Ativo?",
+			"Perfil",
+			"",
+		]);
+	}, [users]);
+
+	// O return antecipado vem depois de TODOS os hooks (useBlockedPage, useMemo...),
+	// senão o React reclama de mudança na ordem dos hooks.
+	if (isBlocked) {
+		return (
+			<div className="flex flex-1 flex-col">
+				<Header />
+			</div>
+		);
+	}
 
 	return (
 		<div className="flex flex-1 flex-col">
 			<Header />
 			<main className="mx-5 my-4 flex flex-col gap-5">
-				{/*<h1 className="text-3xl mx-2">Gerenciamento do sistema</h1>*/}
 				<PageHeader
 					title={"Sistema"}
 					subTitle={"Gestão do Sistema"}
@@ -119,29 +148,8 @@ export default function Page({ users }: { users: User[] }) {
 						</Link>
 					}
 				/>
-				{/*<section className="flex flex-col gap-2 mx-10 my-5">*/}
-				{/*<section className="flex flex-col gap-2">*/}
-					{/*<Link
-						to={"/system/user/add"}
-						className="btn"
-						data-variant="outline"
-						data-size="sm"
-					>
-						Adicionar Usuário
-					</Link>*/}
-				{/*</section>*/}
-					<ComplexTableModelView data={usersTable} actionsColumn />
+				<ComplexTableModelView data={usersTable} actionsColumn />
 			</main>
-			{userToDeactivate && (
-				<ConfirmationDialog
-					title="Desativar usuário?"
-					description={`O usuário ${userToDeactivate.name ?? ""} perderá o acesso ao sistema enquanto estiver desativado.`}
-					confirmLabel="Desativar"
-					errorMessage={deactivationError}
-					onConfirm={() => deactivateUser(userToDeactivate.id!)}
-					onCancel={() => setUserToDeactivate(null)}
-				/>
-			)}
 		</div>
 	);
 }
