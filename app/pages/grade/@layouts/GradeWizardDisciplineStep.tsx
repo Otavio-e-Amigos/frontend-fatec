@@ -142,7 +142,7 @@ export default function GradeWizardDisciplineStep({
 		<section className="surface flex flex-col gap-5 rounded-card p-5">
 			<header className="flex flex-wrap items-start justify-between gap-2 border-b border-line pb-3">
 				<div>
-					<h1 className="text-lg font-semibold text-accent">
+					<h1 className="text-lg font-semibold text-brand">
 						Minhas Disciplinas
 					</h1>
 					<p className="mt-1 text-sm text-ink-muted">

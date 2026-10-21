@@ -2,6 +2,7 @@ import formatTurno from "~/modules/curso/format-turno";
 import type { SavedGradeLesson } from "~/modules/grade/grade.service";
 import type { ScheduleDiscipline } from "../grade-page.types";
 import { displayDay } from "../grade-page.utils";
+import GenericSurface from "~/layouts/pages/GenericSurface";
 
 type GradeDisciplineCardProps = {
 	discipline: ScheduleDiscipline;
@@ -30,100 +31,215 @@ export default function GradeDisciplineCard({
 	const canDeleteAssociation =
 		isCancelled && discipline.lessons.length === 0;
 
-	return (
-		<article className="overflow-hidden rounded-card border border-line bg-surface">
-			<div className="flex flex-col gap-4 p-4 sm:p-5">
-				<header className="flex flex-wrap items-start justify-between gap-3">
-					<div className="min-w-0">
-						<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
-							{discipline.course} · {formatTurno(discipline.shift)}
-						</p>
-						<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
-					</div>
-					<span
-						className={
-							isCancelled
-								? "rounded-control bg-warn-bg px-2.5 py-1 text-xs font-medium text-warn-fg"
-								: "rounded-control bg-ok-bg px-2.5 py-1 text-xs font-medium text-ok-fg"
-						}
-					>
-						{discipline.status}
-					</span>
-				</header>
-
-				<section aria-label={`Horários de ${discipline.name}`}>
-					<div className="mb-2 flex items-center justify-between gap-2">
-						<h4 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
-							Horários da disciplina
-						</h4>
-						<span className="text-xs text-ink-muted">
-							{discipline.lessons.length} cadastrado(s)
-						</span>
-					</div>
-					{discipline.lessons.length ? (
-						<ul className="flex flex-col gap-2">
-							{discipline.lessons.map((lesson) => (
-								<LessonRow
-									key={lesson.id}
-									lesson={lesson}
-									discipline={discipline}
-									disabled={isSavingEdit || isDeleting}
-									onEdit={() => onEditLesson(lesson)}
-									onDelete={() => onDeleteLesson(discipline, lesson)}
-								/>
-							))}
-						</ul>
-					) : (
-						<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
-							Nenhum horário cadastrado para esta disciplina.
-						</p>
-					)}
-				</section>
-
-				<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-ink-muted">
-					<InfoPill>{discipline.quantidadeAulas} aula(s)/semana</InfoPill>
-					<InfoPill>{discipline.semestreCurso}º semestre</InfoPill>
-					{discipline.op !== null && <InfoPill>OP {discipline.op}</InfoPill>}
+	function Header() {
+		return (
+			<header className="flex flex-wrap items-start justify-between gap-3 p-4 sm:p-5">
+				<div className="min-w-0">
+					<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+						{discipline.course} · {formatTurno(discipline.shift)}
+					</p>
+					<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
 				</div>
+				<span
+					className={
+						isCancelled
+							? "rounded-control bg-warn-bg px-2.5 py-1 text-xs font-medium text-warn-fg"
+							: "rounded-control bg-ok-bg px-2.5 py-1 text-xs font-medium text-ok-fg"
+					}
+				>
+					{discipline.status}
+				</span>
+			</header>
+		)
+	}
+	return (
+		<GenericSurface className="overflow-hidden" header={<Header/>}>
+			{/*<article className="rounded-card border border-line bg-surface">*/}
+				<div className="flex flex-col gap-4 p-4 sm:p-5">
+					{/*<header className="flex flex-wrap items-start justify-between gap-3">
+						<div className="min-w-0">
+							<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+								{discipline.course} · {formatTurno(discipline.shift)}
+							</p>
+							<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
+						</div>
+						<span
+							className={
+								isCancelled
+									? "rounded-control bg-warn-bg px-2.5 py-1 text-xs font-medium text-warn-fg"
+									: "rounded-control bg-ok-bg px-2.5 py-1 text-xs font-medium text-ok-fg"
+							}
+						>
+							{discipline.status}
+						</span>
+					</header>*/}
 
-				<DisciplineStatusMessage
-					isCancelled={isCancelled}
-					hasLessons={discipline.lessons.length > 0}
-				/>
+					<section aria-label={`Horários de ${discipline.name}`}>
+						<div className="mb-2 flex items-center justify-between gap-2">
+							<h4 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+								Horários da disciplina
+							</h4>
+							<span className="text-xs text-ink-muted">
+								{discipline.lessons.length} cadastrado(s)
+							</span>
+						</div>
+						{discipline.lessons.length ? (
+							<ul className="flex flex-col gap-2">
+								{discipline.lessons.map((lesson) => (
+									<LessonRow
+										key={lesson.id}
+										lesson={lesson}
+										discipline={discipline}
+										disabled={isSavingEdit || isDeleting}
+										onEdit={() => onEditLesson(lesson)}
+										onDelete={() => onDeleteLesson(discipline, lesson)}
+									/>
+								))}
+							</ul>
+						) : (
+							<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
+								Nenhum horário cadastrado para esta disciplina.
+							</p>
+						)}
+					</section>
 
-				<footer className="flex flex-wrap justify-end gap-2 border-t border-line pt-3">
-					<button
-						type="button"
-						className="btn"
-						data-variant="outline"
-						data-size="sm"
-						onClick={() => onEdit(discipline)}
-						disabled={isSavingEdit || isDeleting}
-					>
-						Editar disciplina
-					</button>
-					<button
-						type="button"
-						className="btn"
-						data-variant="danger"
-						data-size="sm"
-						onClick={() => onCancelOrDelete(discipline)}
-						disabled={
-							isDeleting || (isCancelled && !canDeleteAssociation)
-						}
-						title={
-							isCancelled && !canDeleteAssociation
-								? "Exclua primeiro todos os horários desta disciplina."
-								: undefined
-						}
-					>
-						{isCancelled ? "Excluir vínculo" : "Desvincular"}
-					</button>
-				</footer>
-			</div>
-		</article>
+					<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-ink-muted">
+						<InfoPill>{discipline.quantidadeAulas} aula(s)/semana</InfoPill>
+						<InfoPill>{discipline.semestreCurso}º semestre</InfoPill>
+						{discipline.op !== null && <InfoPill>OP {discipline.op}</InfoPill>}
+					</div>
+
+					<DisciplineStatusMessage
+						isCancelled={isCancelled}
+						hasLessons={discipline.lessons.length > 0}
+					/>
+
+					<footer className="flex flex-wrap justify-end gap-2 border-t border-line pt-3">
+						<button
+							type="button"
+							className="btn"
+							data-variant="outline"
+							data-size="sm"
+							onClick={() => onEdit(discipline)}
+							disabled={isSavingEdit || isDeleting}
+						>
+							Editar disciplina
+						</button>
+						<button
+							type="button"
+							className="btn"
+							data-variant="danger"
+							data-size="sm"
+							onClick={() => onCancelOrDelete(discipline)}
+							disabled={
+								isDeleting || (isCancelled && !canDeleteAssociation)
+							}
+							title={
+								isCancelled && !canDeleteAssociation
+									? "Exclua primeiro todos os horários desta disciplina."
+									: undefined
+							}
+						>
+							{isCancelled ? "Excluir vínculo" : "Desvincular"}
+						</button>
+					</footer>
+				</div>
+			{/*</article>*/}
+		</GenericSurface>
 	);
 }
+
+// <article className="overflow-hidden rounded-card border border-line bg-surface">
+// 			<div className="flex flex-col gap-4 p-4 sm:p-5">
+// 				<header className="flex flex-wrap items-start justify-between gap-3">
+// 					<div className="min-w-0">
+// 						<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+// 							{discipline.course} · {formatTurno(discipline.shift)}
+// 						</p>
+// 						<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
+// 					</div>
+// 					<span
+// 						className={
+// 							isCancelled
+// 								? "rounded-control bg-warn-bg px-2.5 py-1 text-xs font-medium text-warn-fg"
+// 								: "rounded-control bg-ok-bg px-2.5 py-1 text-xs font-medium text-ok-fg"
+// 						}
+// 					>
+// 						{discipline.status}
+// 					</span>
+// 				</header>
+
+// 				<section aria-label={`Horários de ${discipline.name}`}>
+// 					<div className="mb-2 flex items-center justify-between gap-2">
+// 						<h4 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+// 							Horários da disciplina
+// 						</h4>
+// 						<span className="text-xs text-ink-muted">
+// 							{discipline.lessons.length} cadastrado(s)
+// 						</span>
+// 					</div>
+// 					{discipline.lessons.length ? (
+// 						<ul className="flex flex-col gap-2">
+// 							{discipline.lessons.map((lesson) => (
+// 								<LessonRow
+// 									key={lesson.id}
+// 									lesson={lesson}
+// 									discipline={discipline}
+// 									disabled={isSavingEdit || isDeleting}
+// 									onEdit={() => onEditLesson(lesson)}
+// 									onDelete={() => onDeleteLesson(discipline, lesson)}
+// 								/>
+// 							))}
+// 						</ul>
+// 					) : (
+// 						<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
+// 							Nenhum horário cadastrado para esta disciplina.
+// 						</p>
+// 					)}
+// 				</section>
+
+// 				<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-ink-muted">
+// 					<InfoPill>{discipline.quantidadeAulas} aula(s)/semana</InfoPill>
+// 					<InfoPill>{discipline.semestreCurso}º semestre</InfoPill>
+// 					{discipline.op !== null && <InfoPill>OP {discipline.op}</InfoPill>}
+// 				</div>
+
+// 				<DisciplineStatusMessage
+// 					isCancelled={isCancelled}
+// 					hasLessons={discipline.lessons.length > 0}
+// 				/>
+
+// 				<footer className="flex flex-wrap justify-end gap-2 border-t border-line pt-3">
+// 					<button
+// 						type="button"
+// 						className="btn"
+// 						data-variant="outline"
+// 						data-size="sm"
+// 						onClick={() => onEdit(discipline)}
+// 						disabled={isSavingEdit || isDeleting}
+// 					>
+// 						Editar disciplina
+// 					</button>
+// 					<button
+// 						type="button"
+// 						className="btn"
+// 						data-variant="danger"
+// 						data-size="sm"
+// 						onClick={() => onCancelOrDelete(discipline)}
+// 						disabled={
+// 							isDeleting || (isCancelled && !canDeleteAssociation)
+// 						}
+// 						title={
+// 							isCancelled && !canDeleteAssociation
+// 								? "Exclua primeiro todos os horários desta disciplina."
+// 								: undefined
+// 						}
+// 					>
+// 						{isCancelled ? "Excluir vínculo" : "Desvincular"}
+// 					</button>
+// 				</footer>
+// 			</div>
+// 		</article>
 
 /** Displays one schedule entry with its own edit and delete actions. */
 function LessonRow({

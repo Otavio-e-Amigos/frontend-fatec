@@ -25,6 +25,7 @@ import GradeWizardDisciplineStep from "./@layouts/GradeWizardDisciplineStep";
 import GradeWizardNavigation from "./@layouts/GradeWizardNavigation";
 import GradeWizardScheduleStep from "./@layouts/GradeWizardScheduleStep";
 import GradeWizardSummary from "./@layouts/GradeWizardSummary";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 
 type GradeWizardProps = {
   professor: Professor;
@@ -381,68 +382,72 @@ export default function GradeWizard({
   );
   return (
     <div className="flex min-h-screen flex-col">
-      <Header activeItem="Professores" />
+			<Header activeItem="Professores" />
+
+			{/*<main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 px-4 py-6">*/}
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 px-4 py-6">
-        <GradeWizardNavigation
-          step={step}
-          professorId={professor.id}
-          isSaving={isSaving}
-          hasPersistedData={hasPersistedData}
-          onBack={() => setStep((current) => current - 1)}
-          onNext={step === 1 ? proceedToSchedule : proceedToSummary}
-          onSave={saveGrade}
-        />
+	        <GradeWizardNavigation
+	          step={step}
+	          professorId={professor.id}
+	          isSaving={isSaving}
+	          hasPersistedData={hasPersistedData}
+	          onBack={() => setStep((current) => current - 1)}
+	          onNext={step === 1 ? proceedToSchedule : proceedToSummary}
+	          onSave={saveGrade}
+	        />
 
-        {step === 1 && (
-          <GradeWizardDisciplineStep
-            professor={professor}
-            cursos={cursos}
-            disciplinas={disciplinas}
-            periodos={periodos}
-            opOptions={opOptions}
-            opOptionsError={opOptionsError}
-            periodoId={periodoId}
-            onPeriodChange={setPeriodoId}
-            items={items}
-            onItemAdded={handleItemAdded}
-            onRemoveItem={removeItem}
-            itemError={itemError}
-            onItemError={setItemError}
-            hasPersistedData={hasPersistedData}
-          />
-        )}
+				<GenericFloor>
+	        {step === 1 && (
+	          <GradeWizardDisciplineStep
+	            professor={professor}
+	            cursos={cursos}
+	            disciplinas={disciplinas}
+	            periodos={periodos}
+	            opOptions={opOptions}
+	            opOptionsError={opOptionsError}
+	            periodoId={periodoId}
+	            onPeriodChange={setPeriodoId}
+	            items={items}
+	            onItemAdded={handleItemAdded}
+	            onRemoveItem={removeItem}
+	            itemError={itemError}
+	            onItemError={setItemError}
+	            hasPersistedData={hasPersistedData}
+	          />
+	        )}
 
-        {step === 2 && (
-          <GradeWizardScheduleStep
-            items={items}
-            selectedItemKey={selectedItemKey}
-            selectedItem={selectedItem}
-            day={day}
-            manualStart={manualStart}
-            manualEnd={manualEnd}
-            scheduleError={scheduleError}
-            hasPersistedData={hasPersistedData}
-            onSelectItem={selectScheduleItem}
-            onDayChange={setDay}
-            onManualStartChange={setManualStart}
-            onManualEndChange={setManualEnd}
-            onAddManualLesson={addManualLesson}
-            onAddLesson={addLesson}
-            onRemoveLesson={removeLesson}
-          />
-        )}
+	        {step === 2 && (
+	          <GradeWizardScheduleStep
+	            items={items}
+	            selectedItemKey={selectedItemKey}
+	            selectedItem={selectedItem}
+	            day={day}
+	            manualStart={manualStart}
+	            manualEnd={manualEnd}
+	            scheduleError={scheduleError}
+	            hasPersistedData={hasPersistedData}
+	            onSelectItem={selectScheduleItem}
+	            onDayChange={setDay}
+	            onManualStartChange={setManualStart}
+	            onManualEndChange={setManualEnd}
+	            onAddManualLesson={addManualLesson}
+	            onAddLesson={addLesson}
+	            onRemoveLesson={removeLesson}
+	          />
+	        )}
 
-        {step === 3 && selectedPeriod && (
-          <GradeWizardSummary
-            items={items}
-            professor={professor}
-            selectedPeriod={selectedPeriod}
-            months={months}
-            totals={totals}
-            saveError={saveError}
-            hasPersistedData={hasPersistedData}
-          />
-        )}
+	        {step === 3 && selectedPeriod && (
+	          <GradeWizardSummary
+	            items={items}
+	            professor={professor}
+	            selectedPeriod={selectedPeriod}
+	            months={months}
+	            totals={totals}
+	            saveError={saveError}
+	            hasPersistedData={hasPersistedData}
+	          />
+	        )}
+	      </GenericFloor>
       </main>
     </div>
   );
