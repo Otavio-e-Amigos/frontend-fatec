@@ -5,6 +5,7 @@ import ConfirmationDialog from "~/components/ConfirmationDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
+import PageHeader from "~/layouts/PageHeader";
 import PageSection from "~/layouts/PageSection.layout";
 import Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
@@ -12,8 +13,6 @@ import AuthService from "~/modules/user/auth.service";
 
 export default function Page({ list }: { list: Professor[] }) {
 	// TODO test and switch with ObjectTableModel
-	//
-	//
 	const navigate = useNavigate();
 	const auth = AuthService.getUserToken();
 	// const [professorsTableList, setProfessorsTableList] = useState(setList(list));
@@ -37,7 +36,9 @@ export default function Page({ list }: { list: Professor[] }) {
 				setProfessorToDeactivate(null);
 				navigate(0);
 			} else {
-				setDeactivationError("Não foi possível desativar o professor. Tente novamente.");
+				setDeactivationError(
+					"Não foi possível desativar o professor. Tente novamente.",
+				);
 			}
 		} catch (error) {
 			setDeactivationError(
@@ -107,14 +108,6 @@ export default function Page({ list }: { list: Professor[] }) {
 		]);
 	}
 
-	// const professorsTable = new DefaultTableModel(setList(list), [
-	// 	"Docente",
-	// 	"Matrícula",
-	// 	"Tipo de Contrato",
-	// 	"Status",
-	// 	"Ação",
-	// ]);
-
 	function searchItem(value: string) {
 		const term = value.toLowerCase().trim();
 		if (!term) {
@@ -122,8 +115,12 @@ export default function Page({ list }: { list: Professor[] }) {
 			return;
 		}
 		const filtered = list.filter((prof) => {
-			const nameMatch = prof.name ? prof.name.toLowerCase().includes(term) : false;
-			const registryMatch = prof.registry ? prof.registry.toLowerCase().includes(term) : false;
+			const nameMatch = prof.name
+				? prof.name.toLowerCase().includes(term)
+				: false;
+			const registryMatch = prof.registry
+				? prof.registry.toLowerCase().includes(term)
+				: false;
 			return nameMatch || registryMatch;
 		});
 		setProfessorsTable(setList(filtered));
@@ -133,22 +130,40 @@ export default function Page({ list }: { list: Professor[] }) {
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Professores" />
 
-			<main className="mx-5 flex flex-1 flex-col">
+			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
 				<section className="flex flex-row justify-between items-center">
-					<PageSection name={"Professores"} />
-					<Link className="btn" data-variant="outline" data-size="sm" to="add">
-						+ Adicionar
-					</Link>
+					{/* <PageSection name={"Professores"} /> */}
+					<PageHeader
+						title={"Professores"}
+						subTitle={"Recursos Acadêmicos"}
+						description={
+							"Explore e visualize as opções disponíveis para cada docente"
+						}
+						headerItems={
+							<Link
+								className="btn w-fit"
+								data-variant="outline"
+								data-size="sm"
+								to="add"
+							>
+								+ Novo Professor
+							</Link>
+						}
+					/>
 				</section>
-				<section className="flex flex-row my-4 justify-end">
+				<section className="flex flex-row my-4 justify-end items-center gap-5">
 					<FormInput
 						type="search"
 						name={"search"}
+						placeholder="Pesquisar..."
 						onChange={(a: any) => {
 							// if this doesnt work, FormInput may have it's variable onChange commented for some reason
 							searchItem(a.currentTarget.value);
 						}}
 					/>
+					{/* <Link className="btn" data-variant="outline" data-size="sm" to="add">
+						+ Adicionar
+					</Link> */}
 				</section>
 				<ComplexTableModelView data={professorsTable} />
 			</main>

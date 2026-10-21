@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
+import PageHeader from "~/layouts/PageHeader";
 import PageSection from "~/layouts/PageSection.layout";
 import type Curso from "~/modules/curso/curso.class";
 import formatTurno from "~/modules/curso/format-turno";
@@ -41,13 +42,32 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 
   return (
     <div className="flex flex-col flex-1">
-      <Header activeItem="Cursos" />
-      <main className="mx-5 flex flex-1 flex-col">
-        <section className="flex flex-row justify-between items-center">
-          <PageSection name="Cursos" />
+			<Header activeItem="Cursos" />
+
+			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
+      {/*<main className="mx-5 flex flex-1 flex-col">*/}
+				<section className="flex flex-row justify-between items-center">
+					<PageHeader
+						title={"Cursos"}
+						subTitle={"Recursos Acadêmicos"}
+						description={
+							"Visualize os cursos cadastrados dentro do sistema"
+						}
+						headerItems={
+							<Link
+								className="btn w-fit"
+								data-variant="outline"
+								data-size="sm"
+								to="add"
+							>
+								+ Novo Curso
+							</Link>
+						}
+					/>
+          {/*<PageSection name="Cursos" />
           <Link to="add" className="btn h-fit" data-variant="outline" data-size="sm">
             + Adicionar
-          </Link>
+          </Link>*/}
         </section>
         <section className="my-4">
           <ComplexTableModelView data={table} />

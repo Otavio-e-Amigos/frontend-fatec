@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import type { Route } from "./+types/[id]";
-import About from "~/pages/professor/[id]";
+import About from "~/pages/professor/[id]/[id]";
 
 // import professors from "~/mock/db/professors.db";
 import ProfessorService from "~/modules/professor/professor.service";

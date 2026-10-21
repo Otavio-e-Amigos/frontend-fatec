@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router";
 // import CPFFormatter from "~/classes/ValueFormatters/CPFFormatter";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
+// import PageSection from "~/layouts/PageSection.layout";
 import type Professor from "~/modules/professor/professor.class";
 
 function ProfessorInfo({ professor }: { professor?: Professor }) {

@@ -40,7 +40,11 @@ export default function SaveProfessorForm({
 
 	return (
 		<BasicFormLayout
-			title={"Cadastrar novo Docente"}
+			title={
+				professor
+					? `Editar Professor "${professor?.name}"`
+					: `Cadastrar novo Professor`
+			}
 			description={
 				"Preencha as informações requeridas pelo formulário para realizar um cadastro de um novo docente para o sistema."
 			}

@@ -7,6 +7,7 @@ import Header from "~/layouts/Header";
 import AuthService from "~/modules/user/auth.service";
 import UserService from "~/modules/user/user.service";
 import User from "~/modules/user/user.class";
+import PageHeader from "~/layouts/PageHeader";
 
 export default function Page({ users }: { users: User[] }) {
 	const navigate = useNavigate();
@@ -99,19 +100,37 @@ export default function Page({ users }: { users: User[] }) {
 	return (
 		<div className="flex flex-1 flex-col">
 			<Header />
-			<main className="mt-5">
-				<h1 className="text-3xl mx-2">Gerenciamento do sistema</h1>
-				<section className="flex flex-col gap-2 mx-10 my-5">
-					<Link
+			<main className="mx-5 my-4 flex flex-col gap-5">
+				{/*<h1 className="text-3xl mx-2">Gerenciamento do sistema</h1>*/}
+				<PageHeader
+					title={"Sistema"}
+					subTitle={"Gestão do Sistema"}
+					description={
+						"Opções e recursos disponíveis para o gerenciamento do sistema"
+					}
+					headerItems={
+						<Link
+							className="btn w-fit"
+							data-variant="outline"
+							data-size="sm"
+							to="add"
+						>
+							+ Novo Usuário
+						</Link>
+					}
+				/>
+				{/*<section className="flex flex-col gap-2 mx-10 my-5">*/}
+				{/*<section className="flex flex-col gap-2">*/}
+					{/*<Link
 						to={"/system/user/add"}
 						className="btn"
 						data-variant="outline"
 						data-size="sm"
 					>
 						Adicionar Usuário
-					</Link>
+					</Link>*/}
+				{/*</section>*/}
 					<ComplexTableModelView data={usersTable} actionsColumn />
-				</section>
 			</main>
 			{userToDeactivate && (
 				<ConfirmationDialog

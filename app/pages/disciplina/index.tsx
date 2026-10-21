@@ -9,11 +9,13 @@ import PageSection from "~/layouts/PageSection.layout";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import AuthService from "~/modules/user/auth.service";
+import PageHeader from "~/layouts/PageHeader";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const navigate = useNavigate();
 	const [table, setTable] = useState(makeTable(list));
-	const [disciplineToDelete, setDisciplineToDelete] = useState<Disciplina | null>(null);
+	const [disciplineToDelete, setDisciplineToDelete] =
+		useState<Disciplina | null>(null);
 	const [deleteError, setDeleteError] = useState<string>();
 
 	async function removeSelectedDiscipline() {
@@ -28,7 +30,9 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 				setDisciplineToDelete(null);
 				navigate(0);
 			} else {
-				setDeleteError("Não foi possível excluir a disciplina. Tente novamente.");
+				setDeleteError(
+					"Não foi possível excluir a disciplina. Tente novamente.",
+				);
 			}
 		} catch (error) {
 			setDeleteError(
@@ -97,24 +101,37 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 			},
 		]);
 
-		return new DefaultTableModel(rows, [
-			"Disciplina",
-			"Código",
-			"Sigla",
-			"",
-		]);
+		return new DefaultTableModel(rows, ["Disciplina", "Código", "Sigla", ""]);
 	}
 
 	return (
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Disciplinas" />
 
-			<main className="mx-5 flex flex-1 flex-col">
+			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
+			{/*<main className="mx-5 flex flex-1 flex-col">*/}
 				<section className="flex flex-row justify-between items-center">
-					<PageSection name="Disciplinas" />
+					<PageHeader
+						title={"Disciplinas"}
+						subTitle={"Recursos Acadêmicos"}
+						description={
+							"Visualize as disciplinas existentes para a criação das grades"
+						}
+						headerItems={
+							<Link
+								className="btn w-fit"
+								data-variant="outline"
+								data-size="sm"
+								to="add"
+							>
+								+ Novo Período Letivo
+							</Link>
+						}
+					/>
+					{/*<PageSection name="Disciplinas" />
 					<Link to="add" className="btn h-fit" data-variant="outline" data-size="sm">
 						+ Adicionar
-					</Link>
+					</Link>*/}
 				</section>
 
 				<section className="flex flex-row my-4 justify-end">

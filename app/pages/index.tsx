@@ -47,33 +47,33 @@ export default function Page({
 
 					<ComplexTableModelView data={professorMockTable} />
 				</section>
-
-				<aside className="grid grid-rows-2 gap-y-5 surface rounded-xl p-2 text-black overflow-hidden">
-					{/* Resumo do dia */}
-					{/*<section className="flex flex-col flex-1 overflow-hidden">
-						<PageSection name="Resumo do dia" />
-
-						<section className="flex flex-1 flex-col max-h-full gap-2 overflow-y-scroll">
-							{notifications.map((notification, idx) => (
-								<NotificationBadge key={idx} {...notification} />
-							))}
-						</section>
-					</section>*/}
-
-					{/* Ações Rápidas*/}
-					<section>
-						<PageSection name="Ações Rápidas" />
-
-						<div className="flex flex-col gap-1">
-							{quickActionLinks.map((action, idx) => (
-								<Link key={idx} to={action.href}>
-									{action.label}
-								</Link>
-							))}
-						</div>
-					</section>
-				</aside>
 			</main>
 		</div>
 	);
 }
+
+// <aside className="grid grid-rows-2 gap-y-5 surface rounded-xl p-2 text-black overflow-hidden">
+// 					{/* Resumo do dia */}
+// 					{/*<section className="flex flex-col flex-1 overflow-hidden">
+// 						<PageSection name="Resumo do dia" />
+
+// 						<section className="flex flex-1 flex-col max-h-full gap-2 overflow-y-scroll">
+// 							{notifications.map((notification, idx) => (
+// 								<NotificationBadge key={idx} {...notification} />
+// 							))}
+// 						</section>
+// 					</section>*/}
+
+// 					{/* Ações Rápidas*/}
+// 					<section>
+// 						<PageSection name="Ações Rápidas" />
+
+// 						<div className="flex flex-col gap-1">
+// 							{quickActionLinks.map((action, idx) => (
+// 								<Link key={idx} to={action.href}>
+// 									{action.label}
+// 								</Link>
+// 							))}
+// 						</div>
+// 					</section>
+// 				</aside>

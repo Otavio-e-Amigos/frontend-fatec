@@ -1,7 +1,7 @@
 import type { Route } from "./+types/[id]";
 import CursoService from "~/modules/curso/curso.service";
 import AuthService from "~/modules/user/auth.service";
-import Page from "~/pages/curso/[id]";
+import Page from "~/pages/curso/[id]/[id]";
 
 export async function clientLoader({ params }: Route.LoaderArgs) {
 	const auth = AuthService.getUserToken();
