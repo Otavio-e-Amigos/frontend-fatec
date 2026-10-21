@@ -137,17 +137,17 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
           .loading-geral #lg-dot2 { animation-name: lgDot2; }
           .loading-geral #lg-dot3 { animation-name: lgDot3; }
           @keyframes lgDot1 {
-            0%, 28%   { fill: #2563eb; opacity: 1; transform: scaleX(1.3); }
+            0%, 28%   { fill: #b20000; opacity: 1; transform: scaleX(1.3); }
             31%, 100% { fill: #cbd5e1; opacity: .6; transform: scaleX(1); }
           }
           @keyframes lgDot2 {
-            0%, 28%   { fill: #cbd5e1; opacity: .6; transform: scaleX(1); }
-            31%, 60%  { fill: #2563eb; opacity: 1; transform: scaleX(1.3); }
+            0%, 28%   { fill: #b20000; opacity: .6; transform: scaleX(1); }
+            31%, 60%  { fill: #b20000; opacity: 1; transform: scaleX(1.3); }
             63%, 100% { fill: #cbd5e1; opacity: .6; transform: scaleX(1); }
           }
           @keyframes lgDot3 {
             0%, 60%   { fill: #cbd5e1; opacity: .6; transform: scaleX(1); }
-            64%, 94%  { fill: #2563eb; opacity: 1; transform: scaleX(1.3); }
+            64%, 94%  { fill: #b20000; opacity: 1; transform: scaleX(1.3); }
             97%, 100% { fill: #cbd5e1; opacity: .6; transform: scaleX(1); }
           }
 
@@ -156,7 +156,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
             .loading-geral #lg-badge, .loading-geral #lg-clock, .loading-geral #lg-cloud,
             .loading-geral #lg-lab1, .loading-geral #lg-lab2, .loading-geral #lg-rip1,
             .loading-geral #lg-rip2, .loading-geral #lg-spk { opacity: 0; }
-            .loading-geral #lg-dot3 { fill: #2563eb; }
+            .loading-geral #lg-dot3 { fill: #b20000; }
           }
         `}</style>
 
@@ -174,8 +174,8 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 x2="100%"
                 y2="100%"
               >
-                <stop offset="0%" stopColor="#ffffff" />
-                <stop offset="100%" stopColor="#f1f5f9" />
+                <stop offset="0%" stopColor="#b20000" />
+                <stop offset="100%" stopColor="#7e0000" />
               </linearGradient>
               <linearGradient
                 id="lg-grad-blue"
@@ -184,8 +184,8 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 x2="100%"
                 y2="100%"
               >
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="100%" stopColor="#1d4ed8" />
+                <stop offset="0%" stopColor="#b20000" />
+                <stop offset="100%" stopColor="#3c0900" />
               </linearGradient>
               <linearGradient
                 id="lg-grad-ring"
@@ -194,8 +194,8 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 x2="100%"
                 y2="100%"
               >
-                <stop offset="0%" stopColor="#60a5fa" />
-                <stop offset="100%" stopColor="#1d4ed8" />
+                <stop offset="0%" stopColor="#ff4d4d" />
+                <stop offset="100%" stopColor="#3c0900" />
               </linearGradient>
               <filter
                 id="lg-shadow"
@@ -267,7 +267,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
               cy="200"
               r="174"
               fill="none"
-              stroke="#dbeafe"
+              stroke="#b20000"
               strokeWidth="10"
             />
             <g className="ring">
@@ -276,7 +276,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 cy="200"
                 r="174"
                 fill="none"
-                stroke="#2563EB"
+                stroke="#b20000"
                 strokeWidth="12"
                 strokeLinecap="round"
                 strokeDasharray="260 834"
@@ -288,7 +288,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 cy="200"
                 r="174"
                 fill="none"
-                stroke="#2563EB"
+                stroke="#b20000"
                 strokeWidth="10"
                 strokeLinecap="round"
                 strokeDasharray="260 834"
@@ -318,11 +318,11 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                     rx="3"
                     fill="#cbd5e1"
                   />
-                  <circle cx="120" cy="186" r="18" fill="#dbe7f8" />
-                  <circle cx="120" cy="181" r="6" fill="#2563eb" />
-                  <path d="M106 199 q14 -18 28 0z" fill="#2563eb" />
-                  <rect
-                    x="94"
+                  <circle cx="120" cy="186" r="18" fill="#b20000" />
+                  <circle cx="120" cy="181" r="6" fill="#b20000" />
+									<path d="M106 199 q14 -18 28 0z" fill="#b20000" />
+								<rect
+                  	x="94"
                     y="215"
                     width="52"
                     height="6"
@@ -402,7 +402,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                     cy="200"
                     r="26"
                     fill="none"
-                    stroke="#2563eb"
+                    stroke="#b20000"
                     strokeWidth="5"
                     pathLength="120"
                     strokeDasharray="2 8"
@@ -427,7 +427,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                     y1="200"
                     x2="165"
                     y2="178"
-                    stroke="#2563eb"
+                    stroke="#b20000"
                     strokeWidth="3"
                     strokeLinecap="round"
                   />
@@ -469,7 +469,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                     <rect x="215" y="214" width="44" height="6" rx="3" />
                     <rect x="215" y="226" width="44" height="6" rx="3" />
                   </g>
-                  <g fill="#2563eb">
+                  <g fill="#b20000">
                     <rect
                       id="lg-r1"
                       className="fill"
@@ -558,7 +558,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 cy="192"
                 r="42"
                 fill="none"
-                stroke="#2563eb"
+                stroke="#b20000"
                 strokeWidth="3"
               />
               <circle
@@ -571,19 +571,19 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                 stroke="#60a5fa"
                 strokeWidth="2"
               />
-              <g id="lg-spk" className="part" fill="#60a5fa">
+              <g id="lg-spk" className="part" fill="#b20000">
                 <circle cx="152" cy="146" r="3" />
-                <circle cx="250" cy="150" r="2.5" fill="#2563eb" />
-                <circle cx="146" cy="224" r="2.5" fill="#2563eb" />
+                <circle cx="250" cy="150" r="2.5" fill="#b20000" />
+                <circle cx="146" cy="224" r="2.5" fill="#b20000" />
                 <circle cx="256" cy="222" r="3" />
-                <circle cx="200" cy="116" r="2.5" />
+                <circle cx="200" cy="116" r="2.5" fill="#b20000" />
               </g>
               <g id="lg-shield" className="part pop" filter="url(#lg-shadow)">
                 <g className="float">
                   <path
                     d="M200 135 L240 149 V193 C240 222 223 239 200 249 C177 239 160 222 160 193 V149 Z"
                     fill="#fff"
-                    stroke="#2563eb"
+                    stroke="#b20000"
                     strokeWidth="6"
                     strokeLinejoin="round"
                   />
@@ -597,7 +597,7 @@ export const LoadingGeral: React.FC<LoadingProps> = ({
                     d="M182 192 L196 206 L221 177"
                     pathLength="100"
                     fill="none"
-                    stroke="#2563eb"
+                    stroke="#b20000"
                     strokeWidth="10"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -679,7 +679,7 @@ const overlayStyle: React.CSSProperties = {
   left: 0,
   width: "100vw",
   height: "100vh",
-  backgroundColor: "rgba(15, 23, 42, 0.5)",
+  backgroundColor: "#e2e6e9",
   backdropFilter: "blur(4px)",
   display: "grid",
   placeItems: "center",
