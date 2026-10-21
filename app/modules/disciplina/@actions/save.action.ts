@@ -1,28 +1,19 @@
-// import { type SyntheticEvent } from "react";
-// import ProfessorService from "../professor.service";
 import { FormValidationError } from "~/classes/errors/ValidationError";
-// import type FormController from "~/components/forms/FormController";
-// import { type FormReducerAction } from "~/components/forms/FormContext";
-// import { type NavigateFunction } from "react-router";
+import { FormCancelledError } from "~/classes/errors/FormCancelledError";
+import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
+import getErrorMessage from "~/classes/errors/get-error-message";
 import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
-// import type { ProfessorInterface } from "../professor.class";
 import AuthService from "~/modules/user/auth.service";
-// import { Form } from "react-router";
 import Disciplina from "../disciplina.class";
 import DisciplinaService from "../disciplina.service";
-// import { FormSubmitEventHandler } from "~/hooks/useForm";
 
-type disciplineExtras = { id?: number };
-
-// let newProf =
-const newData: {
-	newId?: number;
-} = { newId: undefined };
+type DisciplinaExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-}: FormSubmitEventHandlerProps<disciplineExtras>) {
+	dialogs,
+}: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
 	const { id } = extras;
@@ -48,29 +39,44 @@ async function action({
 		throw new FormValidationError("Verifique os campos da disciplina.", fields);
 	}
 
-	const disciplina = new Disciplina({
-		id,
-		nome,
-		codigo,
-		sigla,
-	});
-
 	if (id) {
-		newData.newId = id;
+		const confirmed = await dialogs.confirm({
+			title: "Salvar alterações?",
+			description: `As alterações na disciplina ${nome} serão aplicadas.`,
+			confirmLabel: "Salvar",
+			tone: "primary",
+		});
+		if (!confirmed) throw new FormCancelledError();
 	}
 
+	const disciplina = new Disciplina({ id, nome, codigo, sigla });
 	const auth = AuthService.getUserToken();
-	const res = id
-		? await DisciplinaService.edit(id, disciplina, auth)
-		: await DisciplinaService.save(disciplina, auth);
+	if (id) {
+		await DisciplinaService.edit(id, disciplina, auth);
+	} else {
+		await DisciplinaService.save(disciplina, auth);
+	}
 }
 
-async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
-	navigate(newData.newId ? `/disciplina${/*/newData.newId*/ ""}` : "/disciplina");
+async function onSuccess({
+	navigate,
+	dialogs,
+	extras,
+}: FormSubmitEventHandlerProps<DisciplinaExtras>) {
+	dialogs.toast.success(
+		extras.id
+			? "Disciplina atualizada com sucesso."
+			: "Disciplina cadastrada com sucesso.",
+	);
+	if (extras.onSaved) extras.onSaved();
+	else navigate("/disciplina");
 }
 
-async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
-	console.log(error)
+async function onFailure({
+	error,
+	dispatch,
+	dialogs,
+}: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
 			dispatch({
@@ -79,11 +85,13 @@ async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 				error: { message: field.message },
 			}),
 		);
+		dialogs.toast.error(error.message);
+		return;
 	}
+	if (error instanceof ApiUnavailableError) return;
+	dialogs.toast.error(
+		getErrorMessage(error, "Não foi possível salvar a disciplina."),
+	);
 }
 
-export default {
-	action,
-	onSuccess,
-	onFailure,
-};
+export default { action, onSuccess, onFailure };

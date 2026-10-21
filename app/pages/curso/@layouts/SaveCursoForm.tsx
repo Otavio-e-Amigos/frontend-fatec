@@ -5,15 +5,18 @@ import FormSection from "~/layouts/forms/FormSection";
 import type Curso from "~/modules/curso/curso.class";
 import save from "~/modules/curso/@actions/save.action";
 
-export default function SaveCursoFrom({ curso }: { curso?: Curso }) {
+export default function SaveCursoFrom({
+	curso,
+	onSaved,
+}: {
+	curso?: Curso;
+	onSaved?: () => void;
+}) {
 	const { controller, FormContainer } = useForm({
 		actions: save,
-		actionsExtras: {
-			id: curso?.id,
-		},
+		actionsExtras: { id: curso?.id, onSaved },
 	});
 
-	// if (curso && !controller.fieldExists("nome")) {
 	if (curso) {
 		controller.addField("nome", curso.nome);
 		controller.addField("turno", curso.turno ?? "MANHA");
@@ -22,24 +25,19 @@ export default function SaveCursoFrom({ curso }: { curso?: Curso }) {
 
 	return (
 		<BasicFormLayout
-			title={curso ? `Editar Professor "${curso?.nome}"` : `Cadastrar Curso`}
+			title={curso ? `Editar Curso "${curso.nome}"` : `Cadastrar Curso`}
 			description={
-				"Use este formulário para realizar o cadastro de um novo curso"
+				curso
+					? "Altere os dados do curso e salve."
+					: "Use este formulário para realizar o cadastro de um novo curso"
 			}
 			Form={FormContainer}
 		>
 			<FormSection
-				section="Informações da curso"
+				section="Informações do curso"
 				description="Dados acadêmicos usados nas grades e folhas de frequência."
 			>
-				<FormInput
-					required
-					lettersOnly
-					name="nome"
-					type="text"
-					label="Nome"
-					// value={curso?.nome}
-				/>
+				<FormInput required lettersOnly name="nome" type="text" label="Nome" />
 
 				<FormInput
 					required

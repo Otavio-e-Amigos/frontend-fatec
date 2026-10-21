@@ -1,98 +1,89 @@
-import { useState, type ChangeEvent } from "react";
-import { Link, useNavigate } from "react-router";
+import { useMemo, useState, type ChangeEvent } from "react";
+import { useRevalidator } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import ConfirmationDialog from "~/components/ConfirmationDialog";
+import FormDialog from "~/components/dialogs/FormDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
+import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
-import DisciplinaService from "~/modules/disciplina/disciplina.service";
-import type Disciplina from "~/modules/disciplina/disciplina.class";
-import AuthService from "~/modules/user/auth.service";
 import PageHeader from "~/layouts/PageHeader";
+import type Disciplina from "~/modules/disciplina/disciplina.class";
+import DisciplinaService from "~/modules/disciplina/disciplina.service";
+import AuthService from "~/modules/user/auth.service";
+import SaveDisciplinaForm from "./@layouts/SaveDisciplinaForm";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
-	const navigate = useNavigate();
-	const [table, setTable] = useState(makeTable(list));
-	const [disciplineToDelete, setDisciplineToDelete] =
-		useState<Disciplina | null>(null);
-	const [deleteError, setDeleteError] = useState<string>();
+	const dialogs = useDialogs();
+	const { revalidate } = useRevalidator();
+	const [term, setTerm] = useState("");
+	// undefined = fechado | null = nova disciplina | Disciplina = editando
+	const [editing, setEditing] = useState<Disciplina | null | undefined>(
+		undefined,
+	);
 
-	async function removeSelectedDiscipline() {
-		if (!disciplineToDelete?.id) return;
-
-		try {
-			const deleted = await DisciplinaService.delete(
-				disciplineToDelete.id,
-				AuthService.getUserToken(),
-			);
-			if (deleted) {
-				setDisciplineToDelete(null);
-				navigate(0);
-			} else {
-				setDeleteError(
-					"Não foi possível excluir a disciplina. Tente novamente.",
-				);
-			}
-		} catch (error) {
-			setDeleteError(
-				error instanceof Error
-					? error.message
-					: "Ocorreu um erro ao excluir a disciplina.",
-			);
-		}
-	}
-
-	function search(event: ChangeEvent<HTMLInputElement>) {
-		const term = event.currentTarget.value.toLowerCase().trim();
-		if (!term) {
-			setTable(makeTable(list));
-			return;
-		}
-		const filteredList = list.filter((item) =>
+	const filtered = useMemo(() => {
+		if (!term) return list;
+		return list.filter((item) =>
 			[item.nome, item.codigo, item.sigla].some((value) =>
 				value ? value.toLowerCase().includes(term) : false,
 			),
 		);
+	}, [list, term]);
 
-		setTable(makeTable(filteredList));
+	async function removeDiscipline(item: Disciplina) {
+		const removed = await dialogs.confirm({
+			title: "Excluir disciplina?",
+			description: `A disciplina ${item.nome ?? ""} será excluída. Esta ação não pode ser desfeita.`,
+			confirmLabel: "Excluir",
+			tone: "danger",
+			onConfirm: async () => {
+				const deleted = await DisciplinaService.delete(
+					item.id!,
+					AuthService.getUserToken(),
+				);
+				if (!deleted) {
+					throw new Error(
+						"Não foi possível excluir a disciplina. Tente novamente.",
+					);
+				}
+			},
+		});
+		if (removed) {
+			dialogs.toast.success("Disciplina excluída com sucesso.");
+			revalidate();
+		}
 	}
 
-	function makeTable(items: Disciplina[]) {
-		const rows = items.map((item) => [
-			{
-				value: item.nome ?? "",
-				display: (
-					<Link className="link" to={`/disciplina/${item.id}`}>
-						{item.nome}
-					</Link>
-				),
-			},
+	function search(event: ChangeEvent<HTMLInputElement>) {
+		setTerm(event.currentTarget.value.toLowerCase().trim());
+	}
+
+	const table = useMemo(() => {
+		const rows = filtered.map((item) => [
+			item.nome ?? "",
 			item.codigo ?? "",
 			item.sigla ?? "",
 			{
 				value: "",
 				display: (
 					<div className="row-actions">
-						<Link
+						<button
+							type="button"
 							className="btn"
 							data-variant="icon"
 							data-icon="edit"
 							title="Editar"
-							to={`/disciplina/${item.id}/edit`}
+							onClick={() => setEditing(item)}
 						>
 							Editar
-						</Link>
+						</button>
 						<button
 							type="button"
 							className="btn"
 							data-variant="icon"
 							data-icon="delete"
 							title="Excluir"
-							onClick={() => {
-								setDeleteError(undefined);
-								setDisciplineToDelete(item);
-							}}
+							onClick={() => removeDiscipline(item)}
 						>
 							Excluir
 						</button>
@@ -100,16 +91,14 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 				),
 			},
 		]);
-
 		return new DefaultTableModel(rows, ["Disciplina", "Código", "Sigla", ""]);
-	}
+	}, [filtered]);
 
 	return (
 		<div className="flex flex-col flex-1">
 			<Header activeItem="Disciplinas" />
 
 			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
-			{/*<main className="mx-5 flex flex-1 flex-col">*/}
 				<section className="flex flex-row justify-between items-center">
 					<PageHeader
 						title={"Disciplinas"}
@@ -118,20 +107,17 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 							"Visualize as disciplinas existentes para a criação das grades"
 						}
 						headerItems={
-							<Link
+							<button
+								type="button"
 								className="btn w-fit"
 								data-variant="outline"
 								data-size="sm"
-								to="add"
+								onClick={() => setEditing(null)}
 							>
-								+ Novo Período Letivo
-							</Link>
+								+ Nova Disciplina
+							</button>
 						}
 					/>
-					{/*<PageSection name="Disciplinas" />
-					<Link to="add" className="btn h-fit" data-variant="outline" data-size="sm">
-						+ Adicionar
-					</Link>*/}
 				</section>
 
 				<section className="flex flex-row my-4 justify-end">
@@ -140,15 +126,18 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 
 				<ComplexTableModelView data={table} />
 			</main>
-			{disciplineToDelete && (
-				<ConfirmationDialog
-					title="Excluir disciplina?"
-					description={`A disciplina ${disciplineToDelete.nome ?? ""} será excluída. Esta ação não pode ser desfeita.`}
-					confirmLabel="Excluir"
-					errorMessage={deleteError}
-					onConfirm={removeSelectedDiscipline}
-					onCancel={() => setDisciplineToDelete(null)}
-				/>
+
+			{editing !== undefined && (
+				<FormDialog onClose={() => setEditing(undefined)}>
+					<SaveDisciplinaForm
+						key={editing?.id ?? "nova"}
+						disciplina={editing ?? undefined}
+						onSaved={() => {
+							setEditing(undefined);
+							revalidate();
+						}}
+					/>
+				</FormDialog>
 			)}
 		</div>
 	);

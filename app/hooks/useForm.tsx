@@ -8,6 +8,8 @@ import {
 } from "react";
 import { Form, useNavigate, type NavigateFunction } from "react-router";
 import FormContainer from "~/components/forms/FormContainer";
+import { FormCancelledError } from "~/classes/errors/FormCancelledError";
+import useDialogs, { type DialogsApi } from "./useDialogs";
 import {
 	FormControllerContext,
 	FormDispatcherContext,
@@ -22,6 +24,7 @@ export type FormSubmitEventHandlerProps<E extends Record<string, any> = any> = {
 	controller: FormController;
 	dispatch: React.ActionDispatch<[action: FormReducerAction]>;
 	navigate: NavigateFunction;
+	dialogs: DialogsApi;
 	extras: E;
 };
 
@@ -55,8 +58,9 @@ export default function useForm(options?: FormHookOptions) {
 	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
-	const formRuntime = useRef({ controller, dispatch, navigate, options });
-	formRuntime.current = { controller, dispatch, navigate, options };
+	const dialogs = useDialogs();
+	const formRuntime = useRef({ controller, dispatch, navigate, options, dialogs });
+	formRuntime.current = { controller, dispatch, navigate, options, dialogs };
 
 	useEffect(() => {
 		// console.log("controller changed!");
@@ -70,8 +74,7 @@ export default function useForm(options?: FormHookOptions) {
 		FormContainer: useMemo(
 			() =>
 				function FormContainer(props: FormContainerProps) {
-					const { controller, dispatch, navigate, options } =
-						formRuntime.current;
+					const { controller, dispatch, navigate, dialogs, options } = formRuntime.current;
 					const formProps = {
 						children: props.children,
 						className: props.className,
@@ -85,6 +88,7 @@ export default function useForm(options?: FormHookOptions) {
 								controller,
 								dispatch,
 								navigate,
+								dialogs,
 								extras: {},
 							};
 
@@ -97,11 +101,9 @@ export default function useForm(options?: FormHookOptions) {
 								if (actions?.onSuccess)
 									await actions.onSuccess(actionProps);
 							} catch (error) {
+								if (error instanceof FormCancelledError) return;
 								if (actions?.onFailure)
-									await actions.onFailure({
-										...actionProps,
-										error: error as Error,
-									});
+									await actions.onFailure({ ...actionProps, error: error as Error });
 							} finally {
 								setIsSubmitting(false);
 							}

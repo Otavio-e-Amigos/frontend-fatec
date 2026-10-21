@@ -11,6 +11,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { LoadingGeral } from "./components/loaders/LoadingGeral";
+import DialogProvider from "./components/dialogs/DialogProvider";
 
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -50,10 +51,10 @@ export default function App() {
 	const isNavigating = Boolean(navigation.location);
 
 	return (
-		<>
+		<DialogProvider>
 			<Outlet />
 			{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
-		</>
+		</DialogProvider>
 	);
 }
 

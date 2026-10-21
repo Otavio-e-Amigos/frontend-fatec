@@ -4,6 +4,8 @@ type ConfirmationDialogProps = {
 	title: string;
 	description: string;
 	confirmLabel: string;
+	cancelLabel?: string;
+	tone?: "danger" | "primary";
 	errorMessage?: string;
 	onConfirm: () => Promise<void> | void;
 	onCancel: () => void;
@@ -13,6 +15,8 @@ export default function ConfirmationDialog({
 	title,
 	description,
 	confirmLabel,
+	cancelLabel = "Cancelar",
+	tone = "danger",
 	errorMessage,
 	onConfirm,
 	onCancel,
@@ -80,12 +84,12 @@ export default function ConfirmationDialog({
 						onClick={onCancel}
 						disabled={isSubmitting}
 					>
-						Cancelar
+						{cancelLabel}
 					</button>
 					<button
 						type="button"
 						className="btn"
-						data-variant="danger"
+						data-variant={tone === "danger" ? "danger" : undefined}
 						onClick={confirm}
 						disabled={isSubmitting}
 					>

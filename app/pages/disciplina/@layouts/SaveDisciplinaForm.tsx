@@ -1,4 +1,3 @@
-// import FormContainer from "~/components/forms/FormContainer";
 import FormInput from "~/components/forms/FormInput";
 import useForm from "~/hooks/useForm";
 import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
@@ -8,30 +7,33 @@ import actions from "~/modules/disciplina/@actions/save.action";
 
 export default function SaveDisciplinaForm({
 	disciplina,
+	onSaved,
 }: {
 	disciplina?: Disciplina;
+	onSaved?: () => void;
 }) {
 	const { controller, FormContainer } = useForm({
 		actions,
-		actionsExtras: { id: disciplina?.id },
+		actionsExtras: { id: disciplina?.id, onSaved },
 	});
-	// console.log(disciplina)
 
 	if (disciplina) {
-		controller.addField("nome", disciplina?.nome);
-		controller.addField("codigo", disciplina?.codigo);
-		controller.addField("sigla", disciplina?.sigla);
+		controller.addField("nome", disciplina.nome);
+		controller.addField("codigo", disciplina.codigo);
+		controller.addField("sigla", disciplina.sigla);
 	}
 
 	return (
 		<BasicFormLayout
 			title={
 				disciplina
-					? `Editar Disciplina "${disciplina?.nome}"`
+					? `Editar Disciplina "${disciplina.nome}"`
 					: `Cadastrar Disciplina`
 			}
 			description={
-				"Use este formulário para realizar o cadastro de uma nova disciplina"
+				disciplina
+					? "Altere os dados da disciplina e salve."
+					: "Use este formulário para realizar o cadastro de uma nova disciplina"
 			}
 			Form={FormContainer}
 		>

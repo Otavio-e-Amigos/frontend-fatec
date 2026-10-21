@@ -1,130 +1,118 @@
-import { useState } from "react";
-import { Form, Link, useNavigate } from "react-router";
+import { useMemo, useState } from "react";
+import { Link, useRevalidator } from "react-router";
+import getErrorMessage from "~/classes/errors/get-error-message";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import ConfirmationDialog from "~/components/ConfirmationDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
+import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/PageHeader";
-import PageSection from "~/layouts/PageSection.layout";
-import Professor from "~/modules/professor/professor.class";
+import type Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
 
 export default function Page({ list }: { list: Professor[] }) {
-	// TODO test and switch with ObjectTableModel
-	const navigate = useNavigate();
 	const auth = AuthService.getUserToken();
-	// const [professorsTableList, setProfessorsTableList] = useState(setList(list));
+	const dialogs = useDialogs();
+	const { revalidate } = useRevalidator();
+	const [term, setTerm] = useState("");
 
-	const [professorsTable, setProfessorsTable] = useState(setList(list));
-	const [professorToDeactivate, setProfessorToDeactivate] =
-		useState<Professor | null>(null);
-	const [deactivationError, setDeactivationError] = useState<string>();
-
-	async function activate(id: number) {
-		const res = await ProfessorService.activate(id, auth);
-		if (res) {
-			navigate(0);
-		}
-	}
-
-	async function deactivate(id: number) {
+	async function activate(prof: Professor) {
 		try {
-			const res = await ProfessorService.deactivate(id, auth);
-			if (res) {
-				setProfessorToDeactivate(null);
-				navigate(0);
-			} else {
-				setDeactivationError(
-					"Não foi possível desativar o professor. Tente novamente.",
-				);
-			}
+			const res = await ProfessorService.activate(prof.id!, auth);
+			if (!res) throw new Error();
+			dialogs.toast.success(`${prof.name} foi ativado.`);
+			revalidate();
 		} catch (error) {
-			setDeactivationError(
-				error instanceof Error
-					? error.message
-					: "Ocorreu um erro ao desativar o professor.",
+			dialogs.toast.error(
+				getErrorMessage(error, "Não foi possível ativar o professor."),
 			);
 		}
 	}
 
-	function setList(list: Array<any>) {
-		const mapper = () => {
-			return list.map((prof) => [
-				{
-					value: prof.name,
-					display: (
-						<Link key={prof.id} className="link" to={`/professor/${prof.id}`}>
-							{prof.name}
-						</Link>
-					),
-				},
-				prof.registry,
-				prof.contract,
-				prof.status,
-				{
-					value: 0,
-					display: (
-						<div key={prof.id} className="row-actions">
-							<Link
-								className="btn"
-								data-variant="icon"
-								data-icon="edit"
-								title="Editar"
-								to={`/professor/${prof.id}/edit`}
-							>
-								Editar
-							</Link>
-							<button
-								type="button"
-								className="btn"
-								data-variant="icon"
-								data-icon="power"
-								title={prof.status === "ATIVO" ? "Desativar" : "Ativar"}
-								onClick={() => {
-									if (prof.status === "ATIVO") {
-										setDeactivationError(undefined);
-										setProfessorToDeactivate(prof);
-									} else {
-										void activate(prof.id!);
-									}
-								}}
-							>
-								{prof.status === "ATIVO" ? "Desativar" : "Ativar"}
-							</button>
-						</div>
-					),
-				},
-			]);
-		};
+	async function deactivate(prof: Professor) {
+		const done = await dialogs.confirm({
+			title: "Desativar professor?",
+			description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
+			confirmLabel: "Desativar",
+			tone: "danger",
+			onConfirm: async () => {
+				const res = await ProfessorService.deactivate(prof.id!, auth);
+				if (!res) {
+					throw new Error(
+						"Não foi possível desativar o professor. Tente novamente.",
+					);
+				}
+			},
+		});
+		if (done) {
+			dialogs.toast.success(`${prof.name} foi desativado.`);
+			revalidate();
+		}
+	}
 
-		return new DefaultTableModel(mapper(), [
+	const filtered = useMemo(() => {
+		if (!term) return list;
+		return list.filter((prof) =>
+			[prof.name, prof.registry].some((value) =>
+				value ? value.toLowerCase().includes(term) : false,
+			),
+		);
+	}, [list, term]);
+
+	const professorsTable = useMemo(() => {
+		const rows = filtered.map((prof) => [
+			{
+				value: prof.name,
+				display: (
+					<Link key={prof.id} className="link" to={`/professor/${prof.id}`}>
+						{prof.name}
+					</Link>
+				),
+			},
+			prof.registry,
+			prof.contract,
+			prof.status,
+			{
+				value: 0,
+				display: (
+					<div key={prof.id} className="row-actions">
+						<Link
+							className="btn"
+							data-variant="icon"
+							data-icon="edit"
+							title="Editar"
+							to={`/professor/${prof.id}/edit`}
+						>
+							Editar
+						</Link>
+						<button
+							type="button"
+							className="btn"
+							data-variant="icon"
+							data-icon="power"
+							title={prof.status === "ATIVO" ? "Desativar" : "Ativar"}
+							onClick={() =>
+								prof.status === "ATIVO"
+									? void deactivate(prof)
+									: void activate(prof)
+							}
+						>
+							{prof.status === "ATIVO" ? "Desativar" : "Ativar"}
+						</button>
+					</div>
+				),
+			},
+		]);
+
+		return new DefaultTableModel(rows as any, [
 			"Docente",
 			"Matrícula",
 			"Tipo de Contrato",
 			"Status",
 			"",
 		]);
-	}
-
-	function searchItem(value: string) {
-		const term = value.toLowerCase().trim();
-		if (!term) {
-			setProfessorsTable(setList(list));
-			return;
-		}
-		const filtered = list.filter((prof) => {
-			const nameMatch = prof.name
-				? prof.name.toLowerCase().includes(term)
-				: false;
-			const registryMatch = prof.registry
-				? prof.registry.toLowerCase().includes(term)
-				: false;
-			return nameMatch || registryMatch;
-		});
-		setProfessorsTable(setList(filtered));
-	}
+	}, [filtered]);
 
 	return (
 		<div className="flex flex-col flex-1">
@@ -132,7 +120,6 @@ export default function Page({ list }: { list: Professor[] }) {
 
 			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
 				<section className="flex flex-row justify-between items-center">
-					{/* <PageSection name={"Professores"} /> */}
 					<PageHeader
 						title={"Professores"}
 						subTitle={"Recursos Acadêmicos"}
@@ -151,32 +138,20 @@ export default function Page({ list }: { list: Professor[] }) {
 						}
 					/>
 				</section>
+
 				<section className="flex flex-row my-4 justify-end items-center gap-5">
 					<FormInput
 						type="search"
 						name={"search"}
 						placeholder="Pesquisar..."
-						onChange={(a: any) => {
-							// if this doesnt work, FormInput may have it's variable onChange commented for some reason
-							searchItem(a.currentTarget.value);
-						}}
+						onChange={(event: any) =>
+							setTerm(event.currentTarget.value.toLowerCase().trim())
+						}
 					/>
-					{/* <Link className="btn" data-variant="outline" data-size="sm" to="add">
-						+ Adicionar
-					</Link> */}
 				</section>
+
 				<ComplexTableModelView data={professorsTable} />
 			</main>
-			{professorToDeactivate && (
-				<ConfirmationDialog
-					title="Desativar professor?"
-					description={`O professor ${professorToDeactivate.name ?? ""} não ficará disponível enquanto estiver desativado.`}
-					confirmLabel="Desativar"
-					errorMessage={deactivationError}
-					onConfirm={() => deactivate(professorToDeactivate.id!)}
-					onCancel={() => setProfessorToDeactivate(null)}
-				/>
-			)}
 		</div>
 	);
 }
