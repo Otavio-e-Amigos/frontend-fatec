@@ -8,6 +8,7 @@ import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
 import SaveProfessorForm from "../professor/@layouts/SaveProfessorForm";
 import GenericFloor from "~/layouts/pages/GenericFloor";
+import GenericSurface from "~/layouts/pages/GenericSurface";
 // import EditPage from "../professor/edit";
 // import Professor from "~/modules/professor/professor.class";
 
@@ -144,6 +145,9 @@ export default function Page() {
 					asodk
 				</GenericFloor>
 
+				<GenericSurface header={<HeaderComponent/>}>
+					askoaskd
+				</GenericSurface>
 				<PageSection name={"Page Layouts"} />
 				<div className="flex flex-col w-full gap-5 p-2 rounded-lg">
 					<div className="bg-page-floor min-h-100 flex flex-col border border-page-floor-outline/25 rounded-lg">
