@@ -59,6 +59,12 @@ async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 				error: { message: field.message },
 			}),
 		);
+		if (error.message) {
+			dispatch({
+				action: "setError",
+				error: { message: error.message },
+			});
+		}
 	}
 }
 

@@ -86,7 +86,28 @@ export default class ProfessorService {
 			// if (res.ok) {
 			// }
 		} catch (e) {
-			console.log(e);
+			// console.log(e);
+			// throw e;
+			if (e instanceof DefaultAPIData) {
+				const message = e.rawData.mensagem;
+				switch (e.status) {
+					case 400:
+						throw new FormValidationError(message ?? "Erro de validação", [
+							message,
+						]);
+					case 401:
+						throw new FormValidationError(message ?? "Não autorizado", [
+							message,
+						]);
+					case 409:
+						throw new FormValidationError(
+							message ?? "Há um conflito entre os dados.",
+							[message],
+						);
+					default:
+						throw new Error("Erro ao salvar dados");
+				}
+			}
 			throw e;
 		}
 
@@ -129,6 +150,11 @@ export default class ProfessorService {
 						throw new FormValidationError(message ?? "Não autorizado", [
 							message,
 						]);
+					case 409:
+						throw new FormValidationError(
+							message ?? "Há um conflito entre os dados.",
+							[message],
+						);
 					default:
 						throw new Error("Erro ao salvar dados");
 				}

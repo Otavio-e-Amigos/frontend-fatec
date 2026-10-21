@@ -88,6 +88,11 @@ export default class CursoService {
 						throw new FormValidationError(message ?? "Não autorizado", [
 							message,
 						]);
+					case 409:
+						throw new FormValidationError(
+							message ?? "Há um conflito entre os dados.",
+							[message],
+						);
 					default:
 						throw new Error("Erro ao salvar dados");
 				}
