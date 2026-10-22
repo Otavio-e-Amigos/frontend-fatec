@@ -1,26 +1,20 @@
-// import { type SyntheticEvent } from "react";
 import ProfessorService from "../professor.service";
 import { FormValidationError } from "~/classes/errors/ValidationError";
-// import type FormController from "~/components/forms/FormController";
-// import { type FormReducerAction } from "~/components/forms/FormContext";
-// import { type NavigateFunction } from "react-router";
+import { FormCancelledError } from "~/classes/errors/FormCancelledError";
+import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
+import getErrorMessage from "~/classes/errors/get-error-message";
 import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import type { ProfessorInterface } from "../professor.class";
 import AuthService from "~/modules/user/auth.service";
-import { Form } from "react-router";
-// import { FormSubmitEventHandler } from "~/hooks/useForm";
 
-type professorExtras = { id?: number };
-
-// let newProf =
-const newData: {
-	newId?: number;
-} = { newId: undefined };
+// savedId é preenchido pela action e lido pelo onSuccess (mesmo objeto extras na submissão).
+type ProfessorExtras = { id?: number; savedId?: number };
 
 async function action({
 	event,
 	extras,
-}: FormSubmitEventHandlerProps<professorExtras>) {
+	dialogs,
+}: FormSubmitEventHandlerProps<ProfessorExtras>) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.currentTarget));
 	const name = String(data.nome ?? "").trim();
@@ -55,6 +49,18 @@ async function action({
 		throw new FormValidationError("Verifique os campos do docente.", fields);
 	}
 
+	// Confirmação apenas na edição, depois que a validação passou.
+	// Se o usuário cancelar, o useForm ignora o erro e o formulário continua aberto.
+	if (extras.id) {
+		const confirmed = await dialogs.confirm({
+			title: "Salvar alterações?",
+			description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
+			confirmLabel: "Salvar",
+			tone: "primary",
+		});
+		if (!confirmed) throw new FormCancelledError();
+	}
+
 	// export form as plain object or class directly using mapper if viable
 	const profRaw: ProfessorInterface = {
 		name,
@@ -71,15 +77,30 @@ async function action({
 	const res = extras.id
 		? await ProfessorService.edit(extras.id, profRaw, auth)
 		: await ProfessorService.save(profRaw, auth);
-	newData.newId = res.id as number;
+	extras.savedId = res.id as number;
 }
 
-async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
-	navigate(newData.newId ? `/professor/${newData.newId}` : "/professor");
+async function onSuccess({
+	navigate,
+	dialogs,
+	extras,
+}: FormSubmitEventHandlerProps<ProfessorExtras>) {
+	dialogs.toast.success(
+		extras.id
+			? "Professor atualizado com sucesso."
+			: "Professor cadastrado com sucesso.",
+	);
+	const id = extras.savedId ?? extras.id;
+	navigate(id ? `/professor/${id}` : "/professor");
 }
 
-async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
-	console.log(error)
+async function onFailure({
+	error,
+	dispatch,
+	dialogs,
+}: FormSubmitEventHandlerProps<ProfessorExtras>) {
+	console.log(error);
+
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
 			dispatch({
@@ -88,13 +109,22 @@ async function onFailure({ error, dispatch }: FormSubmitEventHandlerProps) {
 				error: { message: field.message },
 			}),
 		);
+		// A mensagem geral já aparece no próprio formulário (setError).
 		if (error.message) {
 			dispatch({
 				action: "setError",
 				error: { message: error.message },
 			});
 		}
+		return;
 	}
+
+	// Quando a API não responde, o banner no topo já avisa o usuário.
+	if (error instanceof ApiUnavailableError) return;
+
+	dialogs.toast.error(
+		getErrorMessage(error, "Não foi possível salvar o professor."),
+	);
 }
 
 export default {

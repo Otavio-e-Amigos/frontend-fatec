@@ -20,7 +20,7 @@ function ToastCard({
 	useEffect(() => {
 		const timer = setTimeout(
 			() => onDismiss(toast.id),
-			toast.tone === "error" ? 7000 : 4000,
+			toast.tone === "error" ? 12000 : 8000,
 		);
 		return () => clearTimeout(timer);
 	}, [toast.id, toast.tone, onDismiss]);
