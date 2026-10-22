@@ -143,7 +143,7 @@ export default function GradeWizardDisciplineStep({
 			<header className="flex flex-wrap items-start justify-between gap-2 border-b border-line pb-3">
 				<div>
 					<h1 className="text-lg font-semibold text-brand">
-						Minhas Disciplinas
+						Histórico de Grades
 					</h1>
 					<p className="mt-1 text-sm text-ink-muted">
 						Professor: {professor.name}
