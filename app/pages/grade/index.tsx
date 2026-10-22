@@ -16,7 +16,7 @@ export default function GradePage(props: GradePageProps) {
 			<Header activeItem="Grade" />
 			{/*<main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-4 py-6">*/}
 			<main className="flex flex-1 flex-col gap-5 mx-5 my-4">
-				<PageHeader subTitle={"Recursos Acadêmicos"} description="Consulte a grade de um professor ou cadastre uma nova." title={"Grades"} headerItems={(
+				<PageHeader subTitle={"Recursos Acadêmicos"} description="Consulte a grade de um professor ou cadastre uma nova." title={"Histórico de Grades"} headerItems={(
 					<Link className="btn" data-variant="outline" to="/professor">
 						Ver professores
 					</Link>
