@@ -96,7 +96,8 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 				<header className="flex flex-col px-3 py-1">
 					<div className="flex flex-row gap-10 items-center">
 						<Link to={"/"}>
-							<div className="flex flex-row gap-2 items-center  bg-brand-soft/50 rounded-lg hover:bg-brand-soft/75 px-1.5">
+							{/*<div className="flex flex-row gap-2 items-center  bg-brand-soft/50 rounded-lg hover:bg-brand-soft/75 px-1.5">*/}
+							<div className="flex flex-row gap-2 items-center rounded-lg hover:bg-brand-soft/20 px-1.5">
 								<BrandMark />
 								<p>Appointer</p>
 							</div>
