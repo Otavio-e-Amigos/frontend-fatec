@@ -1,9 +1,11 @@
 import { FormValidationError } from "~/classes/errors/ValidationError";
+import { FormCancelledError } from "~/classes/errors/FormCancelledError";
+import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
+import getErrorMessage from "~/classes/errors/get-error-message";
 import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import AuthService from "../auth.service";
 import UserService from "../user.service";
 import User from "../user.class";
-import DefaultAPIData from "~/modules/api/modules/default/DefaultAPIData";
 
 type UserSaveExtras = {
 	id?: number;
@@ -24,6 +26,7 @@ function getUserProfile(value: string): UserProfile {
 async function action({
 	event,
 	extras,
+	dialogs,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	event.preventDefault();
 	extras.setSubmitError("");
@@ -41,6 +44,17 @@ async function action({
 	}
 	const userProfile = getUserProfile(profile);
 
+	// Confirmação apenas na edição, depois que a validação passou.
+	if (extras.id) {
+		const confirmed = await dialogs.confirm({
+			title: "Salvar alterações?",
+			description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
+			confirmLabel: "Salvar",
+			tone: "primary",
+		});
+		if (!confirmed) throw new FormCancelledError();
+	}
+
 	const user = new User({
 		id: extras.id,
 		name,
@@ -54,7 +68,16 @@ async function action({
 }
 
 /** Returns to the system user list after a successful save. */
-async function onSuccess({ navigate }: FormSubmitEventHandlerProps) {
+async function onSuccess({
+	navigate,
+	dialogs,
+	extras,
+}: FormSubmitEventHandlerProps<UserSaveExtras>) {
+	dialogs.toast.success(
+		extras.id
+			? "Usuário atualizado com sucesso."
+			: "Usuário cadastrado com sucesso.",
+	);
 	navigate("/system");
 }
 
@@ -63,6 +86,7 @@ async function onFailure({
 	error,
 	dispatch,
 	extras,
+	dialogs,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -72,18 +96,16 @@ async function onFailure({
 				error: { message: field.message },
 			}),
 		);
+		dialogs.toast.error(error.message);
 		return;
 	}
 
-	const message =
-		error instanceof DefaultAPIData
-			? error.error?.message ||
-				error.rawData?.mensagem ||
-				"Não foi possível salvar o usuário."
-			: error instanceof Error && error.message
-				? error.message
-				: "Não foi possível salvar o usuário.";
-	extras.setSubmitError(String(message));
+	// Quando a API não responde, o banner no topo já avisa o usuário.
+	if (error instanceof ApiUnavailableError) return;
+
+	const message = getErrorMessage(error, "Não foi possível salvar o usuário.");
+	extras.setSubmitError(message);
+	dialogs.toast.error(message);
 }
 
 export default { action, onSuccess, onFailure };

@@ -1,115 +1,116 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router";
-// import CPFFormatter from "~/classes/ValueFormatters/CPFFormatter";
 import Header from "~/layouts/Header";
-// import PageSection from "~/layouts/PageSection.layout";
+import ProfileBanner from "~/layouts/ProfileBanner";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import type Curso from "~/modules/curso/curso.class";
+import type Disciplina from "~/modules/disciplina/disciplina.class";
+import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import type Professor from "~/modules/professor/professor.class";
+import ProfessorGradesPanel from "../@layouts/ProfessorGradesPanel";
 
-function ProfessorInfo({ professor }: { professor?: Professor }) {
-	function InfoBadge({
-		icon,
-		info,
-	}: {
-		icon: string;
-		info: string | ReactNode;
-	}) {
-		return (
-			<div className="flex flex-row items-center gap-2">
-				<img src={icon} />
-				{info}
-			</div>
-		);
-	}
+// Imagem do banner. Ex.: "/banners/professor.jpg" (arquivo em public/banners/).
+// Enquanto for undefined, o banner mostra o degradê da marca.
+const BANNER_IMAGE: string | undefined = undefined;
 
+type AboutProps = {
+	professor: Professor;
+	periodos: PeriodoLetivo[];
+	cursos: Curso[];
+	disciplinas: Disciplina[];
+};
+
+function InfoItem({ label, children }: { label: string; children?: ReactNode }) {
 	return (
-		<div className="flex flex-row justify-between">
-			<summary className="flex flex-col">
-				<p className="text-3xl">{professor?.name ?? "Professor"}</p>
-				<div className="flex flex-row items-center gap-1.5">
-					<p className="text-gray-400 text-xs">Docente |</p>
-					<p className="badge" data-tone={professor?.status === "ATIVO" ? "ok" : undefined}>{professor?.status}</p>
-					<p className="chip">{professor?.contract}</p>
-				</div>
-				{/*<p className="text-gray-400 text-xs">
-					Docente | {professor?.status} | {professor?.contract}
-				</p>*/}
-				<section className="flex flex-row gap-4">
-					{/*<InfoBadge icon={"/"} info={<Link to={"mailto:PROFESSOR.EMAIL@EMAIL.DOMAIN"}>PROFESSOR.EMAIL@EMAIL.DOMAIN</Link>} />*/}
-					{/*<InfoBadge icon={"/"} info={"(11) 12345-6789"} />*/}
-					{/*<InfoBadge icon={"/"} info={"@TEAMSUSER"} />*/}
-					{/*<InfoBadge icon={"/"} info={CPFFormatter.format(professor?.cpf as string)} />*/}
-				</section>
-			</summary>
-
-			<section className="flex flex-col gap-2">
-				<div className="flex flex-col">
-					<Link className="link" to={`/professor/${professor?.id}/edit`}>Editar</Link>
-					<Link
-						className="btn mt-2"
-						data-variant="outline"
-						to={`/professor/${professor?.id}/grades/new`}
-					>
-						Criar grade horária
-					</Link>
-
-					{/* TODO insert confirmation window here */}
-					{/*<Link to={"/"}>Excluir</Link>*/}
-				</div>
-
-				{/*<div className="flex flex-col">
-					<Link to={"/"}>Visualizar Grade</Link>
-					<Link to={"/"}>Gerar Folha de Ponto</Link>
-				</div>*/}
-			</section>
+		<div className="flex flex-col">
+			<dt className="text-xs text-ink-muted">{label}</dt>
+			<dd className="text-sm font-medium text-ink">{children || "—"}</dd>
 		</div>
 	);
 }
 
-export default function About({ professor }: { professor: Professor }) {
-	console.log(professor);
+export default function About({
+	professor,
+	periodos,
+	cursos,
+	disciplinas,
+}: AboutProps) {
 	return (
-		<>
-			<main className="flex flex-1 flex-col">
-				{/* cool background */}
-				<div className="flex flex-col bg-page-floor min-h-60">
-					<Header activeItem="Professores" />
+		<div className="flex flex-1 flex-col">
+			<Header activeItem="Professores" />
+
+			<ProfileBanner image={BANNER_IMAGE} alt={`Banner de ${professor.name}`} />
+
+			{/* Dados principais */}
+			<section className="floor-accent flex flex-wrap items-center justify-between gap-4 rounded-none border-x-0 px-5 py-4">
+				<div className="flex items-center gap-4">
+					<div className="flex flex-col gap-1">
+						<h1 className="text-3xl leading-tight">
+							{professor.name ?? "Professor"}
+						</h1>
+						<div className="flex flex-wrap items-center gap-1.5">
+							<p className="text-xs text-ink-muted">Docente |</p>
+							<span
+								className="badge"
+								data-tone={professor.status === "ATIVO" ? "ok" : undefined}
+							>
+								{professor.status}
+							</span>
+							<span className="chip">{professor.contract}</span>
+						</div>
+					</div>
 				</div>
 
-				{/*about page*/}
-				<section className="floor-accent border-x-0 rounded-none flex flex-col px-10 py-3">
-					<ProfessorInfo professor={professor} />
-				</section>
+				<div className="flex items-center gap-3">
+					<Link className="link" to={`/professor/${professor.id}/edit`}>
+						Editar
+					</Link>
+					<Link
+						className="btn"
+						data-variant="outline"
+						to={`/professor/${professor.id}/grades/new`}
+					>
+						Criar grade horária
+					</Link>
+				</div>
+			</section>
 
-				<section className="flex flex-col px-10 py-3 pt-6 gap-5">
-					<div className="flex flex-row gap-3">
-						<button className="btn">Geral</button>
-						{/*<button className="btn btn-inactive">Grades</button>*/}
-						{/*<button className="btn btn-inactive">Folhas de Ponto</button>*/}
-					</div>
-					<section className="floor rounded-lg text-black flex flex-col">
-						<div className="floor-accent p-2 border-x-0 border-t-0 rounded-b-none">
-							<h1 className="text-3xl font-medium">Informações Gerais</h1>
-						</div>
-						{/*<PageSection name={"Informações Gerais"} />*/}
-						<main className="px-3 py-4">
-							<ul className="list-disc ml-5">
-								<li>
-									<b>Status</b>: {professor.status}
-								</li>
-								<li>
-									<b>Tipo de Contrato</b>: {professor.contract}
-								</li>
-								<li>
-									<b>Matrícula</b>: {professor.registry}
-								</li>
-								<li>
-									<b>Código do Professor</b>: {professor.code}
-								</li>
-							</ul>
-						</main>
-					</section>
-				</section>
+			<main className="mx-5 my-5 flex flex-1 flex-col gap-5">
+				<div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+					<ProfessorGradesPanel
+						professorId={Number(professor.id)}
+						periodos={periodos}
+						cursos={cursos}
+						disciplinas={disciplinas}
+					/>
+
+					<GenericFloor
+						className="p-4"
+						header={
+							<div className="px-4 py-3">
+								<h2 className="text-xl font-bold text-red-950">
+									Informações Gerais
+								</h2>
+							</div>
+						}
+					>
+						<dl className="flex flex-col gap-3">
+							<InfoItem label="Status">
+								<span
+									className="badge"
+									data-tone={professor.status === "ATIVO" ? "ok" : undefined}
+								>
+									{professor.status}
+								</span>
+							</InfoItem>
+							<InfoItem label="Tipo de contrato">{professor.contract}</InfoItem>
+							<InfoItem label="Matrícula">{professor.registry}</InfoItem>
+							<InfoItem label="Código do professor">{professor.code}</InfoItem>
+							<InfoItem label="Titulação">{professor.title}</InfoItem>
+						</dl>
+					</GenericFloor>
+				</div>
 			</main>
-		</>
+		</div>
 	);
 }

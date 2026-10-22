@@ -2,12 +2,21 @@ import FormInput from "~/components/forms/FormInput";
 import { LoadingGeral } from "~/components/loaders/LoadingGeral";
 import useForm from "~/hooks/useForm";
 import login from "~/modules/user/@actions/login.action";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
+import useDialogs from "~/hooks/useDialogs";
+import { useEffect } from "react";
 
 /** Displays the application login using the institutional visual identity. */
 export default function LoginPage() {
 	const { FormContainer, isSubmitting } = useForm({ actions: login });
+	const dialogs = useDialogs();
+	const [params] = useSearchParams();
 
+	useEffect(() => {
+		if (params.get("sessao") === "expirada") {
+			dialogs.toast.info("Sua sessão expirou. Faça login novamente.");
+		}
+	}, []);
 	return (
 		<div className="login-page">
 			{isSubmitting && (
@@ -19,7 +28,7 @@ export default function LoginPage() {
 						<BrandMark />
 						<span className="login-brand-copy">
 							<strong>Appointer</strong>
-							<small>SISTEMA DE GRADES FATEC</small>
+							<small>SISTEMA DE FOLHA DE PONTO FATEC</small>
 						</span>
 					</Link>
 					<div className="login-institution" aria-label="Centro Paula Souza">

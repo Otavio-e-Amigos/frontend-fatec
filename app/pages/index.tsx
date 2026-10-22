@@ -1,132 +1,76 @@
-import { Link } from "react-router";
-import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
-import type Professor from "~/modules/professor/professor.class";
-import NotificationBadge from "~/components/badges/NotificationBadge";
 import PageHeader from "~/layouts/PageHeader";
 import GenericFloor from "~/layouts/pages/GenericFloor";
+import ShortcutCard from "~/components/cards/ShortcutCard";
+import type User from "~/modules/user/user.class";
+import homeShortcuts from "./home-shortcuts";
 
-export default function Page({
-	professorList,
+type HomePageProps = {
+	name?: string;
+	profile?: User["profile"];
+};
+
+function PanelHeader({
+	title,
+	description,
 }: {
-	professorList: Professor[];
+	title: string;
+	description?: string;
 }) {
-	const quickActionCards: Array<{
-		topic: string;
-		links: Array<{ label: string; href: string }>;
-	}> = [
-		{
-			topic: "Professores",
-			links: [{ label: "Adicionar Professor", href: "/professor/add" }],
-		},
-		{
-			topic: "Disciplinas",
-			links: [{ label: "Adicionar Disciplina", href: "/disciplina/add" }],
-		},
-		{
-			topic: "Cursos",
-			links: [{ label: "Adicionar Curso", href: "/curso/add" }],
-		},
-		{
-			topic: "Períodos Letivos",
-			links: [
-				{ label: "Adicionar Período Letivo", href: "/periodo-letivo/add" },
-			],
-		},
-	];
-
-	const professorTableList = professorList.map((prof) => [
-		{
-			value: prof.name,
-			display: (
-				<Link key={prof.id} className="link" to={`/professor/${prof.id}`}>
-					{prof.name}
-				</Link>
-			),
-		},
-		prof.registry,
-		prof.status,
-	]);
-
-	// const professorMockTable = new DefaultTableModel(professorTableList as any, [
-	// 	"Docente",
-	// 	"Matrícula",
-	// 	"Status",
-	// ]);
-
-	function Card({
-		topic,
-		links,
-	}: {
-		topic: string;
-		links: Array<{ label: string; href: string }>;
-	}) {
-		function CardHeader() {
-			return (
-				<div className="flex flex-row mx-2 my-1">
-					<p className="text-xl">{topic}</p>
-				</div>
-			);
-		}
-
-		return (
-			<GenericFloor
-				className="flex flex-col gap-1 px-3"
-				header={<CardHeader />}
-			>
-				<div className="flex flex-col gap-1 my-1">
-					{links.map(({ label, href }) => (
-						<Link className="link" to={href}>
-							{label}
-						</Link>
-					))}
-				</div>
-			</GenericFloor>
-		);
-	}
-
 	return (
-		<div className="flex flex-1 flex-col max-h-screen">
-			<Header />
-			<main className="grid grid-cols-4 flex-1 gap-x-8 m-5 overflow-hidden">
-				<section className="col-span-4 flex flex-col gap-3">
-					<PageHeader
-						title={"Página Inicial"}
-						description="Bem vindo de volta! O que gostaria de realizar por hoje?"
-					/>
-					{quickActionCards.map(({topic, links}) => <Card topic={topic} links={links}/>)}
-					{/*<Card topic={""} links={[]} />*/}
-					{/*<ComplexTableModelView data={professorMockTable} />*/}
-				</section>
-			</main>
+		<div className="flex flex-col px-4 py-3">
+			<h2 className="text-xl font-bold text-red-950">{title}</h2>
+			{description && <p className="text-xs text-brand-shade">{description}</p>}
 		</div>
 	);
 }
 
-// <aside className="grid grid-rows-2 gap-y-5 surface rounded-xl p-2 text-black overflow-hidden">
-// 					{/* Resumo do dia */}
-// 					{/*<section className="flex flex-col flex-1 overflow-hidden">
-// 						<PageSection name="Resumo do dia" />
+export default function Page({ name, profile }: HomePageProps) {
+	// Esconde os atalhos restritos a perfis que o usuário não tem.
+	const shortcuts = homeShortcuts.filter(
+		(shortcut) =>
+			!shortcut.profiles || (profile && shortcut.profiles.includes(profile)),
+	);
 
-// 						<section className="flex flex-1 flex-col max-h-full gap-2 overflow-y-scroll">
-// 							{notifications.map((notification, idx) => (
-// 								<NotificationBadge key={idx} {...notification} />
-// 							))}
-// 						</section>
-// 					</section>*/}
+	return (
+		<div className="flex flex-1 flex-col">
+			<Header />
 
-// 					{/* Ações Rápidas*/}
-// 					<section>
-// 						<PageSection name="Ações Rápidas" />
+			<main className="mx-5 my-4 flex flex-1 flex-col gap-5">
+				<PageHeader
+					subTitle="Visão geral"
+					title={"Página Inicial"}
+					description={`Bem-vindo de volta${name ? `, ${name}` : ""}! O que gostaria de realizar hoje?`}
+				/>
 
-// 						<div className="flex flex-col gap-1">
-// 							{quickActionLinks.map((action, idx) => (
-// 								<Link key={idx} to={action.href}>
-// 									{action.label}
-// 								</Link>
-// 							))}
-// 						</div>
-// 					</section>
-// 				</aside>
+				<div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+					{/* Painel principal: os cards ficam um nível acima do site */}
+					<GenericFloor
+						className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-4 p-4"
+						header={
+							<PanelHeader
+								title="Acesso rápido"
+								description="Atalhos para as principais áreas do sistema."
+							/>
+						}
+					>
+						{shortcuts.map((shortcut) => (
+							<ShortcutCard key={shortcut.href} {...shortcut} />
+						))}
+					</GenericFloor>
+
+					{/* Painel lateral */}
+					<GenericFloor
+						className="p-4"
+						header={<PanelHeader title="Notificações" />}
+					>
+						<div className="empty-state">
+							<p>Nenhuma notificação</p>
+							<p>Os avisos do sistema aparecerão aqui.</p>
+						</div>
+					</GenericFloor>
+				</div>
+			</main>
+		</div>
+	);
+}

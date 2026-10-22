@@ -1,10 +1,6 @@
-// import professors from "~/mock/db/professors.db";
+import { redirect } from "react-router";
 import type { Route } from "./+types/home";
 import Index from "~/pages";
-import ProfessorService from "~/modules/professor/professor.service";
-import User from "~/modules/user/user.class";
-import { redirect } from "react-router";
-import professors from "~/mock/db/professors.db";
 import AuthService from "~/modules/user/auth.service";
 
 export function meta({}: Route.MetaArgs) {
@@ -15,16 +11,13 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function clientLoader({}: Route.LoaderArgs) {
-	if (!localStorage.getItem("auth")) {
+	if (!AuthService.hasUserToken()) {
 		throw redirect("/login");
 	}
-	const auth = AuthService.getUserToken();
-
-	const list = await ProfessorService.get(auth);
-	// const list = professors;
-	return { list };
+	const { name, profile } = AuthService.getUserToken();
+	return { name, profile };
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-	return <Index professorList={loaderData.list} />;
+	return <Index name={loaderData.name} profile={loaderData.profile} />;
 }
