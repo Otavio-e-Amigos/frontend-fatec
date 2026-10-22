@@ -120,7 +120,7 @@ export default function GradeWizardScheduleStep({
 			/>
 
 			{scheduleError && (
-				<p className="text-sm text-hint-warning" role="alert">
+				<p className="text-sm text-hint-alert-dot" role="alert">
 					{scheduleError}
 				</p>
 			)}

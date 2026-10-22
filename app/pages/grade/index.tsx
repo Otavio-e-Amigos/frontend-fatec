@@ -12,10 +12,11 @@ export default function GradePage(props: GradePageProps) {
 	const page = useGradePage(props);
 
 	return (
-		<div className="flex min-h-screen flex-col">
+		<div className="flex flex-1 min-h-screen flex-col">
 			<Header activeItem="Grade" />
-			<main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-4 py-6">
-				<PageHeader subTitle={"Gestão acadêmica"} description="Consulte a grade de um professor ou cadastre uma nova." title={"Grades"} headerItems={(
+			{/*<main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-5 px-4 py-6">*/}
+			<main className="flex flex-1 flex-col gap-5 mx-5 my-4">
+				<PageHeader subTitle={"Recursos Acadêmicos"} description="Consulte a grade de um professor ou cadastre uma nova." title={"Grades"} headerItems={(
 					<Link className="btn" data-variant="outline" to="/professor">
 						Ver professores
 					</Link>

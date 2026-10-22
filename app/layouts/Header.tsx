@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router";
 import BrandMark from "~/components/BrandMark";
 import AuthService from "~/modules/user/auth.service";
 import User from "~/modules/user/user.class";
+import BrandMark from "./BrandMark";
 
 const staticLinks = [
 	{ label: "Gestão", href: "/system" },

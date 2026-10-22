@@ -352,7 +352,7 @@ export default function GradeWizardDisciplineStep({
 					</p>
 				)}
 				{itemError && (
-					<p className="mt-3 text-sm text-hint-warning" role="alert">
+					<p className="mt-3 text-sm text-hint-alert-dot" role="alert">
 						{itemError}
 					</p>
 				)}
