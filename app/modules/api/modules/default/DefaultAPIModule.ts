@@ -13,9 +13,22 @@ const API_PATH = import.meta.env.VITE_API_PATH as string;
 const API_HTTPS = import.meta.env.VITE_API_HTTPS === "true" ? true : false;
 const API_PORT = Number(import.meta.env.VITE_API_PORT);
 
+// Evita redirecionar várias vezes quando várias requisições falham juntas (ex.: loaders em paralelo).
+let redirectingToLogin = false;
+
+/** Limpa a sessão e leva o usuário para a página de login. */
+function sendToLogin() {
+	if (typeof window === "undefined") return;
+	if (window.location.pathname === "/login" || redirectingToLogin) return;
+
+	redirectingToLogin = true;
+	window.localStorage.removeItem("auth");
+	window.location.replace("/login?sessao=expirada");
+}
 /**
  * System's API Module
  */
+
 export class DefaultAPIModule extends AbstractAPIModule {
 	constructor() {
 		super({
@@ -93,7 +106,15 @@ export class DefaultAPIModule extends AbstractAPIModule {
 						data.error = new APIValidationError(data.rawData.mensagem, data);
 						throw data
 					}
-					case 401: { //send to login page or popup
+					case 401: {
+						// Sessão expirada ou token inválido em uma requisição autenticada.
+						// O login com senha errada não cai aqui, pois não envia credentials.
+						if (req.credentials) {
+							sendToLogin();
+							// Nunca resolve: a página está sendo trocada, então nada abaixo
+							// (toasts, tela de erro) precisa rodar.
+							return new Promise<never>(() => {});
+						}
 						data.error = new APIValidationError(data.rawData.mensagem, data);
 						throw data
 					}

@@ -12,7 +12,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { LoadingGeral } from "./components/loaders/LoadingGeral";
 import DialogProvider from "./components/dialogs/DialogProvider";
-
+import Footer from "./layouts/Footer";
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
 	{
@@ -53,6 +53,7 @@ export default function App() {
 	return (
 		<DialogProvider>
 			<Outlet />
+			<Footer />
 			{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
 		</DialogProvider>
 	);
