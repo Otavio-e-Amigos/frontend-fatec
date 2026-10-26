@@ -6,6 +6,8 @@ import Header from "~/layouts/Header";
 import PageSection from "~/layouts/PageSection.layout";
 import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
+import useWindow from "~/hooks/useWindow";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 const defaultTableTest = new DefaultTableModel(
 	[
@@ -98,6 +100,15 @@ function StepBadge({
 }
 
 export default function Page() {
+	const window = useWindow({
+		wrapper: BasicWindow,
+		initialData: {
+			title: "Hello, WindowManager!",
+			description: "cool, isn't it?",
+			dismissible: true
+		},
+	});
+
 	return (
 		// <main className="bg-cps min-h-full">
 		<main>
@@ -121,14 +132,18 @@ export default function Page() {
 						Inactive
 					</button>
 					<button className="btn">Create</button>
-
 				</section>
 				<br />
 
 				<p className="mb-3">Others</p>
 				<section className="grid grid-cols-3 gap-3 w-fit">
-					<div className="chip">hello</div>
-
+					{/*<div className="chip">hello</div>*/}
+					<button className="btn btn-normal" onClick={() => {window.show()}}>
+						Summon Window
+					</button>
+					<button className="btn btn-normal" onClick={() => {window.show({title: "asdk", dismissible: true})}}>
+						Summon Window w/ different message
+					</button>
 				</section>
 				<br />
 

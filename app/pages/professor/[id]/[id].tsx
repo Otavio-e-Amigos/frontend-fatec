@@ -49,14 +49,15 @@ export default function About({
 							{professor.name ?? "Professor"}
 						</h1>
 						<div className="flex flex-wrap items-center gap-1.5">
-							<p className="text-xs text-ink-muted">Docente |</p>
-							<span
+							<p className="text-xs text-ink-muted">Docente</p>
+							{/*<p className="text-xs text-ink-muted">Docente |</p>*/}
+							{/*<span
 								className="badge"
 								data-tone={professor.status === "ATIVO" ? "ok" : undefined}
 							>
 								{professor.status}
 							</span>
-							<span className="chip">{professor.contract}</span>
+							<span className="chip">{professor.contract}</span>*/}
 						</div>
 					</div>
 				</div>

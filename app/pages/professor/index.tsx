@@ -10,12 +10,28 @@ import PageHeader from "~/layouts/PageHeader";
 import type Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
+import mapper from "./@mappers/professor-table.mapper";
+import filter from "./@filters/professor-table.filter";
+import useWindow from "~/hooks/useWindow";
+import BasicWindow from "~/layouts/windows/BasicWindow";
+import deactivateWindow from "./@windows/deactivate.window";
+// import activate from "./@actions/activate.action";
 
 export default function Page({ list }: { list: Professor[] }) {
 	const auth = AuthService.getUserToken();
 	const dialogs = useDialogs();
 	const { revalidate } = useRevalidator();
 	const [term, setTerm] = useState("");
+	// const window = useWindow({
+		// ...deactivateWindow,
+		// extras: {
+		// 	actions: {
+		// 		activate,
+		// 		deactivate
+		// 	}
+		// }
+	// });
+	const window = useWindow(deactivateWindow)
 
 	async function activate(prof: Professor) {
 		try {
@@ -31,6 +47,7 @@ export default function Page({ list }: { list: Professor[] }) {
 	}
 
 	async function deactivate(prof: Professor) {
+		const test = window.show()
 		const done = await dialogs.confirm({
 			title: "Desativar professor?",
 			description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
@@ -53,57 +70,11 @@ export default function Page({ list }: { list: Professor[] }) {
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
-		return list.filter((prof) =>
-			[prof.name, prof.registry].some((value) =>
-				value ? value.toLowerCase().includes(term) : false,
-			),
-		);
+		return list.filter((prof) => filter(prof, term));
 	}, [list, term]);
 
 	const professorsTable = useMemo(() => {
-		const rows = filtered.map((prof) => [
-			{
-				value: prof.name,
-				display: (
-					<Link key={prof.id} className="link" to={`/professor/${prof.id}`}>
-						{prof.name}
-					</Link>
-				),
-			},
-			prof.registry,
-			prof.contract,
-			prof.status,
-			{
-				value: 0,
-				display: (
-					<div key={prof.id} className="row-actions">
-						<Link
-							className="btn"
-							data-variant="icon"
-							data-icon="edit"
-							title="Editar"
-							to={`/professor/${prof.id}/edit`}
-						>
-							Editar
-						</Link>
-						<button
-							type="button"
-							className="btn"
-							data-variant="icon"
-							data-icon="power"
-							title={prof.status === "ATIVO" ? "Desativar" : "Ativar"}
-							onClick={() =>
-								prof.status === "ATIVO"
-									? void deactivate(prof)
-									: void activate(prof)
-							}
-						>
-							{prof.status === "ATIVO" ? "Desativar" : "Ativar"}
-						</button>
-					</div>
-				),
-			},
-		]);
+		const rows = filtered.map((prof) => mapper(prof, deactivate, activate));
 
 		return new DefaultTableModel(rows as any, [
 			"Docente",
@@ -119,25 +90,25 @@ export default function Page({ list }: { list: Professor[] }) {
 			<Header activeItem="Professores" />
 
 			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
-				<section className="flex flex-row justify-between items-center">
-					<PageHeader
-						title={"Professores"}
-						subTitle={"Recursos Acadêmicos"}
-						description={
-							"Explore e visualize as opções disponíveis para cada docente"
-						}
-						headerItems={
-							<Link
-								className="btn w-fit"
-								data-variant="outline"
-								data-size="sm"
-								to="add"
-							>
-								+ Novo Professor
-							</Link>
-						}
-					/>
-				</section>
+				<PageHeader
+					title={"Professores"}
+					subTitle={"Recursos Acadêmicos"}
+					description={
+						"Explore e visualize as opções disponíveis para cada docente"
+					}
+					headerItems={
+						<Link
+							className="btn w-fit"
+							data-variant="outline"
+							data-size="sm"
+							to="add"
+						>
+							+ Novo Professor
+						</Link>
+					}
+				/>
+				{/*<section className="flex flex-row justify-between items-center">
+				</section>*/}
 
 				<section className="flex flex-row my-4 justify-end items-center gap-5">
 					<FormInput
