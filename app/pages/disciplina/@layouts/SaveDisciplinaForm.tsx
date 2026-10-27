@@ -5,11 +5,13 @@ import FormSection from "~/layouts/forms/FormSection";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import actions from "~/modules/disciplina/@actions/save.action";
 
+import type { DisciplinaInterface } from "~/modules/disciplina/disciplina.class";
+
 export default function SaveDisciplinaForm({
-	disciplina,
-	onSaved,
+	disciplina, initialValues, onSaved,
 }: {
 	disciplina?: Disciplina;
+	initialValues?: DisciplinaInterface;
 	onSaved?: () => void;
 }) {
 	const { controller, FormContainer } = useForm({
@@ -22,7 +24,12 @@ export default function SaveDisciplinaForm({
 		controller.addField("codigo", disciplina.codigo);
 		controller.addField("sigla", disciplina.sigla);
 	}
-
+	const seed = disciplina ?? initialValues;
+	if (seed) {
+		controller.addField("nome", seed.nome);
+		controller.addField("codigo", seed.codigo);
+		controller.addField("sigla", seed.sigla);
+	}
 	return (
 		<BasicFormLayout
 			title={

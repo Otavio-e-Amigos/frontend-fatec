@@ -6,7 +6,7 @@ export default [
 
 	route("login", "routes/login.tsx"),
 	route("grade", "routes/grade/index.tsx"),
-
+	route("folha-ponto", "routes/folha-ponto/index.tsx"),
 	route("system", "routes/system/router.outlet.tsx", [
 		index("routes/system/index.tsx"),
 		route("user", "routes/system/user/router.outlet.tsx", [

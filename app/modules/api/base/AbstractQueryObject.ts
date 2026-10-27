@@ -7,12 +7,13 @@ export interface QueryArgumentObject {
  * Helper query interface which stores all of query data on a semi-structured object, whilst it allows for custom parameters for other extended API Modules
  */
 export default interface AbstractQueryObject {
-	path?: Array<string | number | undefined>; //API's uri path separated in arrays. You can set predefined paths and extend them with external dynamic values (e.g. /professors/1/cool ; ['professor', 1, 'cool'])
-	arguments?: QueryArgumentObject[]; //uri arguments, separated in dictionary for easier access (e.g. ?limit=1&?type=rose ; {limit: 1, type: 'rose'})
-	method?: string; //uri's method (GET, POST, ...)
+	path?: Array<string | number | undefined>;
+	arguments?: QueryArgumentObject[];
+	method?: string;
 	body?: any;
 	headers?: Record<string, string>;
-	credentials?: any //credentials that some systems may require along the request
+	credentials?: any;
+	timeout?: number; // ms; padrão do módulo: 15000
 }
 
 /**

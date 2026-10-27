@@ -3,13 +3,17 @@ import useForm from "~/hooks/useForm";
 import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 import FormSection from "~/layouts/forms/FormSection";
 import type Curso from "~/modules/curso/curso.class";
+import type { CursoInterface } from "~/modules/curso/curso.class";
 import save from "~/modules/curso/@actions/save.action";
 
 export default function SaveCursoFrom({
 	curso,
+	initialValues,
 	onSaved,
 }: {
 	curso?: Curso;
+	/** Preenche o formulário sem entrar em modo edição (ex.: dados vindos da grade). */
+	initialValues?: CursoInterface;
 	onSaved?: () => void;
 }) {
 	const { controller, FormContainer } = useForm({
@@ -17,10 +21,11 @@ export default function SaveCursoFrom({
 		actionsExtras: { id: curso?.id, onSaved },
 	});
 
-	if (curso) {
-		controller.addField("nome", curso.nome);
-		controller.addField("turno", curso.turno ?? "MANHA");
-		controller.addField("sigla", curso.sigla);
+	const seed = curso ?? initialValues;
+	if (seed) {
+		controller.addField("nome", seed.nome);
+		controller.addField("turno", seed.turno ?? "MANHA");
+		controller.addField("sigla", seed.sigla);
 	}
 
 	return (

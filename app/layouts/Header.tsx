@@ -7,6 +7,7 @@ import User from "~/modules/user/user.class";
 const staticLinks = [
 	{ label: "Gestão", href: "/system" },
 	{ label: "Grade", href: "/grade" },
+	{ label: "Folha de Ponto", href: "/folha-ponto" },
 	{ label: "Professores", href: "/professor" },
 	{ label: "Disciplinas", href: "/disciplina" },
 	{ label: "Cursos", href: "/curso" },

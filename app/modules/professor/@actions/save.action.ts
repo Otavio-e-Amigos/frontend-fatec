@@ -8,7 +8,7 @@ import type { ProfessorInterface } from "../professor.class";
 import AuthService from "~/modules/user/auth.service";
 
 // savedId é preenchido pela action e lido pelo onSuccess (mesmo objeto extras na submissão).
-type ProfessorExtras = { id?: number; savedId?: number };
+type ProfessorExtras = { id?: number; savedId?: number; onSaved?: () => void };
 
 async function action({
 	event,
@@ -90,6 +90,11 @@ async function onSuccess({
 			? "Professor atualizado com sucesso."
 			: "Professor cadastrado com sucesso.",
 	);
+
+	if (extras.onSaved) {
+		extras.onSaved();
+		return;
+	}
 	const id = extras.savedId ?? extras.id;
 	navigate(id ? `/professor/${id}` : "/professor");
 }

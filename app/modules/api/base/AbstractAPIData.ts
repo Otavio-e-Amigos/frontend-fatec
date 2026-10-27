@@ -2,7 +2,9 @@ export interface AbstractAPIDataInit {
 	status: number;
 	ok: boolean;
 	data?: any
-	error?: Error
+	error?: Error,
+	credentials?: any
+	timeout?: number; // ms; padrão do módulo: 15000
 }
 
 export interface AbstractAPIDataParseOptions {}

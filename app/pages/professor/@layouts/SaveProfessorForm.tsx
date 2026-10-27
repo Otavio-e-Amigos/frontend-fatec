@@ -7,9 +7,10 @@ import useForm from "~/hooks/useForm";
 import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 import FormSection from "~/layouts/forms/FormSection";
 import saveAction from "~/modules/professor/@actions/save.action";
+import type { ProfessorInterface } from "~/modules/professor/professor.class";
 import type Professor from "~/modules/professor/professor.class";
 
-function createInitialController(professor?: Professor) {
+function createInitialController(professor?: ProfessorInterface) {
 	const controller = new FormController();
 	if (!professor) return controller;
 
@@ -25,16 +26,20 @@ function createInitialController(professor?: Professor) {
 
 export default function SaveProfessorForm({
 	professor,
+	initialValues,
+	onSaved,
 }: {
 	professor?: Professor;
+	initialValues?: ProfessorInterface;
+	onSaved?: () => void;
 }) {
 	const [initialController] = useState(() =>
-		createInitialController(professor),
+		createInitialController(professor ?? initialValues),
 	);
 	const { controller, FormContainer } = useForm({
 		initialController,
 		actions: saveAction,
-		actionsExtras: { id: professor?.id },
+		actionsExtras: { id: professor?.id, onSaved },
 	});
 	const edit = professor !== undefined;
 

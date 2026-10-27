@@ -58,7 +58,13 @@ export class DefaultAPIModule extends AbstractAPIModule {
 		}
 
 		const path = parsePath(req.path);
-		const headers: Record<string, any> = { "Content-Type": "application/json" };
+		// troque a linha do headers:
+		const isFormData = typeof FormData !== "undefined" && req.body instanceof FormData;
+		// no upload o navegador define o multipart com o boundary; não force o Content-Type
+		const headers: Record<string, any> = isFormData ? {} : { "Content-Type": "application/json" };
+
+		// e no axios.request(...):
+		
 		const params = req.arguments
 			? new URLSearchParams(
 				req.arguments.map(({ param, value }) => [param, String(value)]),
@@ -72,14 +78,14 @@ export class DefaultAPIModule extends AbstractAPIModule {
 		console.log(path);
 
 		const res = axios
-			.request({
+			.request({		
 				method: req.method,
 				baseURL: this.url,
 				url: path,
 				params,
 				data: req.body,
+				timeout: req.timeout ?? 15000,
 				headers: headers,
-				timeout: 15000,
 			})
 			.then((res) => {
 				apiStatus.report(true);
@@ -113,7 +119,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 							sendToLogin();
 							// Nunca resolve: a página está sendo trocada, então nada abaixo
 							// (toasts, tela de erro) precisa rodar.
-							return new Promise<never>(() => {});
+							return new Promise<never>(() => { });
 						}
 						data.error = new APIValidationError(data.rawData.mensagem, data);
 						throw data
