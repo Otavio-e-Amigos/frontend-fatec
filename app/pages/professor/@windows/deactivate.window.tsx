@@ -1,41 +1,16 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import type { WindowHookOptions } from "~/hooks/useWindow";
 import BasicWindow, { WindowExtrasContext } from "~/layouts/windows/BasicWindow";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 
-function WindowActions() {
-	const extras: {actions: {activate:Function, deactivate:Function}} = useContext(WindowExtrasContext)
-	return (
-		<>
-			<button
-				type="button"
-				className="btn"
-				data-variant="secondary"
-				// onClick={}
-				// disabled={isSubmitting}
-			>
-				Cancelar
-			</button>
-			<button
-				type="button"
-				className="btn"
-				data-variant={"danger"}
-				// onClick={confirm}
-				// disabled={isSubmitting}
-			>
-				Confirmar
-				{/*{isSubmitting ? "Processando..." : confirmLabel}*/}
-			</button>
-		</>
-	)
-}
 
-const deactivateWindow = {
+const deactivateWindow:WindowHookOptions = {
 	wrapper: BasicWindow,
 	initialData: {
 		title: "Desativar Professor?",
 		dismissible: true,
 		tone: "warning",
-		actions: <WindowActions/>,
+		actions: <ConfirmationWindowAction idleState={"Desativar"}/>,
 	}
 }
 
