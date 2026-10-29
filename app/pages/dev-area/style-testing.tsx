@@ -3,7 +3,7 @@ import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import SimpleTableModelView from "~/components/tables/SimpleTableView";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
+import PageSection from "~/layouts/pages/PageSection";
 import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
 import SaveProfessorForm from "../professor/@layouts/SaveProfessorForm";
@@ -127,9 +127,8 @@ function ComponentSectionTest() {
 	);
 }
 
-
 function HeaderComponent() {
-	return <p>Hello!</p>
+	return <p>Hello!</p>;
 }
 
 export default function Page() {
@@ -139,15 +138,9 @@ export default function Page() {
 			<PageSection name={"Style laboratory"} />
 			<section className="mt-5 flex flex-col mx-5">
 				<PageSection name={"Generic Floors"} />
-				<GenericFloor
-					header={<HeaderComponent/>}
-				>
-					asodk
-				</GenericFloor>
+				<GenericFloor header={<HeaderComponent />}>asodk</GenericFloor>
 
-				<GenericSurface header={<HeaderComponent/>}>
-					askoaskd
-				</GenericSurface>
+				<GenericSurface header={<HeaderComponent />}>askoaskd</GenericSurface>
 				<PageSection name={"Page Layouts"} />
 				<div className="flex flex-col w-full gap-5 p-2 rounded-lg">
 					<div className="bg-page-floor min-h-100 flex flex-col border border-page-floor-outline/25 rounded-lg">

@@ -4,7 +4,7 @@ import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import FormDialog from "~/components/dialogs/FormDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 import type Curso from "~/modules/curso/curso.class";
 import formatTurno from "~/modules/curso/format-turno";
 import SaveCursoForm from "./@layouts/SaveCursoForm";

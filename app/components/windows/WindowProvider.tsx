@@ -1,10 +1,18 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+	useEffect,
+	useMemo,
+	useState,
+	type ReactNode,
+	createContext,
+} from "react";
 import { useRevalidator } from "react-router";
 import {
 	WindowContext,
 	type WindowAPI,
 	type WindowManagerAPI,
 } from "~/hooks/useWindow";
+
+export const WindowContainerContext = createContext<WindowAPI>({});
 
 function useWindowDataState() {
 	const [initialWindowData, setInitialWindowData] = useState<
@@ -16,17 +24,23 @@ function useWindowDataState() {
 	>(undefined);
 
 	const windowData = useMemo(() => {
+		if (currentWindowData && !initialWindowData) {
+			setInitialWindowData(currentWindowData);
+			console.log("setting initial window data!", initialWindowData);
+			console.log("currentWindowData", currentWindowData);
+		}
+
 		return currentWindowData ?? initialWindowData ?? {};
 	}, [initialWindowData, currentWindowData]);
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		if (currentWindowData && !initialWindowData) {
-			setInitialWindowData(currentWindowData);
-			console.log("setting initial window data!");
-			console.log(initialWindowData);
-		}
-	}, [windowData]);
+	// 	if (currentWindowData && !initialWindowData) {
+	// 		setInitialWindowData(currentWindowData);
+	// 		console.log("setting initial window data!", initialWindowData);
+	// 		console.log("currentWindowData", currentWindowData);
+	// 	}
+	// }, [windowData, currentWindowData]);
 
 	function setData(data?: WindowAPI) {
 		if (!data) {
@@ -45,7 +59,7 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 	const [visible, setVisible] = useState<boolean>(false);
 	const [WrapperFunction, setWrapper] = useState<any>(undefined); // Função para definir wrapper
 	const [windowData, setData, setInitialData] = useWindowDataState();
-	const [extras, setExtras] = useState<any>(undefined)
+	const [extras, setExtras] = useState<any>(undefined);
 	// const { revalidate } = useRevalidator();
 
 	function hide() {
@@ -63,12 +77,14 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 	};
 
 	const Wrapper = useMemo(() => {
-		console.log(windowData)
-		const windowProperties = {
-			...windowData,
-			...windowStates,
-		};
-		return WrapperFunction && <WrapperFunction window={windowProperties} extras={extras} />;
+		// if (!WrapperFunction) return <></>
+		console.log("Window Data to be inserted: ", windowData);
+		// const windowProperties = {
+		// 	...windowData,
+		// 	...windowStates,
+		// };
+
+		return WrapperFunction && <WrapperFunction />;
 	}, [WrapperFunction, windowData]);
 
 	const WindowManager = useMemo<WindowManagerAPI>(() => {
@@ -80,7 +96,7 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 			setData,
 			...windowStates,
 			setInitialData,
-			setExtras
+			setExtras,
 		};
 	}, []);
 
@@ -88,7 +104,20 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 		<WindowContext value={WindowManager}>
 			{children}
 
-			{visible && Wrapper && Wrapper}
+			<WindowContainerContext value={{...windowStates, ...windowData}}>
+				{visible ? (
+					Wrapper ? (
+						Wrapper
+							// window={{ ...windowData, ...windowStates }}
+							// extras={extras}
+
+					) : (
+						""
+					)
+				) : (
+					""
+				)}
+			</WindowContainerContext>
 		</WindowContext>
 	);
 }

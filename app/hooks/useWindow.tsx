@@ -17,9 +17,10 @@ export type WindowManagerAPI = {
 	setExtras: any;
 
 	// show(): (() => void) | (() => boolean);
-	show: any;
+	show: (data?: WindowAPI) => void;
 
-	hide: any;
+
+	hide: () => void;
 };
 
 /** Interface de dados para criação e disposição de dados para janelas */
@@ -63,7 +64,7 @@ export default function useWindow(options?: WindowHookOptions) {
 	if (!context) {
 		throw new Error("useWindow deve ser usado dentro de <DialogProvider>.");
 	}
-
+	// console.log(options)
 	// Dados contidos dentro da hook são removidas toda vez que esta hook é chamada, indicando que o usuário está em outra página.
 	// useEffect(() => {
 		// context.setData(undefined);

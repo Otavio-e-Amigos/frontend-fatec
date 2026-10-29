@@ -6,7 +6,7 @@ import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import useBlockedPage from "~/hooks/useBlockedPage";
 import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 import AuthService from "~/modules/user/auth.service";
 import type User from "~/modules/user/user.class";
 import UserService from "~/modules/user/user.service";

@@ -3,7 +3,7 @@ import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import SimpleTableModelView from "~/components/tables/SimpleTableView";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
+import PageSection from "~/layouts/pages/PageSection";
 import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
 import useWindow from "~/hooks/useWindow";

@@ -24,49 +24,64 @@ export default function Page({ list }: { list: Professor[] }) {
 	const [term, setTerm] = useState("");
 	// const window = useWindow({
 		// ...deactivateWindow,
-		// extras: {
-		// 	actions: {
-		// 		activate,
-		// 		deactivate
-		// 	}
-		// }
+		// extras: { actions: { activate, deactivate } },
 	// });
-	const window = useWindow(deactivateWindow)
 
-	async function activate(prof: Professor) {
-		try {
-			const res = await ProfessorService.activate(prof.id!, auth);
-			if (!res) throw new Error();
-			dialogs.toast.success(`${prof.name} foi ativado.`);
-			revalidate();
-		} catch (error) {
-			dialogs.toast.error(
-				getErrorMessage(error, "Não foi possível ativar o professor."),
-			);
-		}
-	}
+	// async function activate(prof: Professor) {
+	// 	try {
+	// 		const res = await ProfessorService.activate(prof.id!, auth);
+	// 		if (!res) throw new Error();
+	// 		dialogs.toast.success(`${prof.name} foi ativado.`);
+	// 		revalidate();
+	// 	} catch (error) {
+	// 		dialogs.toast.error(
+	// 			getErrorMessage(error, "Não foi possível ativar o professor."),
+	// 		);
+	// 	}
+	// }
 
-	async function deactivate(prof: Professor) {
-		const test = window.show()
-		const done = await dialogs.confirm({
-			title: "Desativar professor?",
-			description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
-			confirmLabel: "Desativar",
-			tone: "danger",
-			onConfirm: async () => {
-				const res = await ProfessorService.deactivate(prof.id!, auth);
-				if (!res) {
-					throw new Error(
-						"Não foi possível desativar o professor. Tente novamente.",
-					);
-				}
-			},
-		});
-		if (done) {
-			dialogs.toast.success(`${prof.name} foi desativado.`);
-			revalidate();
-		}
-	}
+	// async function deactivate(prof: Professor) {
+	// 	// const test = window.show()
+	// 	window.show({
+	// 		...deactivateWindow.initialData,
+	// 		description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
+	// 		tone: "danger",
+	// 		extras: {
+	// 			onConfirm: async () => {
+	// 				console.log("click!!");
+	// 				const res = await ProfessorService.deactivate(prof.id!, auth);
+	// 				if (res) {
+	// 					dialogs.toast.success(`${prof.name} foi desativado.`);
+	// 					revalidate();
+	// 					window.hide();
+	// 				}
+	// 				if (!res) {
+	// 					throw new Error(
+	// 						"Não foi possível desativar o professor. Tente novamente.",
+	// 					);
+	// 				}
+	// 			},
+	// 		},
+	// 	});
+	// 	const done = await dialogs.confirm({
+	// 		title: "Desativar professor?",
+	// 		description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
+	// 		confirmLabel: "Desativar",
+	// 		tone: "danger",
+	// 		onConfirm: async () => {
+	// 			const res = await ProfessorService.deactivate(prof.id!, auth);
+	// 			if (!res) {
+	// 				throw new Error(
+	// 					"Não foi possível desativar o professor. Tente novamente.",
+	// 				);
+	// 			}
+	// 		},
+	// 	});
+	// 	if (done) {
+	// 		dialogs.toast.success(`${prof.name} foi desativado.`);
+	// 		revalidate();
+	// 	}
+	// }
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
@@ -74,7 +89,8 @@ export default function Page({ list }: { list: Professor[] }) {
 	}, [list, term]);
 
 	const professorsTable = useMemo(() => {
-		const rows = filtered.map((prof) => mapper(prof, deactivate, activate));
+		// const rows = filtered.map((prof) => mapper(prof, deactivate, activate));
+		const rows = filtered.map(mapper);
 
 		return new DefaultTableModel(rows as any, [
 			"Docente",

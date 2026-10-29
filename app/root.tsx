@@ -52,13 +52,13 @@ export default function App() {
 	const isNavigating = Boolean(navigation.location);
 
 	return (
-		<WindowProvider>
-			<DialogProvider>
+		<DialogProvider>
+			<WindowProvider>
 				<Outlet />
 				<Footer />
 				{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
-			</DialogProvider>
-		</WindowProvider>
+			</WindowProvider>
+		</DialogProvider>
 	);
 }
 
