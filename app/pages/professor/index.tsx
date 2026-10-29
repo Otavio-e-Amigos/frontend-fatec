@@ -6,7 +6,7 @@ import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 import type Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";

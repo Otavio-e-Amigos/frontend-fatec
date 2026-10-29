@@ -4,7 +4,7 @@ import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import FormDialog from "~/components/dialogs/FormDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import SavePeriodoForm from "./@layouts/SavePeriodoForm";

@@ -6,7 +6,7 @@ import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
@@ -121,7 +121,12 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 				</section>
 
 				<section className="flex flex-row my-4 justify-end">
-					<FormInput type="search" name="busca" placeholder="Pesquisar..." onChange={search} />
+					<FormInput
+						type="search"
+						name="busca"
+						placeholder="Pesquisar..."
+						onChange={search}
+					/>
 				</section>
 
 				<ComplexTableModelView data={table} />

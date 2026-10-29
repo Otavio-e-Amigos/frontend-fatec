@@ -5,7 +5,7 @@ import useGradePage from "./@hooks/useGradePage";
 import GradeFocusPanel from "./@layouts/GradeFocusPanel";
 import GradePageDialogs from "./@layouts/GradePageDialogs";
 import GradeSelectionPanel from "./@layouts/GradeSelectionPanel";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 
 /** Composes the grade search, weekly view, and edit/delete dialogs. */
 export default function GradePage(props: GradePageProps) {
