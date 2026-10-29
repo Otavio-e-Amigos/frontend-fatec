@@ -50,8 +50,6 @@ function useWindowDataState() {
 		setCurrentWindowData(data);
 	}
 
-
-
 	return [windowData, setData as any, setInitialWindowData];
 }
 

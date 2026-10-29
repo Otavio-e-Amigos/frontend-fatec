@@ -1,16 +1,27 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
+import { WindowContainerContext } from "~/components/windows/WindowProvider";
 import type { WindowAPI } from "~/hooks/useWindow";
 
-export const WindowExtrasContext = createContext<any>(undefined)
+export const WindowExtrasContext = createContext<any>(undefined);
 
-export default function BasicWindow({ window, extras }: { window: WindowAPI, extras: any }) {
+export default function BasicWindow({
+	// window,
+	// extras,
+}: {
+	// window: WindowAPI;
+	// extras: any;
+}) {
+	const window = useContext(WindowContainerContext)
+	const extraWindowData = window?.extras ?? {};
+	// console.log("loaded! ", window, extraWindowData);
+
 	return (
 		<div
 			className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
 			onClick={() => {
-				console.log("click!", window);
+				// console.log("click!", window);
 				if (window?.dismissible) {
-					console.log("exiting window!");
+					// console.log("exiting window!");
 					window?.hide?.();
 				}
 			}}
@@ -30,7 +41,9 @@ export default function BasicWindow({ window, extras }: { window: WindowAPI, ext
 					{window?.description}
 				</p>
 				<div className="mt-6 flex justify-end">
-					<WindowExtrasContext value={extras}>
+					{window?.body}
+
+					<WindowExtrasContext value={{ ...extraWindowData, window }}>
 						{window.actions}
 					</WindowExtrasContext>
 					{/*<button

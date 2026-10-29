@@ -37,7 +37,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 			https: API_HTTPS,
 			path: API_PATH,
 		});
-		console.log(this.url);
+		// console.log(this.url);
 	}
 
 	/**
@@ -69,7 +69,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 			headers["Authorization"] = `Bearer ${req.credentials.token}`;
 		}
 
-		console.log(path);
+		// console.log(path);
 
 		const res = axios
 			.request({
