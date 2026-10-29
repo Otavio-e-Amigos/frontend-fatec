@@ -8,6 +8,9 @@
 /.react-router/
 /build/
 
+# Project-specific
+QWEN.md
+
 # Temporary
 # /app/mock
 *.ignore
