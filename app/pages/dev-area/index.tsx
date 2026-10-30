@@ -10,7 +10,7 @@ import useWindow from "~/components/windows/useWindow";
 import BasicWindow from "~/layouts/windows/BasicWindow";
 import SaveDisciplinaForm from "../disciplina/@layouts/SaveDisciplinaForm";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
-import { OpenWindowEvent } from "~/utils/window.utils";
+// import { OpenWindowEvent } from "~/utils/window.utils";
 import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
 
 const defaultTableTest = new DefaultTableModel(
@@ -153,7 +153,11 @@ export default function Page() {
 					<button
 						className="btn btn-normal"
 						onClick={(e) => {
-							window.show({ title: "asdk", body: <SaveDisciplinaForm/>, dismissible: true });
+							window.show({
+								title: "asdk",
+								body: <SaveDisciplinaForm />,
+								dismissible: true,
+							});
 						}}
 					>
 						Summon Window w/ different message

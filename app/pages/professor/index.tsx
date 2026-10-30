@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type Professor from "~/modules/professor/professor.class";
@@ -18,8 +18,8 @@ import filter from "./@filters/professor-table.filter";
 // import activate from "./@actions/activate.action";
 
 export default function Page({ list }: { list: Professor[] }) {
-	const auth = AuthService.getUserToken();
-	const dialogs = useDialogs();
+	// const auth = AuthService.getUserToken();
+	// const dialogs = useDialogs();
 	// const { revalidate } = useRevalidator();
 	const [term, setTerm] = useState("");
 	// const window = useWindow({
