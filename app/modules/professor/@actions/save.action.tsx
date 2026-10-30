@@ -6,6 +6,7 @@ import getErrorMessage from "~/classes/errors/get-error-message";
 import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import type { ProfessorInterface } from "../professor.class";
 import AuthService from "~/modules/user/auth.service";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 
 // savedId é preenchido pela action e lido pelo onSuccess (mesmo objeto extras na submissão).
 type ProfessorExtras = { id?: number; savedId?: number };
@@ -14,6 +15,7 @@ async function action({
 	event,
 	extras,
 	dialogs,
+	window,
 }: FormSubmitEventHandlerProps<ProfessorExtras>) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.currentTarget));
@@ -34,16 +36,29 @@ async function action({
 		fields.push({ name: "cpf", message: "Informe um CPF com 11 dígitos." });
 	}
 	if (registry.length < 5) {
-		fields.push({ name: "matricula", message: "A matrícula deve ter ao menos 5 caracteres." });
+		fields.push({
+			name: "matricula",
+			message: "A matrícula deve ter ao menos 5 caracteres.",
+		});
 	}
 	if (!["DETERMINADO", "INDETERMINADO", "TEMPORARIO"].includes(contract)) {
-		fields.push({ name: "regimeContrato", message: "Selecione um contrato válido." });
+		fields.push({
+			name: "regimeContrato",
+			message: "Selecione um contrato válido.",
+		});
 	}
 	if (!["ATIVO", "INATIVO", "AFASTADO"].includes(status)) {
 		fields.push({ name: "status", message: "Selecione um status válido." });
 	}
-	if (!["GRADUADO", "ESPECIALISTA", "MESTRE", "DOUTOR", "POS_DOUTOR"].includes(title)) {
-		fields.push({ name: "titulacao", message: "Selecione uma titulação válida." });
+	if (
+		!["GRADUADO", "ESPECIALISTA", "MESTRE", "DOUTOR", "POS_DOUTOR"].includes(
+			title,
+		)
+	) {
+		fields.push({
+			name: "titulacao",
+			message: "Selecione uma titulação válida.",
+		});
 	}
 	if (fields.length > 0) {
 		throw new FormValidationError("Verifique os campos do docente.", fields);
@@ -52,13 +67,28 @@ async function action({
 	// Confirmação apenas na edição, depois que a validação passou.
 	// Se o usuário cancelar, o useForm ignora o erro e o formulário continua aberto.
 	if (extras.id) {
-		const confirmed = await dialogs.confirm({
+		// let confirmed = false;
+		window?.show({
 			title: "Salvar alterações?",
 			description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
+			dismissible: true,
+			// tone: "primary",
+			actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			extras: {
+				onConfirm: () => {
+					// confirmed = true;
+					window.hide();
+				},
+			},
 		});
-		if (!confirmed) throw new FormCancelledError();
+		// const confirmed = await dialogs.confirm({
+		// 	title: "Salvar alterações?",
+		// 	description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
+		// 	confirmLabel: "Salvar",
+		// 	tone: "primary",
+		// });
+		// if (!confirmed) throw new FormCancelledError();
+		// throw new FormCancelledError();
 	}
 
 	// export form as plain object or class directly using mapper if viable
