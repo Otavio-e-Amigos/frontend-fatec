@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import { Link, useRevalidator } from "react-router";
-import getErrorMessage from "~/classes/errors/get-error-message";
+import { Link } from "react-router";
+// import getErrorMessage from "~/classes/errors/get-error-message";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
@@ -8,23 +8,23 @@ import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type Professor from "~/modules/professor/professor.class";
-import ProfessorService from "~/modules/professor/professor.service";
+// import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
 import mapper from "./@mappers/professor-table.mapper";
 import filter from "./@filters/professor-table.filter";
-import useWindow from "~/hooks/useWindow";
-import BasicWindow from "~/layouts/windows/BasicWindow";
-import deactivateWindow from "./@windows/deactivate.window";
+// import useWindow from "~/components/windows/useWindow";
+// import BasicWindow from "~/layouts/windows/BasicWindow";
+// import deactivateWindow from "./@windows/deactivate.window";
 // import activate from "./@actions/activate.action";
 
 export default function Page({ list }: { list: Professor[] }) {
 	const auth = AuthService.getUserToken();
 	const dialogs = useDialogs();
-	const { revalidate } = useRevalidator();
+	// const { revalidate } = useRevalidator();
 	const [term, setTerm] = useState("");
 	// const window = useWindow({
-		// ...deactivateWindow,
-		// extras: { actions: { activate, deactivate } },
+	// ...deactivateWindow,
+	// extras: { actions: { activate, deactivate } },
 	// });
 
 	// async function activate(prof: Professor) {

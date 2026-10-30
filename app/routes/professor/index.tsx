@@ -1,6 +1,6 @@
 import Index from "~/pages/professor/index";
 import ProfessorService from "~/modules/professor/professor.service";
-import { useState } from "react";
+// import { useState } from "react";
 import AuthService from "~/modules/user/auth.service";
 import type { Route } from "./+types/index";
 
@@ -18,9 +18,9 @@ export async function clientLoader() {
 
 export default function Page({loaderData}: Route.ComponentProps) {
 	// const [professors, setProfessors] = useState<any[]>([]);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
-	const auth = AuthService.getUserToken();
+	// const [loading, setLoading] = useState(true);
+	// const [error, setError] = useState<string | null>(null);
+	// const auth = AuthService.getUserToken();
 
 	return <Index list={loaderData.professors} />;
 }
