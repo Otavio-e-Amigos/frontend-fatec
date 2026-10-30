@@ -8,6 +8,10 @@ import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
 import useWindow from "~/components/windows/useWindow";
 import BasicWindow from "~/layouts/windows/BasicWindow";
+import SaveDisciplinaForm from "../disciplina/@layouts/SaveDisciplinaForm";
+import ShadowCenter from "~/layouts/containers/ShadowCenter";
+import { OpenWindowEvent } from "~/utils/window.utils";
+import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
 
 const defaultTableTest = new DefaultTableModel(
 	[
@@ -138,12 +142,30 @@ export default function Page() {
 				<p className="mb-3">Others</p>
 				<section className="grid grid-cols-3 gap-3 w-fit">
 					{/*<div className="chip">hello</div>*/}
-					<button className="btn btn-normal" onClick={() => {window.show()}}>
+					<button
+						className="btn btn-normal"
+						onClick={() => {
+							window.show();
+						}}
+					>
 						Summon Window
 					</button>
-					<button className="btn btn-normal" onClick={() => {window.show({title: "asdk", dismissible: true})}}>
+					<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							window.show({ title: "asdk", body: <SaveDisciplinaForm/>, dismissible: true });
+						}}
+					>
 						Summon Window w/ different message
 					</button>
+					{/*<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							window.show({ title: "Delete?", dismissible: true, tone: "danger" }, <ExpressiveWindow />);
+						}}
+					>
+						Summon Expressive Window
+					</button>*/}
 				</section>
 				<br />
 
