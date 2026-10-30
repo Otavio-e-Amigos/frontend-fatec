@@ -1,18 +1,6 @@
-import {
-	useEffect,
-	useMemo,
-	useState,
-	type ReactNode,
-	createContext,
-} from "react";
-import { useRevalidator } from "react-router";
-import {
-	WindowContext,
-	type WindowAPI,
-	type WindowManagerAPI,
-} from "~/hooks/useWindow";
-
-export const WindowContainerContext = createContext<WindowAPI>({});
+import { useMemo, useState, type ReactNode } from "react";
+import type { WindowAPI, WindowManagerAPI } from "./window.types";
+import { WindowContext, WindowManagerContext } from "./window.contexts";
 
 function useWindowDataState() {
 	const [initialWindowData, setInitialWindowData] = useState<
@@ -55,16 +43,20 @@ function useWindowDataState() {
 
 export default function WindowProvider({ children }: { children: ReactNode }) {
 	const [visible, setVisible] = useState<boolean>(false);
-	const [WrapperFunction, setWrapper] = useState<any>(undefined); // Função para definir wrapper
-	const [windowData, setData, setInitialData] = useWindowDataState();
+	const [WrapperFunction, setFunctionWrapper] = useState<any>(undefined); // Função para definir wrapper
+	const [InitialWrapper, setInitialWrapper] = useState<any>(undefined); // Função para definir wrapper inicial
+	const [windowDataState, setData, setInitialData] = useWindowDataState();
 	const [extras, setExtras] = useState<any>(undefined);
-	// const { revalidate } = useRevalidator();
 
 	function hide() {
 		setVisible(false);
+		setFunctionWrapper(InitialWrapper);
 	}
 
-	function show(data?: WindowAPI) {
+	function show(data?: WindowAPI, wrapper?: any) {
+		if (wrapper) {
+			setFunctionWrapper(wrapper);
+		}
 		setData(data);
 		setVisible(true);
 	}
@@ -74,48 +66,32 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 		show,
 	};
 
-	const Wrapper = useMemo(() => {
-		// if (!WrapperFunction) return <></>
-		console.log("Window Data to be inserted: ", windowData);
-		// const windowProperties = {
-		// 	...windowData,
-		// 	...windowStates,
-		// };
-
-		return WrapperFunction && <WrapperFunction />;
-	}, [WrapperFunction, windowData]);
+	const windowData: WindowAPI = {
+		...windowStates,
+		...windowDataState,
+		...extras, //might break if something is implemented differently on extras attributes, confirm and patch
+	};
 
 	const WindowManager = useMemo<WindowManagerAPI>(() => {
 		return {
 			setWrapper(Wrapper: any) {
-				// setWrapper(undefined)
-				setWrapper((prev: any) => prev || Wrapper);
+				if (!InitialWrapper) setInitialWrapper(Wrapper);
+				setFunctionWrapper(Wrapper); // setFunctionWrapper((prev: any) => prev || Wrapper); //fallback if anything breaks again because of this.
 			},
 			setData,
-			...windowStates,
 			setInitialData,
 			setExtras,
+			...windowStates,
 		};
 	}, []);
 
 	return (
-		<WindowContext value={WindowManager}>
+		<WindowManagerContext.Provider value={WindowManager}>
 			{children}
 
-			<WindowContainerContext value={{...windowStates, ...windowData}}>
-				{visible ? (
-					Wrapper ? (
-						Wrapper
-							// window={{ ...windowData, ...windowStates }}
-							// extras={extras}
-
-					) : (
-						""
-					)
-				) : (
-					""
-				)}
-			</WindowContainerContext>
-		</WindowContext>
+			<WindowContext.Provider value={windowData}>
+				{visible && WrapperFunction && WrapperFunction}
+			</WindowContext.Provider>
+		</WindowManagerContext.Provider>
 	);
 }
