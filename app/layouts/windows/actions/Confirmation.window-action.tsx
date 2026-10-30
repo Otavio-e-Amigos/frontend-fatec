@@ -1,13 +1,15 @@
 import { useContext, useState } from "react";
-import { WindowExtrasContext } from "../BasicWindow";
+import {
+	WindowContext,
+} from "~/components/windows/window.contexts";
 
 export default function ConfirmationWindowAction({
 	idleState,
 }: {
 	idleState: string;
 }) {
-	const extras: { window: { hide: any }; onConfirm: any } =
-		useContext(WindowExtrasContext);
+	const window = useContext(WindowContext);
+	const extras: { onConfirm: any } = window.extras;
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	async function confirm() {
@@ -28,9 +30,9 @@ export default function ConfirmationWindowAction({
 				className="btn"
 				data-variant="secondary"
 				onClick={() => {
-					extras.window.hide();
+					window.hide();
 				}}
-				// disabled={isSubmitting}
+				disabled={isSubmitting}
 			>
 				Cancelar
 			</button>
@@ -39,9 +41,8 @@ export default function ConfirmationWindowAction({
 				className="btn"
 				data-variant={"danger"}
 				onClick={confirm}
-				// disabled={isSubmitting}
+				disabled={isSubmitting}
 			>
-				{/*Desativar*/}
 				{isSubmitting ? "Processando..." : idleState}
 			</button>
 		</div>

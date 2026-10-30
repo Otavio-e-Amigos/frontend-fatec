@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
-import type { WindowHookOptions } from "~/hooks/useWindow";
-import BasicWindow, { WindowExtrasContext } from "~/layouts/windows/BasicWindow";
+import type { WindowHookOptions } from "~/components/windows/window.types";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 
 
 const deactivateWindow:WindowHookOptions = {
-	wrapper: BasicWindow,
+	wrapper: <BasicWindow/>,
 	initialData: {
 		title: "Desativar Professor?",
 		dismissible: true,

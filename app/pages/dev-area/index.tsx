@@ -6,7 +6,7 @@ import Header from "~/layouts/Header";
 import PageSection from "~/layouts/pages/PageSection";
 import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
-import useWindow from "~/hooks/useWindow";
+import useWindow from "~/components/windows/useWindow";
 import BasicWindow from "~/layouts/windows/BasicWindow";
 
 const defaultTableTest = new DefaultTableModel(
@@ -101,11 +101,11 @@ function StepBadge({
 
 export default function Page() {
 	const window = useWindow({
-		wrapper: BasicWindow,
+		wrapper: <BasicWindow />,
 		initialData: {
 			title: "Hello, WindowManager!",
 			description: "cool, isn't it?",
-			dismissible: true
+			dismissible: true,
 		},
 	});
 

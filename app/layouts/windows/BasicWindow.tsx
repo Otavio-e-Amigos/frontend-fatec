@@ -1,40 +1,28 @@
-import { createContext, useContext } from "react";
-import { WindowContainerContext } from "~/components/windows/WindowProvider";
-import type { WindowAPI } from "~/hooks/useWindow";
+import { useContext } from "react";
+import ShadowCenter from "../containers/ShadowCenter";
+import { WindowContext } from "~/components/windows/window.contexts";
 
-export const WindowExtrasContext = createContext<any>(undefined);
+export default function BasicWindow() {
+	const window = useContext(WindowContext);
 
-export default function BasicWindow({
-	// window,
-	// extras,
-}: {
-	// window: WindowAPI;
-	// extras: any;
-}) {
-	const window = useContext(WindowContainerContext)
-	const extraWindowData = window?.extras ?? {};
-	// console.log("loaded! ", window, extraWindowData);
+	function exitWindow() {
+		if (window?.dismissible) {
+			window?.hide();
+		}
+	}
 
 	return (
-		<div
-			className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4"
-			onClick={() => {
-				// console.log("click!", window);
-				if (window?.dismissible) {
-					// console.log("exiting window!");
-					window?.hide?.();
-				}
-			}}
-		>
+		<ShadowCenter onClick={exitWindow}>
 			<section
 				role="alertdialog"
-				aria-modal="true"
-				// aria-labelledby="alert-title"
-				// aria-describedby="alert-description"
-				className="surface w-full max-w-md rounded-card p-6 shadow-card"
+				// aria-modal="true" //accessibility features, may be interesting implementing this later
+				className="floor w-full max-w-md rounded-card p-6 shadow-card"
 				onClick={(event) => event.stopPropagation()}
 			>
-				<h2 id="alert-title" className="text-xl font-semibold text-ink">
+				<h2
+					id="alert-title"
+					className={`${window.tone === "danger" ? "text-red-950" : "text-ink"} text-xl font-semibold`}
+				>
 					{window?.title}
 				</h2>
 				<p id="alert-description" className="mt-2 text-sm text-ink-muted">
@@ -43,22 +31,9 @@ export default function BasicWindow({
 				<div className="mt-6 flex justify-end">
 					{window?.body}
 
-					<WindowExtrasContext value={{ ...extraWindowData, window }}>
-						{window.actions}
-					</WindowExtrasContext>
-					{/*<button
-						ref={actionButton}
-						type="button"
-						className="btn"
-						onClick={() => {
-							onAction?.();
-							onClose();
-						}}
-					>
-						{actionLabel}
-					</button>*/}
+					{window.actions}
 				</div>
 			</section>
-		</div>
+		</ShadowCenter>
 	);
 }
