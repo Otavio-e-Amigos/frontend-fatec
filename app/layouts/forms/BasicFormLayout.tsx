@@ -20,11 +20,13 @@ export default function BasicFormLayout({
 	title,
 	description,
 	Form,
+	window,
 }: {
 	children: any;
 	title: string;
 	description?: string;
 	Form: any;
+	window?: any;
 }) {
 	return (
 		<GenericFloor
