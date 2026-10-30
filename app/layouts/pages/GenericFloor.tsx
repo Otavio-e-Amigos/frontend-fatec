@@ -24,7 +24,7 @@ export default function GenericFloor({
 	);
 
 	return (
-		<div className="floor flex flex-col">
+		<div className="floor flex flex-col" onClick={(e) => e.stopPropagation()}>
 			{headerChildren}
 			<div className={className}>{children}</div>
 		</div>
