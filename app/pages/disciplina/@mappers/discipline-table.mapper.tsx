@@ -1,15 +1,16 @@
 import { useRevalidator } from "react-router";
 import useDialogs from "~/hooks/useDialogs";
-import useWindow, { type WindowAPI } from "~/hooks/useWindow";
+import useWindow from "~/components/windows/useWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
 import SaveDisciplinaForm from "../@layouts/SaveDisciplinaForm";
+import type { WindowAPIConstructor } from "~/components/windows/window.types";
 
 function RowActions({ item }: { item: Disciplina }) {
-	const windowData: WindowAPI = {
+	const windowData: WindowAPIConstructor = {
 		title: "Excluir disciplina?",
 		dismissible: true,
 		description: `A disciplina selecionada será excluída. Esta ação não pode ser desfeita.`,

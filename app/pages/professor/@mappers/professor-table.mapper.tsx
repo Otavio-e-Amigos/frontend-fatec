@@ -1,5 +1,5 @@
 import { Link, useRevalidator } from "react-router";
-import useWindow, { type WindowAPI } from "~/hooks/useWindow";
+import useWindow from "~/components/windows/useWindow";
 import type Professor from "~/modules/professor/professor.class";
 import deactivateWindow from "../@windows/deactivate.window";
 import ProfessorService from "~/modules/professor/professor.service";
@@ -7,47 +7,38 @@ import AuthService from "~/modules/user/auth.service";
 import useDialogs from "~/hooks/useDialogs";
 import getErrorMessage from "~/classes/errors/get-error-message";
 import ResourceDisplay from "~/layouts/tables/ResourceDisplay";
+import type { WindowAPIConstructor } from "~/components/windows/window.types";
 
-function RowActions({
-	prof,
-	// deactivate,
-	// activate,
-}: {
-	prof: Professor;
-	// deactivate: any;
-	// activate: any;
-}) {
-	const window = useWindow({
-		...deactivateWindow,
-		// extras: { actions: { activate, deactivate } },
-	});
+function RowActions({ prof }: { prof: Professor }) {
+	const window = useWindow(deactivateWindow);
+	const confirmationWindow: WindowAPIConstructor = {
+		...deactivateWindow.initialData,
+		description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
+		tone: "danger",
+		extras: {
+			onConfirm: async () => {
+				console.log("click!!");
+				const res = await ProfessorService.deactivate(prof.id!, auth);
+				if (res) {
+					dialogs.toast.success(`${prof.name} foi desativado.`);
+					revalidate();
+					window.hide();
+				}
+				if (!res) {
+					throw new Error(
+						"Não foi possível desativar o professor. Tente novamente.",
+					);
+				}
+			},
+		},
+	};
+
 	const auth = AuthService.getUserToken();
 	const { revalidate } = useRevalidator();
 	const dialogs = useDialogs();
 
 	function deactivate() {
-		const data: WindowAPI = {
-			...deactivateWindow.initialData,
-			description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
-			tone: "danger",
-			extras: {
-				onConfirm: async () => {
-					console.log("click!!");
-					const res = await ProfessorService.deactivate(prof.id!, auth);
-					if (res) {
-						dialogs.toast.success(`${prof.name} foi desativado.`);
-						revalidate();
-						window.hide();
-					}
-					if (!res) {
-						throw new Error(
-							"Não foi possível desativar o professor. Tente novamente.",
-						);
-					}
-				},
-			},
-		};
-		window.show(data);
+		window.show(confirmationWindow);
 	}
 
 	async function activate() {
@@ -98,17 +89,20 @@ export default function mapper(
 	return [
 		{
 			value: prof.name,
-			display: <ResourceDisplay id={prof.id ?? ""} name={prof.name ?? ""} baseURL={"/professor"}  />,
+			display: (
+				<ResourceDisplay
+					id={prof.id ?? ""}
+					name={prof.name ?? ""}
+					baseURL={"/professor"}
+				/>
+			),
 		},
 		prof.registry,
 		prof.contract,
 		prof.status,
 		{
 			value: 0,
-			display: (
-				<RowActions prof={prof} />
-				// <RowActions prof={prof} deactivate={deactivate} activate={activate} />
-			),
+			display: <RowActions prof={prof} />,
 		},
 	];
 }
