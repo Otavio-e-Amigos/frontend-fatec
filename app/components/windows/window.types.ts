@@ -26,7 +26,8 @@ export type WindowAPI = {
 
 	// manager?: any;
 
-	show: (data?: WindowAPI, wrapper?: any) => void;
+	// show: (data?: WindowAPI, wrapper?: any) => void;
+	show: any;
 	hide: () => void;
 };
 
@@ -39,7 +40,8 @@ export type WindowManagerAPI = {
 	setExtras: any;
 
 	/* As mesmas funções também são compartilhadas para a própria janela em si */
-	show: (data?: WindowAPIConstructor, wrapper?: any) => void;
+	// show: (data?: WindowAPIConstructor, wrapper?: any) => void;
+	show: any;
 	hide: () => void;
 };
 
