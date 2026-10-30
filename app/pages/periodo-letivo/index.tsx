@@ -5,42 +5,21 @@ import FormDialog from "~/components/dialogs/FormDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
-import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import SavePeriodoForm from "./@layouts/SavePeriodoForm";
+// import useWindow from "~/components/windows/useWindow";
+import mapper from "./@mappers/periodo-letivo-table.mapper";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 	const { revalidate } = useRevalidator();
+	// const window = useWindow()
 	// undefined = fechado | null = novo período | PeriodoLetivo = editando
 	const [editing, setEditing] = useState<PeriodoLetivo | null | undefined>(
 		undefined,
 	);
 
 	const table = new DefaultTableModel(
-		list.map((item) => [
-			`${item.ano}/${item.semestre}`,
-			item.ano ?? "",
-			`${item.semestre}º`,
-			formatPeriodoDate(item.dataInicio),
-			formatPeriodoDate(item.dataFim),
-			{
-				value: "",
-				display: (
-					<div className="row-actions">
-						<button
-							type="button"
-							className="btn"
-							data-variant="icon"
-							data-icon="edit"
-							title="Editar"
-							onClick={() => setEditing(item)}
-						>
-							Editar
-						</button>
-					</div>
-				),
-			},
-		]),
+		list.map(mapper),
 		["Período", "Ano", "Semestre", "Início", "Fim", ""],
 	);
 

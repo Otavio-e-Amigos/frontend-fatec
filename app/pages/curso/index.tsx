@@ -8,6 +8,7 @@ import PageHeader from "~/layouts/pages/PageHeader";
 import type Curso from "~/modules/curso/curso.class";
 import formatTurno from "~/modules/curso/format-turno";
 import SaveCursoForm from "./@layouts/SaveCursoForm";
+import mapper from "./@mappers/curso-table.mapper";
 
 export default function CursoIndexPage({ list }: { list: Curso[] }) {
 	const { revalidate } = useRevalidator();
@@ -15,28 +16,7 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 	const [editing, setEditing] = useState<Curso | null | undefined>(undefined);
 
 	const table = new DefaultTableModel(
-		list.map((curso) => [
-			curso.nome ?? "",
-			curso.sigla ?? "",
-			formatTurno(curso.turno),
-			{
-				value: "",
-				display: (
-					<div className="row-actions">
-						<button
-							type="button"
-							className="btn"
-							data-variant="icon"
-							data-icon="edit"
-							title="Editar"
-							onClick={() => setEditing(curso)}
-						>
-							Editar
-						</button>
-					</div>
-				),
-			},
-		]),
+		list.map(mapper),
 		["Curso", "Sigla", "Turno", "Ações"],
 	);
 

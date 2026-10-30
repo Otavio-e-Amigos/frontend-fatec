@@ -17,6 +17,9 @@ import {
 	type FormReducerAction,
 } from "~/components/forms/FormContext";
 import FormController from "~/components/forms/FormController";
+import type { WindowAPI, WindowAPIConstructor, WindowManagerAPI } from "~/components/windows/window.types";
+import useWindow from "~/components/windows/useWindow";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 export type FormSubmitEventHandlerProps<E extends Record<string, any> = any> = {
 	error?: Error;
@@ -25,6 +28,7 @@ export type FormSubmitEventHandlerProps<E extends Record<string, any> = any> = {
 	dispatch: React.ActionDispatch<[action: FormReducerAction]>;
 	navigate: NavigateFunction;
 	dialogs: DialogsApi;
+	window?: WindowManagerAPI
 	extras: E;
 };
 
@@ -59,8 +63,10 @@ export default function useForm(options?: FormHookOptions) {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
 	const dialogs = useDialogs();
-	const formRuntime = useRef({ controller, dispatch, navigate, options, dialogs });
-	formRuntime.current = { controller, dispatch, navigate, options, dialogs };
+	// const window = useWindow({wrapper: <BasicWindow/>})
+	const window = useWindow()
+	const formRuntime = useRef({ controller, dispatch, navigate, options, dialogs, window });
+	formRuntime.current = { controller, dispatch, navigate, options, dialogs, window };
 
 	useEffect(() => {
 		// console.log("controller changed!");
@@ -74,7 +80,7 @@ export default function useForm(options?: FormHookOptions) {
 		FormContainer: useMemo(
 			() =>
 				function FormContainer(props: FormContainerProps) {
-					const { controller, dispatch, navigate, dialogs, options } = formRuntime.current;
+					const { controller, dispatch, navigate, dialogs, options, window } = formRuntime.current;
 					const formProps = {
 						children: props.children,
 						className: props.className,
@@ -89,6 +95,7 @@ export default function useForm(options?: FormHookOptions) {
 								dispatch,
 								navigate,
 								dialogs,
+								window,
 								extras: {},
 							};
 

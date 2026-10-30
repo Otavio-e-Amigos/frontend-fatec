@@ -11,6 +11,8 @@ import type Disciplina from "~/modules/disciplina/disciplina.class";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
 import SaveDisciplinaForm from "./@layouts/SaveDisciplinaForm";
+import useWindow from "~/components/windows/useWindow";
+import deactivateWindow from "./@windows/deactivate.window";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const dialogs = useDialogs();
@@ -20,6 +22,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const [editing, setEditing] = useState<Disciplina | null | undefined>(
 		undefined,
 	);
+	const window = useWindow(deactivateWindow);
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
@@ -31,27 +34,28 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	}, [list, term]);
 
 	async function removeDiscipline(item: Disciplina) {
-		const removed = await dialogs.confirm({
-			title: "Excluir disciplina?",
+		window.show({
+			...deactivateWindow.initialData,
 			description: `A disciplina ${item.nome ?? ""} será excluída. Esta ação não pode ser desfeita.`,
-			confirmLabel: "Excluir",
 			tone: "danger",
-			onConfirm: async () => {
-				const deleted = await DisciplinaService.delete(
-					item.id!,
-					AuthService.getUserToken(),
-				);
-				if (!deleted) {
-					throw new Error(
-						"Não foi possível excluir a disciplina. Tente novamente.",
+			extras: {
+				onConfirm: async () => {
+					const deleted = await DisciplinaService.delete(
+						item.id!,
+						AuthService.getUserToken(),
 					);
-				}
+					if (!deleted) {
+						throw new Error(
+							"Não foi possível excluir a disciplina. Tente novamente.",
+						);
+					} else {
+						dialogs.toast.success("Disciplina excluída com sucesso.");
+						revalidate();
+						window.hide();
+					}
+				},
 			},
 		});
-		if (removed) {
-			dialogs.toast.success("Disciplina excluída com sucesso.");
-			revalidate();
-		}
 	}
 
 	function search(event: ChangeEvent<HTMLInputElement>) {

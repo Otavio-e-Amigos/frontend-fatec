@@ -49,7 +49,18 @@ function RowActions({ item }: { item: Disciplina }) {
 	}
 
 	async function edit() {
-		window.setWrapper(() => (
+		// window.setWrapper(() => (
+		// 	<SaveDisciplinaForm
+		// 		disciplina={item}
+		// 		onSaved={() => {
+		// 			// setEditing(undefined);
+		// 			window.hide();
+		// 			revalidate();
+		// 		}}
+		// 	/>
+		// ));
+		window.show(
+			{ dismissible: true },
 			<SaveDisciplinaForm
 				disciplina={item}
 				onSaved={() => {
@@ -57,9 +68,8 @@ function RowActions({ item }: { item: Disciplina }) {
 					window.hide();
 					revalidate();
 				}}
-			/>
-		));
-		window.show({dismissible: true})
+			/>,
+		);
 		// window.show({
 		// wrapper: BasicWindow,
 		// dismissible: true,
