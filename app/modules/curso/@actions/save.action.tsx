@@ -6,20 +6,27 @@ import { FormValidationError } from "~/classes/errors/ValidationError";
 import { FormCancelledError } from "~/classes/errors/FormCancelledError";
 import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
 import getErrorMessage from "~/classes/errors/get-error-message";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 type CursoExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-	dialogs,
+	// dialogs,
+	window,
 }: FormSubmitEventHandlerProps<CursoExtras>) {
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
 	const nome = String(form.nome ?? "").trim();
 	const turno = String(form.turno ?? "");
-	const sigla = String(form.sigla ?? "").trim().toUpperCase();
+	const sigla = String(form.sigla ?? "")
+		.trim()
+		.toUpperCase();
 	const fields = [];
+
+	console.log(window);
 
 	if (!nome) fields.push({ name: "nome", message: "Informe o nome do curso." });
 	else if (!/^[\p{L}\s.'-]+$/u.test(nome)) {
@@ -28,25 +35,39 @@ async function action({
 	if (!["MANHA", "TARDE", "NOITE"].includes(turno)) {
 		fields.push({ name: "turno", message: "Selecione um turno válido." });
 	}
-	if (!sigla) fields.push({ name: "sigla", message: "Informe a sigla do curso." });
+	if (!sigla)
+		fields.push({ name: "sigla", message: "Informe a sigla do curso." });
 	else if (!/^[A-Z]{2,10}$/.test(sigla)) {
-		fields.push({ name: "sigla", message: "A sigla deve ter de 2 a 10 letras." });
+		fields.push({
+			name: "sigla",
+			message: "A sigla deve ter de 2 a 10 letras.",
+		});
 	}
 
 	if (fields.length > 0) {
 		throw new FormValidationError("Verifique os campos do curso.", fields);
 	}
-
 	if (extras.id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações no curso ${nome} serão aplicadas.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				description: `As alterações no curso ${nome} serão aplicadas.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
+		console.log("<confirmed>", confirmed);
+		// const confirmed = await dialogs.confirm({
+		// 	title: "Salvar alterações?",
+		// 	description: `As alterações no curso ${nome} serão aplicadas.`,
+		// 	confirmLabel: "Salvar",
+		// 	tone: "primary",
+		// });
 		if (!confirmed) throw new FormCancelledError();
 	}
-
+	console.log("submiting data")
 	const curso = new Curso({ id: extras.id, nome, turno, sigla });
 	const auth = AuthService.getUserToken();
 	if (extras.id) {
@@ -54,6 +75,7 @@ async function action({
 	} else {
 		await CursoService.save(curso, auth);
 	}
+	window?.hide()
 }
 
 async function onSuccess({

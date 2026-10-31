@@ -6,6 +6,8 @@ import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import AuthService from "../auth.service";
 import UserService from "../user.service";
 import User from "../user.class";
+import BasicWindow from "~/layouts/windows/BasicWindow";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 
 type UserSaveExtras = {
 	id?: number;
@@ -27,6 +29,7 @@ async function action({
 	event,
 	extras,
 	dialogs,
+	window,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	event.preventDefault();
 	extras.setSubmitError("");
@@ -37,7 +40,8 @@ async function action({
 	const profile = String(values.profile ?? "");
 	const fields = [];
 
-	if (!name) fields.push({ name: "user", message: "Informe o nome do usuário." });
+	if (!name)
+		fields.push({ name: "user", message: "Informe o nome do usuário." });
 	if (!password) fields.push({ name: "pass", message: "Informe a senha." });
 	if (fields.length) {
 		throw new FormValidationError("Verifique os campos informados.", fields);
@@ -46,12 +50,22 @@ async function action({
 
 	// Confirmação apenas na edição, depois que a validação passou.
 	if (extras.id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
+		// const confirmed = await dialogs.confirm({
+		// 	title: "Salvar alterações?",
+		// 	description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
+		// 	confirmLabel: "Salvar",
+		// 	tone: "primary",
+		// });
 		if (!confirmed) throw new FormCancelledError();
 	}
 

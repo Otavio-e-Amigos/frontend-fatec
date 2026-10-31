@@ -6,13 +6,16 @@ import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import AuthService from "~/modules/user/auth.service";
 import Disciplina from "../disciplina.class";
 import DisciplinaService from "../disciplina.service";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 type DisciplinaExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-	dialogs,
+	// dialogs,
+	window
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
@@ -52,12 +55,22 @@ async function action({
 	}
 
 	if (id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações na disciplina ${nome} serão aplicadas.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				description: `As alterações na disciplina ${nome} serão aplicadas.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
+		// const confirmed = await dialogs.confirm({
+		// 	title: "Salvar alterações?",
+		// 	description: `As alterações na disciplina ${nome} serão aplicadas.`,
+		// 	confirmLabel: "Salvar",
+		// 	tone: "primary",
+		// });
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -68,6 +81,7 @@ async function action({
 	} else {
 		await DisciplinaService.save(disciplina, auth);
 	}
+	window?.hide()
 }
 
 async function onSuccess({

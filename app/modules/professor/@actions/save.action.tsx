@@ -68,18 +68,18 @@ async function action({
 	// Se o usuário cancelar, o useForm ignora o erro e o formulário continua aberto.
 	if (extras.id) {
 		// let confirmed = false;
-		window?.show({
+		const confirmed = await window?.confirm({
 			title: "Salvar alterações?",
 			description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
 			dismissible: true,
 			// tone: "primary",
 			actions: <ConfirmationWindowAction idleState={"Editar"} />,
-			extras: {
-				onConfirm: () => {
-					// confirmed = true;
-					window.hide();
-				},
-			},
+			// extras: {
+				// onConfirm: () => {
+				// 	// confirmed = true;
+				// 	window.hide();
+				// },
+			// },
 		});
 		// const confirmed = await dialogs.confirm({
 		// 	title: "Salvar alterações?",
@@ -87,7 +87,7 @@ async function action({
 		// 	confirmLabel: "Salvar",
 		// 	tone: "primary",
 		// });
-		// if (!confirmed) throw new FormCancelledError();
+		if (!confirmed) throw new FormCancelledError();
 		// throw new FormCancelledError();
 	}
 

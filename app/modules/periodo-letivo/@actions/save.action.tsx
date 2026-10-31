@@ -5,13 +5,16 @@ import { FormValidationError } from "~/classes/errors/ValidationError";
 import { FormCancelledError } from "~/classes/errors/FormCancelledError";
 import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
 import getErrorMessage from "~/classes/errors/get-error-message";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 type PeriodoExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-	dialogs,
+	// dialogs,
+	window
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.currentTarget));
@@ -27,23 +30,42 @@ async function action({
 	if (semestre !== 1 && semestre !== 2) {
 		fields.push({ name: "semestre", message: "Selecione o semestre." });
 	}
-	if (!dataInicio) fields.push({ name: "dataInicio", message: "Informe a data inicial." });
-	if (!dataFim) fields.push({ name: "dataFim", message: "Informe a data final." });
+	if (!dataInicio)
+		fields.push({ name: "dataInicio", message: "Informe a data inicial." });
+	if (!dataFim)
+		fields.push({ name: "dataFim", message: "Informe a data final." });
 	if (dataInicio && dataFim && dataFim <= dataInicio) {
-		fields.push({ name: "dataFim", message: "A data final deve ser posterior à inicial." });
+		fields.push({
+			name: "dataFim",
+			message: "A data final deve ser posterior à inicial.",
+		});
 	}
 
 	if (fields.length > 0) {
-		throw new FormValidationError("Verifique os campos do período letivo.", fields);
+		throw new FormValidationError(
+			"Verifique os campos do período letivo.",
+			fields,
+		);
 	}
 
 	if (extras.id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				// description: `As alterações na disciplina ${nome} serão aplicadas.`,
+				description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
+		// const confirmed = await dialogs.confirm({
+		// 	title: "Salvar alterações?",
+		// 	description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
+		// 	confirmLabel: "Salvar",
+		// 	tone: "primary",
+		// });
 		if (!confirmed) throw new FormCancelledError();
 	}
 
