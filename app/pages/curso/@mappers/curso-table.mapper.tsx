@@ -11,6 +11,7 @@ import type Disciplina from "~/modules/disciplina/disciplina.class";
 import formatTurno from "~/modules/curso/format-turno";
 import SaveCursoFrom from "../@layouts/SaveCursoForm";
 import type Curso from "~/modules/curso/curso.class";
+import { useEffect } from "react";
 
 function RowActions({ item }: { item: Disciplina }) {
 	const windowData: WindowAPIConstructor = {
@@ -21,18 +22,8 @@ function RowActions({ item }: { item: Disciplina }) {
 		// actions: <ConfirmationWindowAction idleState={"Excluir"} />,
 	};
 	const { revalidate } = useRevalidator();
-	// const dialogs = useDialogs();
+
 	const window = useWindow({
-		wrapper: (
-			<SaveCursoFrom
-				curso={item}
-				onSaved={() => {
-					// setEditing(undefined);
-					window.hide();
-					revalidate();
-				}}
-			/>
-		),
 		initialData: windowData,
 	});
 
@@ -67,26 +58,14 @@ function RowActions({ item }: { item: Disciplina }) {
 }
 
 export default function mapper(curso: Curso) {
+	// console.log(curso)
 	return [
 		curso.nome ?? "",
 		curso.sigla ?? "",
 		formatTurno(curso.turno),
 		{
 			value: "",
-			display: (<RowActions item={curso}/>
-				// <div className="row-actions">
-				// 	<button
-				// 		type="button"
-				// 		className="btn"
-				// 		data-variant="icon"
-				// 		data-icon="edit"
-				// 		title="Editar"
-				// 		onClick={() => setEditing(curso)}
-				// 	>
-				// 		Editar
-				// 	</button>
-				// </div>
-			),
+			display: <RowActions item={curso} />,
 		},
 	];
 }
