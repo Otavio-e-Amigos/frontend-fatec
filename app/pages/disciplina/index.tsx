@@ -22,7 +22,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const [editing, setEditing] = useState<Disciplina | null | undefined>(
 		undefined,
 	);
-	const window = useWindow(deactivateWindow);
+	const window = useWindow();
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
@@ -55,7 +55,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 					}
 				},
 			},
-		});
+		}, deactivateWindow.wrapper);
 	}
 
 	function search(event: ChangeEvent<HTMLInputElement>) {
@@ -116,7 +116,19 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 								className="btn w-fit"
 								data-variant="outline"
 								data-size="sm"
-								onClick={() => setEditing(null)}
+								onClick={() => {
+									window.show(
+										{ dismissible: true },
+										<SaveDisciplinaForm
+											// key={editing?.id ?? "nova"}
+											// disciplina={editing ?? undefined}
+											// onSaved={() => {
+												// setEditing(undefined);
+												// revalidate();
+											// }}
+										/>,
+									);
+								}}
 							>
 								+ Nova Disciplina
 							</button>
@@ -136,7 +148,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 				<ComplexTableModelView data={table} />
 			</main>
 
-			{editing !== undefined && (
+			{/*{editing !== undefined && (
 				<FormDialog onClose={() => setEditing(undefined)}>
 					<SaveDisciplinaForm
 						key={editing?.id ?? "nova"}
@@ -147,7 +159,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 						}}
 					/>
 				</FormDialog>
-			)}
+			)}*/}
 		</div>
 	);
 }

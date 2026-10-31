@@ -12,6 +12,7 @@ import SaveDisciplinaForm from "../disciplina/@layouts/SaveDisciplinaForm";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
 // import { OpenWindowEvent } from "~/utils/window.utils";
 import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 
 const defaultTableTest = new DefaultTableModel(
 	[
@@ -161,6 +162,16 @@ export default function Page() {
 						}}
 					>
 						Summon Window w/ different message
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={async () => {
+							console.log("summoning confirmation window!")
+							const test = await window.confirm({dismissible: true, actions: <ConfirmationWindowAction idleState={"Confirmar"}/>});
+							console.log("confirmed?", test);
+						}}
+					>
+						Summon Confirmation Window
 					</button>
 					{/*<button
 						className="btn btn-normal"

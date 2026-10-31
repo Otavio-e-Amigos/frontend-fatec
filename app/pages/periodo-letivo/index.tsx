@@ -9,19 +9,27 @@ import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import SavePeriodoForm from "./@layouts/SavePeriodoForm";
 // import useWindow from "~/components/windows/useWindow";
 import mapper from "./@mappers/periodo-letivo-table.mapper";
+import useWindow from "~/components/windows/useWindow";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
-	const { revalidate } = useRevalidator();
-	// const window = useWindow()
+	// const { revalidate } = useRevalidator();
+	const window = useWindow({
+		wrapper: <SavePeriodoForm />,
+		initialData: { dismissible: true },
+	});
 	// undefined = fechado | null = novo período | PeriodoLetivo = editando
 	const [editing, setEditing] = useState<PeriodoLetivo | null | undefined>(
 		undefined,
 	);
 
-	const table = new DefaultTableModel(
-		list.map(mapper),
-		["Período", "Ano", "Semestre", "Início", "Fim", ""],
-	);
+	const table = new DefaultTableModel(list.map(mapper), [
+		"Período",
+		"Ano",
+		"Semestre",
+		"Início",
+		"Fim",
+		"",
+	]);
 
 	return (
 		<div className="flex flex-col flex-1">
@@ -40,7 +48,9 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 								className="btn w-fit"
 								data-variant="outline"
 								data-size="sm"
-								onClick={() => setEditing(null)}
+								onClick={() => {
+									window.show();
+								}}
 							>
 								+ Novo Período Letivo
 							</button>
@@ -52,7 +62,7 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 				</section>
 			</main>
 
-			{editing !== undefined && (
+			{/*{editing !== undefined && (
 				<FormDialog onClose={() => setEditing(undefined)}>
 					<SavePeriodoForm
 						key={editing?.id ?? "novo"}
@@ -63,7 +73,7 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 						}}
 					/>
 				</FormDialog>
-			)}
+			)}*/}
 		</div>
 	);
 }

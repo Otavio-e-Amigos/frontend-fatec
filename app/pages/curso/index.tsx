@@ -6,19 +6,34 @@ import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type Curso from "~/modules/curso/curso.class";
-import formatTurno from "~/modules/curso/format-turno";
-import SaveCursoForm from "./@layouts/SaveCursoForm";
+// import formatTurno from "~/modules/curso/format-turno";
+// import SaveCursoForm from "./@layouts/SaveCursoForm";
 import mapper from "./@mappers/curso-table.mapper";
+import useWindow from "~/components/windows/useWindow";
+import SaveCursoForm from "./@layouts/SaveCursoForm";
 
 export default function CursoIndexPage({ list }: { list: Curso[] }) {
 	const { revalidate } = useRevalidator();
 	// undefined = fechado | null = novo curso | Curso = editando
 	const [editing, setEditing] = useState<Curso | null | undefined>(undefined);
-
-	const table = new DefaultTableModel(
-		list.map(mapper),
-		["Curso", "Sigla", "Turno", "Ações"],
-	);
+	const window = useWindow({
+		wrapper: (
+			<SaveCursoForm
+			// key={editing?.id ?? "novo"}
+			// curso={editing ?? undefined}
+			// onSaved={() => {
+			// 	setEditing(undefined);
+			// 	revalidate();
+			// }}
+			/>
+		),
+	});
+	const table = new DefaultTableModel(list.map(mapper), [
+		"Curso",
+		"Sigla",
+		"Turno",
+		"Ações",
+	]);
 
 	return (
 		<div className="flex flex-col flex-1">
@@ -36,7 +51,9 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 								className="btn w-fit"
 								data-variant="outline"
 								data-size="sm"
-								onClick={() => setEditing(null)}
+								onClick={() => {
+									window.show();
+								}}
 							>
 								+ Novo Curso
 							</button>
@@ -48,7 +65,7 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 				</section>
 			</main>
 
-			{editing !== undefined && (
+			{/*{editing !== undefined && (
 				<FormDialog onClose={() => setEditing(undefined)}>
 					<SaveCursoForm
 						key={editing?.id ?? "novo"}
@@ -59,7 +76,7 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 						}}
 					/>
 				</FormDialog>
-			)}
+			)}*/}
 		</div>
 	);
 }
