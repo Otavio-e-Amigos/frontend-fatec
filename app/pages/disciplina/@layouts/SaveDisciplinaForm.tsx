@@ -4,6 +4,10 @@ import BasicFormLayout from "~/layouts/forms/BasicFormLayout";
 import FormSection from "~/layouts/forms/FormSection";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import actions from "~/modules/disciplina/@actions/save.action";
+import ShadowCenter from "~/layouts/containers/ShadowCenter";
+// import useWindow from "~/components/windows/useWindow";
+import { WindowContext } from "~/components/windows/window.contexts";
+import { useContext } from "react";
 
 export default function SaveDisciplinaForm({
 	disciplina,
@@ -16,6 +20,7 @@ export default function SaveDisciplinaForm({
 		actions,
 		actionsExtras: { id: disciplina?.id, onSaved },
 	});
+	const window = useContext(WindowContext)
 
 	if (disciplina) {
 		controller.addField("nome", disciplina.nome);
@@ -24,46 +29,52 @@ export default function SaveDisciplinaForm({
 	}
 
 	return (
-		<BasicFormLayout
-			title={
-				disciplina
-					? `Editar Disciplina "${disciplina.nome}"`
-					: `Cadastrar Disciplina`
-			}
-			description={
-				disciplina
-					? "Altere os dados da disciplina e salve."
-					: "Use este formulário para realizar o cadastro de uma nova disciplina"
-			}
-			Form={FormContainer}
+		<ShadowCenter
+			onClick={() => {
+				window.dismissible && window.hide();
+			}}
 		>
-			<FormSection
-				section="Informações da disciplina"
-				description="Dados acadêmicos usados nas grades e folhas de frequência."
+			<BasicFormLayout
+				title={
+					disciplina
+						? `Editar Disciplina "${disciplina.nome}"`
+						: `Cadastrar Disciplina`
+				}
+				description={
+					disciplina
+						? "Altere os dados da disciplina e salve."
+						: "Use este formulário para realizar o cadastro de uma nova disciplina"
+				}
+				Form={FormContainer}
 			>
-				<FormInput required lettersOnly name="nome" type="text" label="Nome" />
-				<FormInput
-					required
-					maxLength={10}
-					name="codigo"
-					type="text"
-					label="Código"
-				/>
-				<FormInput
-					required
-					maxLength={8}
-					lettersOnly
-					name="sigla"
-					type="text"
-					label="Sigla"
-				/>
-			</FormSection>
-			<p className="text-hint-alert-dot w-full text-right">
-				{controller.error?.message}
-			</p>
-			<button type="submit" className="btn btn-success">
-				{disciplina ? "Salvar alterações" : "Adicionar"}
-			</button>
-		</BasicFormLayout>
+				<FormSection
+					section="Informações da disciplina"
+					description="Dados acadêmicos usados nas grades e folhas de frequência."
+				>
+					<FormInput required lettersOnly name="nome" type="text" label="Nome" />
+					<FormInput
+						required
+						maxLength={10}
+						name="codigo"
+						type="text"
+						label="Código"
+					/>
+					<FormInput
+						required
+						maxLength={8}
+						lettersOnly
+						name="sigla"
+						type="text"
+						label="Sigla"
+					/>
+				</FormSection>
+				<p className="text-hint-alert-dot w-full text-right">
+					{controller.error?.message}
+				</p>
+				<button type="submit" className="btn btn-success">
+					{disciplina ? "Salvar alterações" : "Adicionar"}
+				</button>
+			</BasicFormLayout>
+		</ShadowCenter>
 	);
 }
