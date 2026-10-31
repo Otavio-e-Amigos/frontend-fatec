@@ -1,7 +1,5 @@
 import { useContext, useState } from "react";
-import {
-	WindowContext,
-} from "~/components/windows/window.contexts";
+import { WindowContext } from "~/components/windows/window.contexts";
 
 export default function ConfirmationWindowAction({
 	idleState,
@@ -9,19 +7,32 @@ export default function ConfirmationWindowAction({
 	idleState: string;
 }) {
 	const window = useContext(WindowContext);
-	const extras: { onConfirm: any } = window.extras;
+	const extras: { onConfirm?: any, onCancel?: any } = window.extras ?? { onConfirm: () => {}, onCancel: () => {} };
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	async function confirm() {
 		setIsSubmitting(true);
 		try {
-			await extras.onConfirm();
+			await extras.onConfirm?.();
+			// console.log("handling confirmation!")
+			await window.handleConfirm?.();
 		} finally {
 			setIsSubmitting(false);
 		}
 	}
 
-	console.log("<ConfirmationWindowAction> extras: ", extras);
+	async function cancel() {
+		setIsSubmitting(true);
+		try {
+			await extras.onCancel?.();
+			await window.handleCancel?.();
+		} finally {
+			setIsSubmitting(false);
+		}
+	}
+
+	// console.log("<ConfirmationWindowAction> window: ", window);
+	// console.log("<ConfirmationWindowAction> extras: ", extras);
 
 	return (
 		<div className="flex flex-row gap-2">
@@ -29,9 +40,7 @@ export default function ConfirmationWindowAction({
 				type="button"
 				className="btn"
 				data-variant="secondary"
-				onClick={() => {
-					window.hide();
-				}}
+				onClick={cancel}
 				disabled={isSubmitting}
 			>
 				Cancelar

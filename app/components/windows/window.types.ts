@@ -24,11 +24,16 @@ export type WindowAPI = {
 	/** Campo livre para dados específicos entres janelas e seu corpo, qualquer tipo de dado pode ser inserido aqui. */
 	extras?: any;
 
-	// manager?: any;
+	onConfirm?: any;
 
 	// show: (data?: WindowAPI, wrapper?: any) => void;
 	show: any;
 	hide: () => void;
+	confirm?: any;
+	resolve?: any;
+	handleConfirm?: any;
+	handleCancel?: any;
+	confirmExtra?: any;
 };
 
 /** Interface para sistema gerenciador de janelas, utilizado para definir layouts e outras opções importantes do sistema dentro do código */
@@ -43,6 +48,8 @@ export type WindowManagerAPI = {
 	// show: (data?: WindowAPIConstructor, wrapper?: any) => void;
 	show: any;
 	hide: () => void;
+	confirm?: any;
+	confirmExtra?: any;
 };
 
 export type WindowHookOptions = {
