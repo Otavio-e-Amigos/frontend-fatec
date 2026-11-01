@@ -13,6 +13,7 @@ import ShadowCenter from "~/layouts/containers/ShadowCenter";
 // import { OpenWindowEvent } from "~/utils/window.utils";
 import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import useToast from "~/components/toasts/useToast.ts";
 
 const defaultTableTest = new DefaultTableModel(
 	[
@@ -113,7 +114,7 @@ export default function Page() {
 			dismissible: true,
 		},
 	});
-
+	const toast = useToast();
 	return (
 		// <main className="bg-cps min-h-full">
 		<main>
@@ -172,6 +173,12 @@ export default function Page() {
 						}}
 					>
 						Summon Confirmation Window
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={() => {toast.push("warning", "something happened ig")}}
+					>
+						Summon toast
 					</button>
 					{/*<button
 						className="btn btn-normal"
