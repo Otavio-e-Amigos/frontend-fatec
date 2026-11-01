@@ -8,6 +8,7 @@ import Disciplina from "../disciplina.class";
 import DisciplinaService from "../disciplina.service";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
+import { DisciplinaGenericSaveFailedToast, DisciplinaSavedToast, DisciplinaUpdatedToast } from "../disciplina.toasts";
 
 type DisciplinaExtras = { id?: number; onSaved?: () => void };
 
@@ -15,7 +16,7 @@ async function action({
 	event,
 	extras,
 	// dialogs,
-	window
+	window,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
@@ -87,13 +88,15 @@ async function action({
 async function onSuccess({
 	navigate,
 	dialogs,
+	toast,
 	extras,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Disciplina atualizada com sucesso."
-			: "Disciplina cadastrada com sucesso.",
-	);
+	toast?.push(extras.id ? DisciplinaUpdatedToast : DisciplinaSavedToast);
+	// dialogs.toast.success(
+	// 	extras.id
+	// 		? "Disciplina atualizada com sucesso."
+	// 		: "Disciplina cadastrada com sucesso.",
+	// );
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/disciplina");
 }
@@ -101,7 +104,8 @@ async function onSuccess({
 async function onFailure({
 	error,
 	dispatch,
-	dialogs,
+	toast,
+	// dialogs,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {;
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -117,13 +121,21 @@ async function onFailure({
 				error: { message: error.message },
 			});
 		}
-		dialogs.toast.error(error.message);
+		toast?.push({ tone: "error", message: error.message });
+		// dialogs.toast.error(error.message);
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
-	dialogs.toast.error(
-		getErrorMessage(error, "Não foi possível salvar a disciplina."),
+	const genericErrorToast = DisciplinaGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
 	);
+	// dialogs.toast.error(
+	// 	getErrorMessage(error, "Não foi possível salvar a disciplina."),
+	// );
 }
 
 export default { action, onSuccess, onFailure };

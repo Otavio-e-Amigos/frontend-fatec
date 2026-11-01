@@ -1,5 +1,5 @@
 import { useRevalidator } from "react-router";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
 import getErrorMessage from "~/classes/errors/get-error-message";

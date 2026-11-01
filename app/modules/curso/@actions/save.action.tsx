@@ -8,6 +8,11 @@ import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
 import getErrorMessage from "~/classes/errors/get-error-message";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
+import {
+	CursoGenericSaveFailedToast,
+	CursoSavedToast,
+	CursoUpdatedToast,
+} from "../curso.toasts";
 
 type CursoExtras = { id?: number; onSaved?: () => void };
 
@@ -67,7 +72,7 @@ async function action({
 		// });
 		if (!confirmed) throw new FormCancelledError();
 	}
-	console.log("submiting data")
+	console.log("submiting data");
 	const curso = new Curso({ id: extras.id, nome, turno, sigla });
 	const auth = AuthService.getUserToken();
 	if (extras.id) {
@@ -75,19 +80,21 @@ async function action({
 	} else {
 		await CursoService.save(curso, auth);
 	}
-	window?.hide()
+	window?.hide();
 }
 
 async function onSuccess({
 	navigate,
-	dialogs,
+	// dialogs,
 	extras,
+	toast,
 }: FormSubmitEventHandlerProps<CursoExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Curso atualizado com sucesso."
-			: "Curso cadastrado com sucesso.",
-	);
+	toast?.push(extras.id ? CursoUpdatedToast : CursoSavedToast);
+	// dialogs.toast.success(
+	// 	extras.id
+	// 		? "Curso atualizado com sucesso."
+	// 		: "Curso cadastrado com sucesso.",
+	// );
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/curso");
 }
@@ -96,6 +103,7 @@ async function onFailure({
 	error,
 	dispatch,
 	dialogs,
+	toast,
 }: FormSubmitEventHandlerProps<CursoExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -111,13 +119,21 @@ async function onFailure({
 				error: { message: error.message },
 			});
 		}
-		dialogs.toast.error(error.message);
+		toast?.push({ tone: "error", message: error.message });
+		// dialogs.toast.error(error.message);
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
-	dialogs.toast.error(
-		getErrorMessage(error, "Não foi possível salvar o curso."),
+	const genericErrorToast = CursoGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
 	);
+	// dialogs.toast.error(
+	// 	getErrorMessage(error, "Não foi possível salvar o curso."),
+	// );
 }
 
 export default { action, onSuccess, onFailure };

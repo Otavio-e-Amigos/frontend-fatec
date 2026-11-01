@@ -8,6 +8,7 @@ import UserService from "../user.service";
 import User from "../user.class";
 import BasicWindow from "~/layouts/windows/BasicWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import { UserGenericSaveFailedToast, UserSavedToast, UserUpdatedToast } from "../user.toasts";
 
 type UserSaveExtras = {
 	id?: number;
@@ -28,7 +29,7 @@ function getUserProfile(value: string): UserProfile {
 async function action({
 	event,
 	extras,
-	dialogs,
+	// dialogs,
 	window,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	event.preventDefault();
@@ -84,14 +85,17 @@ async function action({
 /** Returns to the system user list after a successful save. */
 async function onSuccess({
 	navigate,
-	dialogs,
+	// dialogs,
+	toast,
 	extras,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Usuário atualizado com sucesso."
-			: "Usuário cadastrado com sucesso.",
-	);
+	toast?.push(extras.id ? UserUpdatedToast : UserSavedToast);
+
+	// dialogs.toast.success(
+	// 	extras.id
+	// 		? "Usuário atualizado com sucesso."
+	// 		: "Usuário cadastrado com sucesso.",
+	// );
 	navigate("/system");
 }
 
@@ -100,7 +104,8 @@ async function onFailure({
 	error,
 	dispatch,
 	extras,
-	dialogs,
+	// dialogs,
+	toast
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -110,16 +115,25 @@ async function onFailure({
 				error: { message: field.message },
 			}),
 		);
-		dialogs.toast.error(error.message);
+		// dialogs.toast.error(error.message);
+		toast?.push({ tone: "error", message: error.message });
+
 		return;
 	}
 
 	// Quando a API não responde, o banner no topo já avisa o usuário.
 	if (error instanceof ApiUnavailableError) return;
+	const genericErrorToast = UserGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
+	);
 
-	const message = getErrorMessage(error, "Não foi possível salvar o usuário.");
-	extras.setSubmitError(message);
-	dialogs.toast.error(message);
+	// const message = getErrorMessage(error, "Não foi possível salvar o usuário.");
+	extras.setSubmitError(errorMessage);
+	// dialogs.toast.error(message);
 }
 
 export default { action, onSuccess, onFailure };

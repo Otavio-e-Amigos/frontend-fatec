@@ -7,6 +7,7 @@ import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import type { ProfessorInterface } from "../professor.class";
 import AuthService from "~/modules/user/auth.service";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import { ProfessorGenericSaveFailedToast, ProfessorSavedToast, ProfessorUpdatedToast } from "../professor.toasts";
 
 // savedId é preenchido pela action e lido pelo onSuccess (mesmo objeto extras na submissão).
 type ProfessorExtras = { id?: number; savedId?: number };
@@ -14,7 +15,6 @@ type ProfessorExtras = { id?: number; savedId?: number };
 async function action({
 	event,
 	extras,
-	dialogs,
 	window,
 }: FormSubmitEventHandlerProps<ProfessorExtras>) {
 	event.preventDefault();
@@ -112,14 +112,17 @@ async function action({
 
 async function onSuccess({
 	navigate,
-	dialogs,
+	// dialogs,
 	extras,
+	toast,
 }: FormSubmitEventHandlerProps<ProfessorExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Professor atualizado com sucesso."
-			: "Professor cadastrado com sucesso.",
-	);
+	toast?.push(extras.id ? ProfessorUpdatedToast : ProfessorSavedToast);
+
+	// dialogs.toast.success(
+	// 	extras.id
+	// 		? "Professor atualizado com sucesso."
+	// 		: "Professor cadastrado com sucesso.",
+	// );
 	const id = extras.savedId ?? extras.id;
 	navigate(id ? `/professor/${id}` : "/professor");
 }
@@ -127,7 +130,8 @@ async function onSuccess({
 async function onFailure({
 	error,
 	dispatch,
-	dialogs,
+	// dialogs,
+	toast,
 }: FormSubmitEventHandlerProps<ProfessorExtras>) {
 	console.log(error);
 
@@ -146,15 +150,21 @@ async function onFailure({
 				error: { message: error.message },
 			});
 		}
+		toast?.push({ tone: "error", message: error.message });
 		return;
 	}
-
 	// Quando a API não responde, o banner no topo já avisa o usuário.
 	if (error instanceof ApiUnavailableError) return;
-
-	dialogs.toast.error(
-		getErrorMessage(error, "Não foi possível salvar o professor."),
+	const genericErrorToast = ProfessorGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
 	);
+	// dialogs.toast.error(
+	// 	getErrorMessage(error, "Não foi possível salvar o professor."),
+	// );
 }
 
 export default {
