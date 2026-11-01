@@ -4,7 +4,7 @@ import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import FormDialog from "~/components/dialogs/FormDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
@@ -13,9 +13,10 @@ import AuthService from "~/modules/user/auth.service";
 import SaveDisciplinaForm from "./@layouts/SaveDisciplinaForm";
 import useWindow from "~/components/windows/useWindow";
 import deactivateWindow from "./@windows/deactivate.window";
+import useToast from "~/components/toasts/useToast";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
-	const dialogs = useDialogs();
+	// const dialogs = useDialogs();
 	const { revalidate } = useRevalidator();
 	const [term, setTerm] = useState("");
 	// undefined = fechado | null = nova disciplina | Disciplina = editando
@@ -23,6 +24,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 		undefined,
 	);
 	const window = useWindow();
+	const toast = useToast()
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
@@ -49,7 +51,8 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 							"Não foi possível excluir a disciplina. Tente novamente.",
 						);
 					} else {
-						dialogs.toast.success("Disciplina excluída com sucesso.");
+						toast.push({tone: "success", message: "Disciplina excluída com sucesso."})
+						// dialogs.toast.success();
 						revalidate();
 						window.hide();
 					}

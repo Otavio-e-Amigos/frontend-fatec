@@ -4,7 +4,7 @@ import getErrorMessage from "~/classes/errors/get-error-message";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import useBlockedPage from "~/hooks/useBlockedPage";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import AuthService from "~/modules/user/auth.service";

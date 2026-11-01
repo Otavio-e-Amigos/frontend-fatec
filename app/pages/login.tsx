@@ -3,18 +3,21 @@ import { LoadingGeral } from "~/components/loaders/LoadingGeral";
 import useForm from "~/hooks/useForm";
 import login from "~/modules/user/@actions/login.action";
 import { Link, useSearchParams } from "react-router";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import { useEffect } from "react";
+import useToast from "~/components/toasts/useToast";
 
 /** Displays the application login using the institutional visual identity. */
 export default function LoginPage() {
 	const { FormContainer, isSubmitting } = useForm({ actions: login });
-	const dialogs = useDialogs();
+	// const dialogs = useDialogs();
+	const toast = useToast()
 	const [params] = useSearchParams();
 
 	useEffect(() => {
 		if (params.get("sessao") === "expirada") {
-			dialogs.toast.info("Sua sessão expirou. Faça login novamente.");
+			toast.push({tone: "info", message: "Sua sessão expirou. Faça login novamente."})
+			// dialogs.toast.info();
 		}
 	}, []);
 	return (
