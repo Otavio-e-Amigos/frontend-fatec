@@ -55,7 +55,7 @@ export default function ToastProvider({ children }: { children: ReactNode }) {
 			// 	return () =>
 			// 		setPendingAlert((current) => (current?.id === id ? null : current));
 			// },
-			push: (tone: ToastTone, message: string) => pushToast(tone, message),
+			push: (toast: {tone: ToastTone, message: string}) => pushToast(toast.tone, toast.message),
 			// toast: {
 			// 	success: (message) => pushToast("success", message),
 			// 	error: (message) => pushToast("error", message),

@@ -11,7 +11,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { LoadingGeral } from "./components/loaders/LoadingGeral";
-import DialogProvider from "./components/dialogs/DialogProvider";
+// import DialogProvider from "./components/dialogs/DialogProvider";
 import Footer from "./layouts/Footer";
 import WindowProvider from "./components/windows/WindowProvider";
 import ToastProvider from "./components/toasts/ToastProvider";
@@ -54,13 +54,13 @@ export default function App() {
 
 	return (
 		<ToastProvider>
-			<DialogProvider>
+			{/*<DialogProvider>*/}
 				<WindowProvider>
 					<Outlet />
 					<Footer />
 					{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
 				</WindowProvider>
-			</DialogProvider>
+			{/*</DialogProvider>*/}
 		</ToastProvider>
 	);
 }

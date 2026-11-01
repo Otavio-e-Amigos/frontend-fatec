@@ -26,9 +26,9 @@ export type ToastAPI = {
 	// confirm: (options: ConfirmOptions) => Promise<boolean>;
 	/** Retorna uma função que fecha o alerta. */
 	// alert: (options: AlertOptions) => () => void;
-	
+
 	/** pops a toast message for user. */
-	push: (tone: ToastTone, message: string) => void
+	push: (toast: {tone: ToastTone, message: string}) => void
 	// toast: {
 	// 	success: (message: string) => void;
 	// 	error: (message: string) => void;
@@ -36,6 +36,8 @@ export type ToastAPI = {
 	// 	info: (message: string) => void;
 	// };
 };
+
+export type ToastObject = {tone: ToastTone, message: string}
 
 export const ToastsContext = createContext<ToastAPI | null>(null);
 
