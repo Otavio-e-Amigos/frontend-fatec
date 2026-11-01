@@ -3,7 +3,7 @@ import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
 import { useRevalidator } from "react-router";
 import useWindow from "~/components/windows/useWindow";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
 import type Disciplina from "~/modules/disciplina/disciplina.class";

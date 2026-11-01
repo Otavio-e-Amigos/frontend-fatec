@@ -1,5 +1,5 @@
 import { useRevalidator } from "react-router";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import useWindow from "~/components/windows/useWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
@@ -8,6 +8,7 @@ import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
 import SaveDisciplinaForm from "../@layouts/SaveDisciplinaForm";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
+import useToast from "~/components/toasts/useToast";
 
 function RowActions({ item }: { item: Disciplina }) {
 	const windowData: WindowAPIConstructor = {
@@ -18,9 +19,10 @@ function RowActions({ item }: { item: Disciplina }) {
 		actions: <ConfirmationWindowAction idleState={"Excluir"} />,
 	};
 	const { revalidate } = useRevalidator();
-	const dialogs = useDialogs();
+	// const dialogs = useDialogs();
+	const toast = useToast();
 	const window = useWindow({
-		wrapper: BasicWindow,
+		// wrapper: <BasicWindow/>,
 		initialData: windowData,
 	});
 
@@ -39,7 +41,11 @@ function RowActions({ item }: { item: Disciplina }) {
 							"Não foi possível excluir a disciplina. Tente novamente.",
 						);
 					} else {
-						dialogs.toast.success("Disciplina excluída com sucesso.");
+						toast.push({
+							tone: "success",
+							message: "Disciplina excluída com sucesso.",
+						});
+						// dialogs.toast.success();
 						revalidate();
 						window.hide();
 					}

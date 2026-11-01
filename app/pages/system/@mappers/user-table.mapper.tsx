@@ -1,5 +1,5 @@
 import { Link, useRevalidator } from "react-router";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import useWindow from "~/components/windows/useWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
@@ -11,6 +11,7 @@ import type { WindowAPIConstructor } from "~/components/windows/window.types";
 import type User from "~/modules/user/user.class";
 import getErrorMessage from "~/classes/errors/get-error-message";
 import UserService from "~/modules/user/user.service";
+import useToast from "~/components/toasts/useToast";
 
 function RowActions({ user }: { user: User }) {
 	const windowData: WindowAPIConstructor = {
@@ -21,9 +22,10 @@ function RowActions({ user }: { user: User }) {
 		actions: <ConfirmationWindowAction idleState={"Excluir"} />,
 	};
 	const { revalidate } = useRevalidator();
-	const dialogs = useDialogs();
+	// const dialogs = useDialogs();
+	const toast = useToast();
 	const window = useWindow({
-		wrapper: <BasicWindow/>,
+		wrapper: <BasicWindow />,
 		initialData: windowData,
 	});
 
@@ -96,12 +98,18 @@ function RowActions({ user }: { user: User }) {
 				AuthService.getUserToken(),
 			);
 			if (!res) throw new Error();
-			dialogs.toast.success(`${user.name} foi ativado.`);
+			// dialogs.toast.success(`${user.name} foi ativado.`);
+			toast.push({ tone: "success", message: `${user.name} foi ativado.` });
 			revalidate();
 		} catch (error) {
-			dialogs.toast.error(
-				getErrorMessage(error, "Não foi possível ativar o usuário."),
-			);
+			toast.push({
+				tone: "error",
+				message: getErrorMessage(error, "Não foi possível ativar o usuário."),
+			});
+
+			// dialogs.toast.error(
+			// 	,
+			// );
 		}
 	}
 
@@ -114,7 +122,7 @@ function RowActions({ user }: { user: User }) {
 						user.id!,
 						AuthService.getUserToken(),
 					);
-					revalidate()
+					revalidate();
 					if (!res) {
 						throw new Error(
 							"Não foi possível desativar o usuário. Tente novamente.",
@@ -124,7 +132,9 @@ function RowActions({ user }: { user: User }) {
 			},
 		});
 		if (done) {
-			dialogs.toast.success(`${user.name} foi desativado.`);
+			toast.push({ tone: "success", message: `${user.name} foi desativado.` });
+
+			// dialogs.toast.success(`${user.name} foi desativado.`);
 			revalidate();
 		}
 	}

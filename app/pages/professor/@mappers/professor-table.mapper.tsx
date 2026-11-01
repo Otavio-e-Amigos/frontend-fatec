@@ -4,13 +4,15 @@ import type Professor from "~/modules/professor/professor.class";
 import deactivateWindow from "../@windows/deactivate.window";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
-import useDialogs from "~/hooks/useDialogs";
+// import useDialogs from "~/hooks/useDialogs";
 import getErrorMessage from "~/classes/errors/get-error-message";
 import ResourceDisplay from "~/layouts/tables/ResourceDisplay";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
+import useToast from "~/components/toasts/useToast";
 
 function RowActions({ prof }: { prof: Professor }) {
 	const window = useWindow(deactivateWindow);
+	const toast = useToast()
 	const confirmationWindow: WindowAPIConstructor = {
 		...deactivateWindow.initialData,
 		description: `O professor ${prof.name ?? ""} não ficará disponível enquanto estiver desativado.`,
@@ -20,7 +22,9 @@ function RowActions({ prof }: { prof: Professor }) {
 				console.log("click!!");
 				const res = await ProfessorService.deactivate(prof.id!, auth);
 				if (res) {
-					dialogs.toast.success(`${prof.name} foi desativado.`);
+					toast.push({ tone: "success", message: `${prof.name} foi desativado.` });
+
+					// dialogs.toast.success(`${prof.name} foi desativado.`);
 					revalidate();
 					window.hide();
 				}
@@ -35,7 +39,7 @@ function RowActions({ prof }: { prof: Professor }) {
 
 	const auth = AuthService.getUserToken();
 	const { revalidate } = useRevalidator();
-	const dialogs = useDialogs();
+	// const dialogs = useDialogs();
 
 	function deactivate() {
 		window.show(confirmationWindow);
@@ -45,12 +49,16 @@ function RowActions({ prof }: { prof: Professor }) {
 		try {
 			const res = await ProfessorService.activate(prof.id!, auth);
 			if (!res) throw new Error();
-			dialogs.toast.success(`${prof.name} foi ativado.`);
+			toast.push({ tone: "success", message: `${prof.name} foi ativado.` });
+
+			// dialogs.toast.success(`${prof.name} foi ativado.`);
 			revalidate();
 		} catch (error) {
-			dialogs.toast.error(
-				getErrorMessage(error, "Não foi possível ativar o professor."),
-			);
+			toast.push({ tone: "error", message: getErrorMessage(error, "Não foi possível ativar o professor.") });
+
+			// dialogs.toast.error(
+			// 	,
+			// );
 		}
 	}
 
