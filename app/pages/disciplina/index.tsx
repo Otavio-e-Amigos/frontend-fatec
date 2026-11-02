@@ -12,6 +12,7 @@ import SaveDisciplinaForm from "./@layouts/SaveDisciplinaForm";
 import useWindow from "~/components/windows/useWindow";
 import deactivateWindow from "./@windows/deactivate.window";
 import useToast from "~/components/toasts/useToast";
+import mapper from "./@mappers/discipline-table.mapper";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const { revalidate } = useRevalidator();
@@ -68,38 +69,39 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	}
 
 	const table = useMemo(() => {
-		const rows = filtered.map((item) => [
-			item.nome ?? "",
-			item.codigo ?? "",
-			item.sigla ?? "",
-			{
-				value: "",
-				display: (
-					<div className="row-actions">
-						<button
-							type="button"
-							className="btn"
-							data-variant="icon"
-							data-icon="edit"
-							title="Editar"
-							onClick={() => setEditing(item)}
-						>
-							Editar
-						</button>
-						<button
-							type="button"
-							className="btn"
-							data-variant="icon"
-							data-icon="delete"
-							title="Excluir"
-							onClick={() => removeDiscipline(item)}
-						>
-							Excluir
-						</button>
-					</div>
-				),
-			},
-		]);
+		const rows = filtered.map(mapper)
+		// const rows = filtered.map((item) => [
+		// 	item.nome ?? "",
+		// 	item.codigo ?? "",
+		// 	item.sigla ?? "",
+		// 	{
+		// 		value: "",
+		// 		display: (
+		// 			<div className="row-actions">
+		// 				<button
+		// 					type="button"
+		// 					className="btn"
+		// 					data-variant="icon"
+		// 					data-icon="edit"
+		// 					title="Editar"
+		// 					onClick={() => setEditing(item)}
+		// 				>
+		// 					Editar
+		// 				</button>
+		// 				<button
+		// 					type="button"
+		// 					className="btn"
+		// 					data-variant="icon"
+		// 					data-icon="delete"
+		// 					title="Excluir"
+		// 					onClick={() => removeDiscipline(item)}
+		// 				>
+		// 					Excluir
+		// 				</button>
+		// 			</div>
+		// 		),
+		// 	},
+		// ]);
 		return new DefaultTableModel(rows, ["Disciplina", "Código", "Sigla", ""]);
 	}, [filtered]);
 

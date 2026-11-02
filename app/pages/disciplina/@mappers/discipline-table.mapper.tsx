@@ -7,6 +7,7 @@ import AuthService from "~/modules/user/auth.service";
 import SaveDisciplinaForm from "../@layouts/SaveDisciplinaForm";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
 import useToast from "~/components/toasts/useToast";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 function RowActions({ item }: { item: Disciplina }) {
 	const windowData: WindowAPIConstructor = {
@@ -46,7 +47,7 @@ function RowActions({ item }: { item: Disciplina }) {
 					}
 				},
 			},
-		});
+		}, <BasicWindow/>);
 	}
 
 	async function edit() {
