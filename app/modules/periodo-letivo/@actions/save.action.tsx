@@ -14,7 +14,6 @@ type PeriodoExtras = { id?: number; onSaved?: () => void };
 async function action({
 	event,
 	extras,
-	// dialogs,
 	window
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
 	event.preventDefault();
@@ -54,19 +53,12 @@ async function action({
 		const confirmed = await window?.confirmExtra(
 			{
 				title: "Salvar alterações?",
-				// description: `As alterações na disciplina ${nome} serão aplicadas.`,
 				description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
 				dismissible: true,
 				actions: <ConfirmationWindowAction idleState={"Editar"} />,
 			},
 			<BasicWindow />,
 		);
-		// const confirmed = await dialogs.confirm({
-		// 	title: "Salvar alterações?",
-		// 	description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
-		// 	confirmLabel: "Salvar",
-		// 	tone: "primary",
-		// });
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -77,17 +69,11 @@ async function action({
 
 async function onSuccess({
 	navigate,
-	// dialogs,
 	toast,
 	extras,
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
 	toast?.push(extras.id ? PeriodoLetivoUpdatedToast : PeriodoLetivoSavedToast);
 
-	// dialogs.toast.success(
-	// 	extras.id
-	// 		? "Período letivo atualizado com sucesso."
-	// 		: "Período letivo cadastrado com sucesso.",
-	// );
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/periodo-letivo");
 }
@@ -95,7 +81,6 @@ async function onSuccess({
 async function onFailure({
 	error,
 	dispatch,
-	// dialogs,
 	toast
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
 	if (error instanceof FormValidationError) {
@@ -114,7 +99,6 @@ async function onFailure({
 		}
 		toast?.push({ tone: "error", message: error.message });
 
-		// dialogs.toast.error(error.message);
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
@@ -125,9 +109,6 @@ async function onFailure({
 			? { tone: "error", message: errorMessage }
 			: genericErrorToast,
 	);
-	// dialogs.toast.error(
-	// 	getErrorMessage(error, "Não foi possível salvar o período letivo."),
-	// );
 }
 
 export default { action, onSuccess, onFailure };

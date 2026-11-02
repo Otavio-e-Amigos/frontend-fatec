@@ -29,7 +29,6 @@ function getUserProfile(value: string): UserProfile {
 async function action({
 	event,
 	extras,
-	// dialogs,
 	window,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	event.preventDefault();
@@ -61,12 +60,7 @@ async function action({
 			},
 			<BasicWindow />,
 		);
-		// const confirmed = await dialogs.confirm({
-		// 	title: "Salvar alterações?",
-		// 	description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
-		// 	confirmLabel: "Salvar",
-		// 	tone: "primary",
-		// });
+
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -85,17 +79,11 @@ async function action({
 /** Returns to the system user list after a successful save. */
 async function onSuccess({
 	navigate,
-	// dialogs,
 	toast,
 	extras,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	toast?.push(extras.id ? UserUpdatedToast : UserSavedToast);
 
-	// dialogs.toast.success(
-	// 	extras.id
-	// 		? "Usuário atualizado com sucesso."
-	// 		: "Usuário cadastrado com sucesso.",
-	// );
 	navigate("/system");
 }
 
@@ -104,7 +92,6 @@ async function onFailure({
 	error,
 	dispatch,
 	extras,
-	// dialogs,
 	toast
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	if (error instanceof FormValidationError) {
@@ -115,7 +102,6 @@ async function onFailure({
 				error: { message: field.message },
 			}),
 		);
-		// dialogs.toast.error(error.message);
 		toast?.push({ tone: "error", message: error.message });
 
 		return;
@@ -131,9 +117,7 @@ async function onFailure({
 			: genericErrorToast,
 	);
 
-	// const message = getErrorMessage(error, "Não foi possível salvar o usuário.");
 	extras.setSubmitError(errorMessage);
-	// dialogs.toast.error(message);
 }
 
 export default { action, onSuccess, onFailure };

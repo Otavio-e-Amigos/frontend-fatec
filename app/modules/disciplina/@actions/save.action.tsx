@@ -15,7 +15,6 @@ type DisciplinaExtras = { id?: number; onSaved?: () => void };
 async function action({
 	event,
 	extras,
-	// dialogs,
 	window,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	event.preventDefault();
@@ -66,12 +65,7 @@ async function action({
 			},
 			<BasicWindow />,
 		);
-		// const confirmed = await dialogs.confirm({
-		// 	title: "Salvar alterações?",
-		// 	description: `As alterações na disciplina ${nome} serão aplicadas.`,
-		// 	confirmLabel: "Salvar",
-		// 	tone: "primary",
-		// });
+
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -87,16 +81,11 @@ async function action({
 
 async function onSuccess({
 	navigate,
-	dialogs,
 	toast,
 	extras,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	toast?.push(extras.id ? DisciplinaUpdatedToast : DisciplinaSavedToast);
-	// dialogs.toast.success(
-	// 	extras.id
-	// 		? "Disciplina atualizada com sucesso."
-	// 		: "Disciplina cadastrada com sucesso.",
-	// );
+
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/disciplina");
 }
@@ -105,7 +94,6 @@ async function onFailure({
 	error,
 	dispatch,
 	toast,
-	// dialogs,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {;
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -122,7 +110,6 @@ async function onFailure({
 			});
 		}
 		toast?.push({ tone: "error", message: error.message });
-		// dialogs.toast.error(error.message);
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
@@ -133,9 +120,7 @@ async function onFailure({
 			? { tone: "error", message: errorMessage }
 			: genericErrorToast,
 	);
-	// dialogs.toast.error(
-	// 	getErrorMessage(error, "Não foi possível salvar a disciplina."),
-	// );
+
 }
 
 export default { action, onSuccess, onFailure };

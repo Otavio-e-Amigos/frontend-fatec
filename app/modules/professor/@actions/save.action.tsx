@@ -67,28 +67,14 @@ async function action({
 	// Confirmação apenas na edição, depois que a validação passou.
 	// Se o usuário cancelar, o useForm ignora o erro e o formulário continua aberto.
 	if (extras.id) {
-		// let confirmed = false;
 		const confirmed = await window?.confirm({
 			title: "Salvar alterações?",
 			description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
 			dismissible: true,
-			// tone: "primary",
 			actions: <ConfirmationWindowAction idleState={"Editar"} />,
-			// extras: {
-				// onConfirm: () => {
-				// 	// confirmed = true;
-				// 	window.hide();
-				// },
-			// },
 		});
-		// const confirmed = await dialogs.confirm({
-		// 	title: "Salvar alterações?",
-		// 	description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
-		// 	confirmLabel: "Salvar",
-		// 	tone: "primary",
-		// });
+
 		if (!confirmed) throw new FormCancelledError();
-		// throw new FormCancelledError();
 	}
 
 	// export form as plain object or class directly using mapper if viable
@@ -112,17 +98,11 @@ async function action({
 
 async function onSuccess({
 	navigate,
-	// dialogs,
 	extras,
 	toast,
 }: FormSubmitEventHandlerProps<ProfessorExtras>) {
 	toast?.push(extras.id ? ProfessorUpdatedToast : ProfessorSavedToast);
 
-	// dialogs.toast.success(
-	// 	extras.id
-	// 		? "Professor atualizado com sucesso."
-	// 		: "Professor cadastrado com sucesso.",
-	// );
 	const id = extras.savedId ?? extras.id;
 	navigate(id ? `/professor/${id}` : "/professor");
 }
@@ -130,7 +110,6 @@ async function onSuccess({
 async function onFailure({
 	error,
 	dispatch,
-	// dialogs,
 	toast,
 }: FormSubmitEventHandlerProps<ProfessorExtras>) {
 	console.log(error);
@@ -162,9 +141,6 @@ async function onFailure({
 			? { tone: "error", message: errorMessage }
 			: genericErrorToast,
 	);
-	// dialogs.toast.error(
-	// 	getErrorMessage(error, "Não foi possível salvar o professor."),
-	// );
 }
 
 export default {

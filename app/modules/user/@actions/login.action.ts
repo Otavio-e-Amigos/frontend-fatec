@@ -1,11 +1,6 @@
-// import { type SyntheticEvent } from "react";
 import AuthService from "../auth.service";
 import { FormValidationError } from "~/classes/errors/ValidationError";
-// import type FormController from "~/components/forms/FormController";
-// import { type FormReducerAction } from "~/components/forms/FormContext";
-// import { type NavigateFunction } from "react-router";
 import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
-// import { FormSubmitEventHandler } from "~/hooks/useForm";
 
 async function action({ event }: FormSubmitEventHandlerProps) {
 	event.preventDefault();

@@ -19,7 +19,6 @@ type CursoExtras = { id?: number; onSaved?: () => void };
 async function action({
 	event,
 	extras,
-	// dialogs,
 	window,
 }: FormSubmitEventHandlerProps<CursoExtras>) {
 	event.preventDefault();
@@ -64,12 +63,7 @@ async function action({
 			<BasicWindow />,
 		);
 		console.log("<confirmed>", confirmed);
-		// const confirmed = await dialogs.confirm({
-		// 	title: "Salvar alterações?",
-		// 	description: `As alterações no curso ${nome} serão aplicadas.`,
-		// 	confirmLabel: "Salvar",
-		// 	tone: "primary",
-		// });
+
 		if (!confirmed) throw new FormCancelledError();
 	}
 	console.log("submiting data");
@@ -85,16 +79,11 @@ async function action({
 
 async function onSuccess({
 	navigate,
-	// dialogs,
 	extras,
 	toast,
 }: FormSubmitEventHandlerProps<CursoExtras>) {
 	toast?.push(extras.id ? CursoUpdatedToast : CursoSavedToast);
-	// dialogs.toast.success(
-	// 	extras.id
-	// 		? "Curso atualizado com sucesso."
-	// 		: "Curso cadastrado com sucesso.",
-	// );
+
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/curso");
 }
@@ -120,7 +109,6 @@ async function onFailure({
 			});
 		}
 		toast?.push({ tone: "error", message: error.message });
-		// dialogs.toast.error(error.message);
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
@@ -131,9 +119,7 @@ async function onFailure({
 			? { tone: "error", message: errorMessage }
 			: genericErrorToast,
 	);
-	// dialogs.toast.error(
-	// 	getErrorMessage(error, "Não foi possível salvar o curso."),
-	// );
+
 }
 
 export default { action, onSuccess, onFailure };

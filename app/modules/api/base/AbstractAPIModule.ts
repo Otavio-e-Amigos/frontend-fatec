@@ -1,5 +1,3 @@
-// import { URL } from "node:url";
-// import { URL } from "url";
 import type AbstractAPIData from "./AbstractAPIData";
 import type AbstractQueryObject from "./AbstractQueryObject";
 
