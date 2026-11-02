@@ -19,7 +19,6 @@ export default class DefaultTableModel extends AbstractTableModel {
     super()
     this.list = list
     this.columns = columns
-    // console.log(list)
   }
 
   addColumn(name:string) {
@@ -102,12 +101,9 @@ export default class DefaultTableModel extends AbstractTableModel {
     }
 
 
-    // console.log(typeAlgorithms[dataColumn.type][order])
-    // console.log(selectedRow)
     console.log(finalResult)
 
     return finalResult
-    // throw new Error("Method not implemented.");
   }
 
   getColumnName(index: number): string {
