@@ -7,7 +7,6 @@ import {
 	type SyntheticEvent,
 } from "react";
 import { Form, useNavigate, type NavigateFunction } from "react-router";
-// import FormContainer from "~/components/forms/FormContainer";
 import { FormCancelledError } from "~/classes/errors/FormCancelledError";
 import {
 	FormControllerContext,
@@ -16,9 +15,8 @@ import {
 	type FormReducerAction,
 } from "~/components/forms/FormContext";
 import FormController from "~/components/forms/FormController";
-import type { WindowAPI, WindowAPIConstructor, WindowManagerAPI } from "~/components/windows/window.types";
+import type { WindowManagerAPI } from "~/components/windows/window.types";
 import useWindow from "~/components/windows/useWindow";
-import BasicWindow from "~/layouts/windows/BasicWindow";
 import type { ToastAPI } from "~/components/toasts/useToast";
 import useToast from "~/components/toasts/useToast";
 
@@ -28,10 +26,9 @@ export type FormSubmitEventHandlerProps<E extends Record<string, any> = any> = {
 	controller: FormController;
 	dispatch: React.ActionDispatch<[action: FormReducerAction]>;
 	navigate: NavigateFunction;
-	dialogs: DialogsApi;
-	window?: WindowManagerAPI
+	window?: WindowManagerAPI;
 	extras: E;
-	toast?: ToastAPI
+	toast?: ToastAPI;
 };
 
 type FormSubmitEventHandler = (
@@ -64,10 +61,24 @@ export default function useForm(options?: FormHookOptions) {
 	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
-	const window = useWindow()
-	const toast = useToast()
-	const formRuntime = useRef({ controller, dispatch, navigate, options, window, toast });
-	formRuntime.current = { controller, dispatch, navigate, options, window, toast };
+	const window = useWindow();
+	const toast = useToast();
+	const formRuntime = useRef({
+		controller,
+		dispatch,
+		navigate,
+		options,
+		window,
+		toast,
+	});
+	formRuntime.current = {
+		controller,
+		dispatch,
+		navigate,
+		options,
+		window,
+		toast,
+	};
 
 	useEffect(() => {
 		// console.log("controller changed!");
@@ -81,7 +92,8 @@ export default function useForm(options?: FormHookOptions) {
 		FormContainer: useMemo(
 			() =>
 				function FormContainer(props: FormContainerProps) {
-					const { controller, dispatch, navigate, options, window, toast } = formRuntime.current;
+					const { controller, dispatch, navigate, options, window, toast } =
+						formRuntime.current;
 					const formProps = {
 						children: props.children,
 						className: props.className,
@@ -106,12 +118,14 @@ export default function useForm(options?: FormHookOptions) {
 
 							try {
 								if (actions) await actions.action(actionProps);
-								if (actions?.onSuccess)
-									await actions.onSuccess(actionProps);
+								if (actions?.onSuccess) await actions.onSuccess(actionProps);
 							} catch (error) {
 								if (error instanceof FormCancelledError) return;
 								if (actions?.onFailure)
-									await actions.onFailure({ ...actionProps, error: error as Error });
+									await actions.onFailure({
+										...actionProps,
+										error: error as Error,
+									});
 							} finally {
 								setIsSubmitting(false);
 							}

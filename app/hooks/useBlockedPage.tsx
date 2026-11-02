@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import useWindow from "~/components/windows/useWindow";
 import BasicWindow from "~/layouts/windows/BasicWindow";
-// import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 
 type BlockedPageOptions = {
 	title?: string;
@@ -22,28 +21,25 @@ export default function useBlockedPage(
 	}: BlockedPageOptions = {},
 ) {
 	const window = useWindow({
-		wrapper: <BasicWindow/>,
+		wrapper: <BasicWindow />,
 		initialData: {
 			title,
 			description,
-			actions: <ReturnButton/>
-		}
-	})
+			actions: <ReturnButton />,
+		},
+	});
 	const navigate = useNavigate();
 
 	function ReturnButton() {
-		return <button className="btn btn-normal" onClick={() => navigate(redirectTo)}>
-			{actionLabel}
-		</button>
+		return (
+			<button className="btn btn-normal" onClick={() => navigate(redirectTo)}>
+				{actionLabel}
+			</button>
+		);
 	}
 	useEffect(() => {
 		if (!blocked) return;
-		return window.show()
-
-		// 	actionLabel,
-		// 	dismissible: false,
-		// 	onAction: () => navigate(redirectTo),
-		// });
+		return window.show();
 	}, [blocked]);
 
 	return blocked;
