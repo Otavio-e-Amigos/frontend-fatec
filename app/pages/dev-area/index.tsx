@@ -13,7 +13,7 @@ import ShadowCenter from "~/layouts/containers/ShadowCenter";
 // import { OpenWindowEvent } from "~/utils/window.utils";
 import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
-import useToast from "~/components/toasts/useToast.ts";
+import useToast from "~/components/toasts/useToast";
 
 const defaultTableTest = new DefaultTableModel(
 	[
