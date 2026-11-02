@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import type {
 	WindowAPI,
 	WindowAPIConstructor,
@@ -26,15 +26,6 @@ function useWindowDataState() {
 
 		return currentWindowData ?? initialWindowData ?? {};
 	}, [initialWindowData, currentWindowData]);
-
-	// useEffect(() => {
-
-	// 	if (currentWindowData && !initialWindowData) {
-	// 		setInitialWindowData(currentWindowData);
-	// 		console.log("setting initial window data!", initialWindowData);
-	// 		console.log("currentWindowData", currentWindowData);
-	// 	}
-	// }, [windowData, currentWindowData]);
 
 	function setData(data?: WindowAPI) {
 		if (!data) {
@@ -83,34 +74,11 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 			hideExtraWindow();
 			return;
 		}
-		// hideExtraWindow();
 		setVisible(false);
 		setFunctionWrapper(InitialWrapper);
-		// setMainWindowInvoked(false)
 	}
 
-	// useEffect(() => {
-	// 	console.log("<visible>", visible);
-	// 	if (visible) {
-	// 		setMainWindowInvoked(true);
-	// 	} else {
-	// 		setMainWindowInvoked(false);
-	// 	}
-	// }, [visible]);
-
-	// function isVisible() {
-	// 	return visible;
-	// }
-
 	function show(data?: WindowAPIConstructor, wrapper?: any) {
-		// revalidate()
-		// console.log("summoning window!", visible, mainWindowInvoked);
-
-		// if (visible) {
-		// 	console.log("summoning extra window!");
-		// 	showExtraWindow(data, wrapper);
-		// 	return;
-		// }
 		if (wrapper) {
 			setFunctionWrapper(wrapper);
 		}
@@ -133,60 +101,37 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 	}
 
 	function confirm(data?: WindowAPIConstructor, wrapper?: any) {
-		// revalidate()
 		return new Promise<boolean>((resolve) => {
-			// confirmRef.current?.resolve(false);
-			// setConfirmError(undefined);
 			show({ ...data, resolve }, wrapper);
-			// setData({ ...data, resolve });
-			// setVisible(true);
-			// setPendingConfirm({ ...options, resolve });
 		});
 	}
 
 	function confirmExtra(data?: WindowAPIConstructor, wrapper?: any) {
-		// revalidate()
 		return new Promise<boolean>((resolve) => {
-			// confirmRef.current?.resolve(false);
-			// setConfirmError(undefined);
 			showExtraWindow({ ...data, resolve }, wrapper);
-			// setData({ ...data, resolve });
-			// setVisible(true);
-			// setPendingConfirm({ ...options, resolve });
 		});
 	}
 
 	async function handleConfirm() {
-		// const current = pendingConfirm;
 		const current = extraWindowData ?? windowDataState;
 		console.log(current);
 		if (!current) return;
 		try {
 			await current.onConfirm?.();
 			current.resolve?.(true);
-			// setPendingConfirm(null);
-			// there is a chance of the window funcion only hiding the extra layer due to implementation in production, test this later
 			hide();
-			// hide();
-			// if (visible)
 		} catch (error) {
 			setConfirmError(getErrorMessage(error));
 		}
 	}
 
 	async function handleCancel() {
-		// pendingConfirm?.resolve(false);
-		// setPendingConfirm(null);
-		// setConfirmError(undefined);
-		// hide()
 		const current = windowDataState;
 		console.log("<current>: ", current);
 		if (!current) return;
 		try {
 			await current.onCancel?.();
-			// if (!current.resolve) hide() //if invoked with show(), resolve function won't appeat
 			current.resolve?.(false);
-			// setPendingConfirm(null);
 			hide();
 		} catch (error) {
 			setConfirmError(getErrorMessage(error));
@@ -197,17 +142,8 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 		hide,
 		show,
 		confirm,
-		confirmExtra
+		confirmExtra,
 	};
-
-	// const windowStates = useMemo(() => {
-	// 	// console.log("changed!")
-	// 	return {
-	// 		hide,
-	// 		show,
-	// 		confirm,
-	// 	};
-	// }, [visible]);
 
 	const windowData: WindowAPI = {
 		...windowStates,
@@ -216,17 +152,6 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 		handleConfirm,
 		handleCancel,
 	};
-
-	// const windowData: WindowAPI = useMemo(() => {
-	// 	console.log("oijkasodk")
-	// 	return {
-	// 		...windowStates,
-	// 		...windowDataState,
-	// 		...extras, //might break if something is implemented differently on extras attributes, confirm and patch
-	// 		handleConfirm,
-	// 		handleCancel,
-	// 	};
-	// }, [visible]);
 
 	const extraWindowData: WindowAPI = {
 		...windowStates,
@@ -257,11 +182,9 @@ export default function WindowProvider({ children }: { children: ReactNode }) {
 				{visible && WrapperFunction && WrapperFunction}
 			</WindowContext.Provider>
 
-			{/*<div className="z-50">*/}
-				<WindowContext.Provider value={extraWindowData}>
-					{ExtraWindowActivated && ExtraWrapperFunction && ExtraWrapperFunction}
-				</WindowContext.Provider>
-			{/*</div>*/}
+			<WindowContext.Provider value={extraWindowData}>
+				{ExtraWindowActivated && ExtraWrapperFunction && ExtraWrapperFunction}
+			</WindowContext.Provider>
 		</WindowManagerContext.Provider>
 	);
 }

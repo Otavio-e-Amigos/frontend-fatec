@@ -1,4 +1,4 @@
-import { createContext, useReducer, useState } from "react";
+import { createContext } from "react";
 import FormController, {
 	InputValidator,
 	type FormError,
@@ -35,7 +35,6 @@ export function formReducer(
 
 	switch (action.action) {
 		case "addField": {
-			// console.log("adding field! (sorry for the spam btw)")
 			newController.addField(action.fieldName!, action.value, {
 				validator: action.validator,
 				error: action.error,
@@ -44,24 +43,18 @@ export function formReducer(
 		}
 
 		case "setFieldError": {
-			console.log("applying field error!");
-			// console.log("before", newController);
-			console.log(action);
 			newController.setFieldError(action.fieldName as string, action.error);
 			console.log("after", newController);
 			break;
 		}
 
 		case "cleanFieldError": {
-			// console.log("cleaning error!")
 			newController.cleanFieldError(action.fieldName!);
 			break;
 		}
 
 		case "setError": {
-			console.log("applying main error!");
 			newController.setError(action.error);
-			console.log(newController);
 			break;
 		}
 
