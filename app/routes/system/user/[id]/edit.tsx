@@ -1,6 +1,5 @@
 import Page from "~/pages/system/user/add";
 import UserService from "~/modules/user/user.service";
-// import { auth } from "~/mock/db/users.db";
 import type { Route } from "./+types/edit";
 import AuthService from "~/modules/user/auth.service";
 
@@ -19,7 +18,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 }
 
 export default function Edit({ loaderData }: Route.ComponentProps) {
-	// return <Page />
 	if (!loaderData.user) {
 		return <p>Insert not found page here</p>
 	}

@@ -1,6 +1,4 @@
 import { useState } from "react";
-import CPFFormatter from "~/classes/ValueFormatters/CPFFormatter";
-import NameFormatter from "~/classes/ValueFormatters/NameFormatter";
 import FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
 import useForm from "~/hooks/useForm";
@@ -13,24 +11,11 @@ function createInitialController(user?: User) {
 	const controller = new FormController();
 	if (!user) return controller;
 
-	// controller.addField("nome", user.name);
-	// controller.addField("cpf", user.cpf);
-	// controller.addField("matricula", user.registry);
-	// controller.addField("regimeContrato", user.contract);
-	// controller.addField("status", user.status);
-	// controller.addField("codigo", user.code);
-	// controller.addField("titulacao", user.title);
 	return controller;
 }
 
-export default function SaveUserForm({
-	user,
-}: {
-	user?: User;
-}) {
-	const [initialController] = useState(() =>
-		createInitialController(user),
-	);
+export default function SaveUserForm({ user }: { user?: User }) {
+	const [initialController] = useState(() => createInitialController(user));
 	const [submitError, setSubmitError] = useState("");
 	const { FormContainer, isSubmitting } = useForm({
 		actions: saveAction,
@@ -43,11 +28,7 @@ export default function SaveUserForm({
 
 	return (
 		<BasicFormLayout
-			title={
-				user
-					? `Editar Usuário "${user?.name}"`
-					: `Cadastrar novo Usuário`
-			}
+			title={user ? `Editar Usuário "${user?.name}"` : `Cadastrar novo Usuário`}
 			description={
 				"Preencha as informações requeridas para realizar um cadastro de um novo usuário para o sistema."
 			}
@@ -88,9 +69,6 @@ export default function SaveUserForm({
 					{submitError}
 				</p>
 			)}
-			{/*<p className="text-hint-alert-dot w-full text-right">
-				{controller.error?.message}
-			</p>*/}
 			<button type="submit" className="flex btn btn-success">
 				{edit ? "Salvar Alterações" : "Adicionar"}
 			</button>

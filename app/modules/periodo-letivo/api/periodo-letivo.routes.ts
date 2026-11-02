@@ -1,5 +1,3 @@
-import type AbstractQueryObject from "~/modules/api/base/AbstractQueryObject";
-
 const periodosLetivosAPIRoutes = {
 	GET_ALL: {
 		method: "GET",

@@ -1,5 +1,5 @@
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
+import PageHeader from "~/layouts/pages/PageHeader";
 import GenericFloor from "~/layouts/pages/GenericFloor";
 import ShortcutCard from "~/components/cards/ShortcutCard";
 import type User from "~/modules/user/user.class";

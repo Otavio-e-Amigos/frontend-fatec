@@ -6,13 +6,16 @@ import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import AuthService from "~/modules/user/auth.service";
 import Disciplina from "../disciplina.class";
 import DisciplinaService from "../disciplina.service";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import BasicWindow from "~/layouts/windows/BasicWindow";
+import { DisciplinaGenericSaveFailedToast, DisciplinaSavedToast, DisciplinaUpdatedToast } from "../disciplina.toasts";
 
 type DisciplinaExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-	dialogs,
+	window,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
 	event.preventDefault();
 	const form = Object.fromEntries(new FormData(event.currentTarget));
@@ -52,12 +55,17 @@ async function action({
 	}
 
 	if (id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações na disciplina ${nome} serão aplicadas.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				description: `As alterações na disciplina ${nome} serão aplicadas.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
+
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -68,18 +76,16 @@ async function action({
 	} else {
 		await DisciplinaService.save(disciplina, auth);
 	}
+	window?.hide()
 }
 
 async function onSuccess({
 	navigate,
-	dialogs,
+	toast,
 	extras,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Disciplina atualizada com sucesso."
-			: "Disciplina cadastrada com sucesso.",
-	);
+	toast?.push(extras.id ? DisciplinaUpdatedToast : DisciplinaSavedToast);
+
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/disciplina");
 }
@@ -87,7 +93,7 @@ async function onSuccess({
 async function onFailure({
 	error,
 	dispatch,
-	dialogs,
+	toast,
 }: FormSubmitEventHandlerProps<DisciplinaExtras>) {;
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -103,13 +109,18 @@ async function onFailure({
 				error: { message: error.message },
 			});
 		}
-		dialogs.toast.error(error.message);
+		toast?.push({ tone: "error", message: error.message });
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
-	dialogs.toast.error(
-		getErrorMessage(error, "Não foi possível salvar a disciplina."),
+	const genericErrorToast = DisciplinaGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
 	);
+
 }
 
 export default { action, onSuccess, onFailure };

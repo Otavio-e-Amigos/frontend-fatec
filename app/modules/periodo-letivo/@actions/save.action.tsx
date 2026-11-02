@@ -5,13 +5,16 @@ import { FormValidationError } from "~/classes/errors/ValidationError";
 import { FormCancelledError } from "~/classes/errors/FormCancelledError";
 import { ApiUnavailableError } from "~/classes/errors/ApiUnavailableError";
 import getErrorMessage from "~/classes/errors/get-error-message";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import BasicWindow from "~/layouts/windows/BasicWindow";
+import { PeriodoLetivoGenericSaveFailedToast, PeriodoLetivoSavedToast, PeriodoLetivoUpdatedToast } from "../periodo-letivo.toasts";
 
 type PeriodoExtras = { id?: number; onSaved?: () => void };
 
 async function action({
 	event,
 	extras,
-	dialogs,
+	window
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
 	event.preventDefault();
 	const data = Object.fromEntries(new FormData(event.currentTarget));
@@ -27,23 +30,35 @@ async function action({
 	if (semestre !== 1 && semestre !== 2) {
 		fields.push({ name: "semestre", message: "Selecione o semestre." });
 	}
-	if (!dataInicio) fields.push({ name: "dataInicio", message: "Informe a data inicial." });
-	if (!dataFim) fields.push({ name: "dataFim", message: "Informe a data final." });
+	if (!dataInicio)
+		fields.push({ name: "dataInicio", message: "Informe a data inicial." });
+	if (!dataFim)
+		fields.push({ name: "dataFim", message: "Informe a data final." });
 	if (dataInicio && dataFim && dataFim <= dataInicio) {
-		fields.push({ name: "dataFim", message: "A data final deve ser posterior à inicial." });
+		fields.push({
+			name: "dataFim",
+			message: "A data final deve ser posterior à inicial.",
+		});
 	}
 
 	if (fields.length > 0) {
-		throw new FormValidationError("Verifique os campos do período letivo.", fields);
+		throw new FormValidationError(
+			"Verifique os campos do período letivo.",
+			fields,
+		);
 	}
 
 	if (extras.id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				description: `As alterações no período ${ano}/${semestre} serão aplicadas.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -54,14 +69,11 @@ async function action({
 
 async function onSuccess({
 	navigate,
-	dialogs,
+	toast,
 	extras,
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Período letivo atualizado com sucesso."
-			: "Período letivo cadastrado com sucesso.",
-	);
+	toast?.push(extras.id ? PeriodoLetivoUpdatedToast : PeriodoLetivoSavedToast);
+
 	if (extras.onSaved) extras.onSaved();
 	else navigate("/periodo-letivo");
 }
@@ -69,7 +81,7 @@ async function onSuccess({
 async function onFailure({
 	error,
 	dispatch,
-	dialogs,
+	toast
 }: FormSubmitEventHandlerProps<PeriodoExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -85,12 +97,17 @@ async function onFailure({
 				error: { message: error.message },
 			});
 		}
-		dialogs.toast.error(error.message);
+		toast?.push({ tone: "error", message: error.message });
+
 		return;
 	}
 	if (error instanceof ApiUnavailableError) return;
-	dialogs.toast.error(
-		getErrorMessage(error, "Não foi possível salvar o período letivo."),
+	const genericErrorToast = PeriodoLetivoGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
 	);
 }
 

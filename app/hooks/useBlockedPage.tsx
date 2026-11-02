@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import useDialogs from "./useDialogs";
+import useWindow from "~/components/windows/useWindow";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 type BlockedPageOptions = {
 	title?: string;
@@ -19,18 +20,26 @@ export default function useBlockedPage(
 		redirectTo = "/",
 	}: BlockedPageOptions = {},
 ) {
-	const dialogs = useDialogs();
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (!blocked) return;
-		return dialogs.alert({
+	const window = useWindow({
+		wrapper: <BasicWindow />,
+		initialData: {
 			title,
 			description,
-			actionLabel,
-			dismissible: false,
-			onAction: () => navigate(redirectTo),
-		});
+			actions: <ReturnButton />,
+		},
+	});
+	const navigate = useNavigate();
+
+	function ReturnButton() {
+		return (
+			<button className="btn btn-normal" onClick={() => navigate(redirectTo)}>
+				{actionLabel}
+			</button>
+		);
+	}
+	useEffect(() => {
+		if (!blocked) return;
+		return window.show();
 	}, [blocked]);
 
 	return blocked;

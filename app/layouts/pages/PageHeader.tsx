@@ -29,9 +29,7 @@ export default function PageHeader({
 					{headerItems}
 				</div>
 			</div>
-			{/* <Link className="btn" data-variant="outline" to="/professor">
-                    Ver professores
-                </Link> */}
+
 			<div className="flex flex-row w-full h-fit items-center">
 				<div className="min-h-3 bg-brand-shade/75 rounded-xl w-1/4" />
 				<div className="min-h-1 bg-brand-shade/50 rounded-xl  rounded-s-none w-full" />
@@ -39,12 +37,3 @@ export default function PageHeader({
 		</div>
 	);
 }
-
-// <div className="flex flex-col gap-2 w-full">
-//        <h1 className="text-3xl font-semibold">{title}</h1>
-//        <div className="flex flex-row w-full h-fit items-center">
-//            <div className="min-h-3 bg-brand-shade/75 rounded-xl w-1/4" />
-//            <div className="min-h-1 bg-brand-shade/50 rounded-xl  rounded-s-none w-full" />
-
-//        </div>
-//    </div>

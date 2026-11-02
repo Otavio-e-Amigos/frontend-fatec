@@ -1,5 +1,3 @@
-import type AbstractQueryObject from "~/modules/api/base/AbstractQueryObject"
-
 const authAPIRoutes = {
 	LOGIN: {
 		path: ["autenticacao", "login"],

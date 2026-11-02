@@ -1,4 +1,6 @@
-import { useReducer, type SubmitEventHandler } from "react";
+import {
+	useReducer,
+} from "react";
 import { Form } from "react-router";
 import FormController from "~/components/forms/FormController";
 import {
@@ -18,7 +20,6 @@ type FormContainerProps = {
 	children?: any;
 	className?: string;
 	onSubmit?: SubmitEventHandlerController<HTMLFormElement>;
-	// action?: string;
 };
 
 export default function FormContainer({
@@ -26,7 +27,6 @@ export default function FormContainer({
 	children,
 	className,
 	onSubmit,
-	// action,
 }: FormContainerProps) {
 	const [controller, dispatch] = useReducer(
 		formReducer,
@@ -34,7 +34,6 @@ export default function FormContainer({
 	);
 
 	const formProps = { className,
-		// action,
 	};
 
 	return (

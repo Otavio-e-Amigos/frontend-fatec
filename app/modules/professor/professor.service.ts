@@ -83,11 +83,7 @@ export default class ProfessorService {
 			const res = await this.module.request(req);
 
 			return mapper(res.rawData.dados ?? res.rawData);
-			// if (res.ok) {
-			// }
 		} catch (e) {
-			// console.log(e);
-			// throw e;
 			if (e instanceof DefaultAPIData) {
 				const message = e.rawData.mensagem;
 				switch (e.status) {

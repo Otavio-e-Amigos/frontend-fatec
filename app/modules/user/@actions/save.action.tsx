@@ -6,6 +6,9 @@ import type { FormSubmitEventHandlerProps } from "~/hooks/useForm";
 import AuthService from "../auth.service";
 import UserService from "../user.service";
 import User from "../user.class";
+import BasicWindow from "~/layouts/windows/BasicWindow";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import { UserGenericSaveFailedToast, UserSavedToast, UserUpdatedToast } from "../user.toasts";
 
 type UserSaveExtras = {
 	id?: number;
@@ -26,7 +29,7 @@ function getUserProfile(value: string): UserProfile {
 async function action({
 	event,
 	extras,
-	dialogs,
+	window,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	event.preventDefault();
 	extras.setSubmitError("");
@@ -37,7 +40,8 @@ async function action({
 	const profile = String(values.profile ?? "");
 	const fields = [];
 
-	if (!name) fields.push({ name: "user", message: "Informe o nome do usuário." });
+	if (!name)
+		fields.push({ name: "user", message: "Informe o nome do usuário." });
 	if (!password) fields.push({ name: "pass", message: "Informe a senha." });
 	if (fields.length) {
 		throw new FormValidationError("Verifique os campos informados.", fields);
@@ -46,12 +50,17 @@ async function action({
 
 	// Confirmação apenas na edição, depois que a validação passou.
 	if (extras.id) {
-		const confirmed = await dialogs.confirm({
-			title: "Salvar alterações?",
-			description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
-			confirmLabel: "Salvar",
-			tone: "primary",
-		});
+		console.log("confirm");
+		const confirmed = await window?.confirmExtra(
+			{
+				title: "Salvar alterações?",
+				description: `As alterações no usuário ${name} serão aplicadas e a senha será atualizada.`,
+				dismissible: true,
+				actions: <ConfirmationWindowAction idleState={"Editar"} />,
+			},
+			<BasicWindow />,
+		);
+
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -70,14 +79,11 @@ async function action({
 /** Returns to the system user list after a successful save. */
 async function onSuccess({
 	navigate,
-	dialogs,
+	toast,
 	extras,
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
-	dialogs.toast.success(
-		extras.id
-			? "Usuário atualizado com sucesso."
-			: "Usuário cadastrado com sucesso.",
-	);
+	toast?.push(extras.id ? UserUpdatedToast : UserSavedToast);
+
 	navigate("/system");
 }
 
@@ -86,7 +92,7 @@ async function onFailure({
 	error,
 	dispatch,
 	extras,
-	dialogs,
+	toast
 }: FormSubmitEventHandlerProps<UserSaveExtras>) {
 	if (error instanceof FormValidationError) {
 		error.fields.forEach((field) =>
@@ -96,16 +102,22 @@ async function onFailure({
 				error: { message: field.message },
 			}),
 		);
-		dialogs.toast.error(error.message);
+		toast?.push({ tone: "error", message: error.message });
+
 		return;
 	}
 
 	// Quando a API não responde, o banner no topo já avisa o usuário.
 	if (error instanceof ApiUnavailableError) return;
+	const genericErrorToast = UserGenericSaveFailedToast;
+	const errorMessage = getErrorMessage(error, genericErrorToast.message);
+	toast?.push(
+		errorMessage !== genericErrorToast.message
+			? { tone: "error", message: errorMessage }
+			: genericErrorToast,
+	);
 
-	const message = getErrorMessage(error, "Não foi possível salvar o usuário.");
-	extras.setSubmitError(message);
-	dialogs.toast.error(message);
+	extras.setSubmitError(errorMessage);
 }
 
 export default { action, onSuccess, onFailure };

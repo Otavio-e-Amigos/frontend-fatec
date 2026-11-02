@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 export interface FormError {
 	message?: string;
 }
@@ -9,25 +7,9 @@ export interface FormError {
 // removing the necessity of orchestrating them into the action code repeteatly?
 // And when really submitting to some API or code,
 // FormController automatically converts the fieldValues into their respective format, like JSON or smth else?
-interface ExportableFormFormat {
-	export(data: any): number;
-	exportReturnType: unknown;
-}
-
-// class FieldFormController {
-// 	private _value: any;
-// 	private _validator?: InputValidator | undefined;
-// 	private _error?: FormError | undefined;
-
-// 	constructor(
-// 		value: any,
-// 		params: { validator?: InputValidator; error?: FormError },
-// 	) {
-// 		this._value = value;
-// 		this._validator = params.validator;
-// 		this._error = params.error;
-// 	}
-
+// interface ExportableFormFormat {
+// 	export(data: any): number;
+// 	exportReturnType: unknown;
 // }
 
 interface FormFieldController extends Record<string, any> {
@@ -44,8 +26,8 @@ interface FormFieldController extends Record<string, any> {
 export default class FormController {
 	private fields: Record<string, FormFieldController> = {};
 	public error?: FormError;
-	private submitButtonPressed: boolean = false;
-	private canSubmit: boolean = false;
+	// private submitButtonPressed: boolean = false;
+	// private canSubmit: boolean = false;
 
 	addField(
 		fieldName: string,
@@ -72,8 +54,6 @@ export default class FormController {
 		if (!this.fieldExists(fieldName)) return;
 
 		this.fields[fieldName].value = value;
-		// console.log(this.fields[fieldName]);
-		// console.log(this.fields);
 	}
 
 	setFormattedFieldValue(fieldName: string, value: any) {
@@ -98,7 +78,6 @@ export default class FormController {
 		console.log("<FormController> Field Error applied!");
 		console.log(error);
 		this.fields[fieldName].error = error;
-		// this.fields["user"].error = {message: "error!"};
 		console.log(this.fields[fieldName]);
 	}
 

@@ -1,48 +1,27 @@
 import { useState } from "react";
-import { useRevalidator } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import FormDialog from "~/components/dialogs/FormDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
-import PageHeader from "~/layouts/PageHeader";
-import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
+import PageHeader from "~/layouts/pages/PageHeader";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import SavePeriodoForm from "./@layouts/SavePeriodoForm";
+import mapper from "./@mappers/periodo-letivo-table.mapper";
+import useWindow from "~/components/windows/useWindow";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
-	const { revalidate } = useRevalidator();
-	// undefined = fechado | null = novo período | PeriodoLetivo = editando
-	const [editing, setEditing] = useState<PeriodoLetivo | null | undefined>(
-		undefined,
-	);
+	const window = useWindow({
+		wrapper: <SavePeriodoForm />,
+		initialData: { dismissible: true },
+	});
 
-	const table = new DefaultTableModel(
-		list.map((item) => [
-			`${item.ano}/${item.semestre}`,
-			item.ano ?? "",
-			`${item.semestre}º`,
-			formatPeriodoDate(item.dataInicio),
-			formatPeriodoDate(item.dataFim),
-			{
-				value: "",
-				display: (
-					<div className="row-actions">
-						<button
-							type="button"
-							className="btn"
-							data-variant="icon"
-							data-icon="edit"
-							title="Editar"
-							onClick={() => setEditing(item)}
-						>
-							Editar
-						</button>
-					</div>
-				),
-			},
-		]),
-		["Período", "Ano", "Semestre", "Início", "Fim", ""],
-	);
+	const table = new DefaultTableModel(list.map(mapper), [
+		"Período",
+		"Ano",
+		"Semestre",
+		"Início",
+		"Fim",
+		"",
+	]);
 
 	return (
 		<div className="flex flex-col flex-1">
@@ -61,7 +40,9 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 								className="btn w-fit"
 								data-variant="outline"
 								data-size="sm"
-								onClick={() => setEditing(null)}
+								onClick={() => {
+									window.show();
+								}}
 							>
 								+ Novo Período Letivo
 							</button>
@@ -73,18 +54,6 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 				</section>
 			</main>
 
-			{editing !== undefined && (
-				<FormDialog onClose={() => setEditing(undefined)}>
-					<SavePeriodoForm
-						key={editing?.id ?? "novo"}
-						periodo={editing ?? undefined}
-						onSaved={() => {
-							setEditing(undefined);
-							revalidate();
-						}}
-					/>
-				</FormDialog>
-			)}
 		</div>
 	);
 }

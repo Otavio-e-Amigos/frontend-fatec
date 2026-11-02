@@ -3,9 +3,17 @@ import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import SimpleTableModelView from "~/components/tables/SimpleTableView";
 import Header from "~/layouts/Header";
-import PageSection from "~/layouts/PageSection.layout";
+import PageSection from "~/layouts/pages/PageSection";
 import StatusBadge from "~/components/badges/StatusBadge";
 import FormInput from "~/components/forms/FormInput";
+import useWindow from "~/components/windows/useWindow";
+import BasicWindow from "~/layouts/windows/BasicWindow";
+import SaveDisciplinaForm from "../disciplina/@layouts/SaveDisciplinaForm";
+import ShadowCenter from "~/layouts/containers/ShadowCenter";
+// import { OpenWindowEvent } from "~/utils/window.utils";
+import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
+import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
+import useToast from "~/components/toasts/useToast";
 
 const defaultTableTest = new DefaultTableModel(
 	[
@@ -98,6 +106,15 @@ function StepBadge({
 }
 
 export default function Page() {
+	const window = useWindow({
+		wrapper: <BasicWindow />,
+		initialData: {
+			title: "Hello, WindowManager!",
+			description: "cool, isn't it?",
+			dismissible: true,
+		},
+	});
+	const toast = useToast();
 	return (
 		// <main className="bg-cps min-h-full">
 		<main>
@@ -121,14 +138,56 @@ export default function Page() {
 						Inactive
 					</button>
 					<button className="btn">Create</button>
-
 				</section>
 				<br />
 
 				<p className="mb-3">Others</p>
 				<section className="grid grid-cols-3 gap-3 w-fit">
-					<div className="chip">hello</div>
-
+					{/*<div className="chip">hello</div>*/}
+					<button
+						className="btn btn-normal"
+						onClick={() => {
+							window.show();
+						}}
+					>
+						Summon Window
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							window.show({
+								title: "asdk",
+								body: <SaveDisciplinaForm />,
+								dismissible: true,
+							});
+						}}
+					>
+						Summon Window w/ different message
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={async () => {
+							console.log("summoning confirmation window!")
+							const test = await window.confirm({dismissible: true, actions: <ConfirmationWindowAction idleState={"Confirmar"}/>});
+							console.log("confirmed?", test);
+						}}
+					>
+						Summon Confirmation Window
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={() => {toast.push("warning", "something happened ig")}}
+					>
+						Summon toast
+					</button>
+					{/*<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							window.show({ title: "Delete?", dismissible: true, tone: "danger" }, <ExpressiveWindow />);
+						}}
+					>
+						Summon Expressive Window
+					</button>*/}
 				</section>
 				<br />
 

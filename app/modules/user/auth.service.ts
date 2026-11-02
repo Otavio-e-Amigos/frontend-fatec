@@ -1,13 +1,10 @@
 import {
-	// APIValidationError,
 	FormValidationError,
 } from "~/classes/errors/ValidationError";
 import type AbstractQueryObject from "../api/base/AbstractQueryObject";
 import { DefaultAPIModule } from "../api/modules/default/DefaultAPIModule";
 import authAPIRoutes from "./api/auth.routes";
 import User, { type UserInterface } from "./user.class";
-// import { data } from "react-router";
-// import AbstractAPIData from "../api/base/AbstractAPIData";
 import DefaultAPIData from "../api/modules/default/DefaultAPIData";
 
 export default class AuthService {
@@ -76,12 +73,11 @@ export default class AuthService {
 		return auth;
 	}
 
-	// TODO check API routes for authentication and implement it here
 
-	static async isLoggedIn(): Promise<boolean> {
-		// TODO: Implement isLoggedIn
-		return false;
-	}
+	// static async isLoggedIn(): Promise<boolean> {
+	// 	// TODO: Implement isLoggedIn
+	// 	return false;
+	// }
 
 	static hasUserToken(): boolean {
 		return (
