@@ -7,9 +7,8 @@ import {
 	type SyntheticEvent,
 } from "react";
 import { Form, useNavigate, type NavigateFunction } from "react-router";
-import FormContainer from "~/components/forms/FormContainer";
+// import FormContainer from "~/components/forms/FormContainer";
 import { FormCancelledError } from "~/classes/errors/FormCancelledError";
-// import useDialogs, { type DialogsApi } from "./useDialogs";
 import {
 	FormControllerContext,
 	FormDispatcherContext,
@@ -65,8 +64,6 @@ export default function useForm(options?: FormHookOptions) {
 	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const navigate = useNavigate();
-	// const dialogs = useDialogs();
-	// const window = useWindow({wrapper: <BasicWindow/>})
 	const window = useWindow()
 	const toast = useToast()
 	const formRuntime = useRef({ controller, dispatch, navigate, options, window, toast });

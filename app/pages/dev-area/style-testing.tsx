@@ -190,8 +190,6 @@ export default function Page() {
 				<PageSubSection name={"Buttons"} />
 				<PageSubSection name={"Badges and related"} />
 				<PageSubSection name={"Tables"} />
-				{/*<PageSubSection name={"Dialogs"}/>*/}
-				{/*<PageSubSection name={"Buttons"}/>*/}
 				<PageSection name={"Text"} />
 				{/*<PageSection name={"Forms"}/>*/}
 			</section>

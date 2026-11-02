@@ -95,10 +95,6 @@ export default class UserService {
 	}
 
 	static async save(data: User, auth: User): Promise<User> {
-		// console.log("saving user!");
-		// console.log("checking user credentials!");
-		// console.log(auth);
-
 		const form = {
 			nome: data.name,
 			senha: data.password,
@@ -108,12 +104,6 @@ export default class UserService {
 		const req: AbstractQueryObject = this.routes.SAVE;
 		req.body = form;
 		req.credentials = auth;
-
-		// const dataInit: AbstractAPIDataInit = {
-		// 	status: 200,
-		// 	ok: true,
-		// 	data: undefined,
-		// };
 
 		try {
 			const res = await this.module.request(req);

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
-// import useDialogs from "./useDialogs";
 import useWindow from "~/components/windows/useWindow";
 import BasicWindow from "~/layouts/windows/BasicWindow";
 // import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
@@ -22,7 +21,6 @@ export default function useBlockedPage(
 		redirectTo = "/",
 	}: BlockedPageOptions = {},
 ) {
-	// const dialogs = useDialogs();
 	const window = useWindow({
 		wrapper: <BasicWindow/>,
 		initialData: {
@@ -41,9 +39,7 @@ export default function useBlockedPage(
 	useEffect(() => {
 		if (!blocked) return;
 		return window.show()
-		// return dialogs.alert({
-		// 	title,
-		// 	description,
+
 		// 	actionLabel,
 		// 	dismissible: false,
 		// 	onAction: () => navigate(redirectTo),
