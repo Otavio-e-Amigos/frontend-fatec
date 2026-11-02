@@ -4,7 +4,6 @@ import type Professor from "~/modules/professor/professor.class";
 import deactivateWindow from "../@windows/deactivate.window";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
-// import useDialogs from "~/hooks/useDialogs";
 import getErrorMessage from "~/classes/errors/get-error-message";
 import ResourceDisplay from "~/layouts/tables/ResourceDisplay";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
@@ -24,7 +23,6 @@ function RowActions({ prof }: { prof: Professor }) {
 				if (res) {
 					toast.push({ tone: "success", message: `${prof.name} foi desativado.` });
 
-					// dialogs.toast.success(`${prof.name} foi desativado.`);
 					revalidate();
 					window.hide();
 				}
@@ -39,7 +37,6 @@ function RowActions({ prof }: { prof: Professor }) {
 
 	const auth = AuthService.getUserToken();
 	const { revalidate } = useRevalidator();
-	// const dialogs = useDialogs();
 
 	function deactivate() {
 		window.show(confirmationWindow);
@@ -51,14 +48,10 @@ function RowActions({ prof }: { prof: Professor }) {
 			if (!res) throw new Error();
 			toast.push({ tone: "success", message: `${prof.name} foi ativado.` });
 
-			// dialogs.toast.success(`${prof.name} foi ativado.`);
 			revalidate();
 		} catch (error) {
 			toast.push({ tone: "error", message: getErrorMessage(error, "Não foi possível ativar o professor.") });
 
-			// dialogs.toast.error(
-			// 	,
-			// );
 		}
 	}
 
@@ -91,8 +84,6 @@ function RowActions({ prof }: { prof: Professor }) {
 
 export default function mapper(
 	prof: Professor,
-	// deactivate: any,
-	// activate: any,
 ) {
 	return [
 		{

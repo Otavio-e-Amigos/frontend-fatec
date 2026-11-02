@@ -1,8 +1,6 @@
 import { useRevalidator } from "react-router";
-// import useDialogs from "~/hooks/useDialogs";
 import useWindow from "~/components/windows/useWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
-import BasicWindow from "~/layouts/windows/BasicWindow";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
@@ -19,10 +17,8 @@ function RowActions({ item }: { item: Disciplina }) {
 		actions: <ConfirmationWindowAction idleState={"Excluir"} />,
 	};
 	const { revalidate } = useRevalidator();
-	// const dialogs = useDialogs();
 	const toast = useToast();
 	const window = useWindow({
-		// wrapper: <BasicWindow/>,
 		initialData: windowData,
 	});
 
@@ -45,7 +41,6 @@ function RowActions({ item }: { item: Disciplina }) {
 							tone: "success",
 							message: "Disciplina excluída com sucesso.",
 						});
-						// dialogs.toast.success();
 						revalidate();
 						window.hide();
 					}
@@ -55,41 +50,17 @@ function RowActions({ item }: { item: Disciplina }) {
 	}
 
 	async function edit() {
-		// window.setWrapper(() => (
-		// 	<SaveDisciplinaForm
-		// 		disciplina={item}
-		// 		onSaved={() => {
-		// 			// setEditing(undefined);
-		// 			window.hide();
-		// 			revalidate();
-		// 		}}
-		// 	/>
-		// ));
 		window.show(
 			{ dismissible: true },
 			<SaveDisciplinaForm
 				disciplina={item}
 				onSaved={() => {
-					// setEditing(undefined);
 					window.hide();
 					revalidate();
 				}}
 			/>,
 		);
-		// window.show({
-		// wrapper: BasicWindow,
-		// dismissible: true,
-		// body: (
-		// 	<SaveDisciplinaForm
-		// 		disciplina={item}
-		// 		onSaved={() => {
-		// 			// setEditing(undefined);
-		// 			window.hide();
-		// 			revalidate();
-		// 		}}
-		// 	/>
-		// ),
-		// });
+
 	}
 
 	return (
@@ -100,7 +71,6 @@ function RowActions({ item }: { item: Disciplina }) {
 				data-variant="icon"
 				data-icon="edit"
 				title="Editar"
-				// onClick={() => setEditing(item)}
 				onClick={edit}
 			>
 				Editar

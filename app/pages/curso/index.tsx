@@ -1,32 +1,15 @@
-import { useState } from "react";
-import { useRevalidator } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import FormDialog from "~/components/dialogs/FormDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type Curso from "~/modules/curso/curso.class";
-// import formatTurno from "~/modules/curso/format-turno";
-// import SaveCursoForm from "./@layouts/SaveCursoForm";
 import mapper from "./@mappers/curso-table.mapper";
 import useWindow from "~/components/windows/useWindow";
 import SaveCursoForm from "./@layouts/SaveCursoForm";
 
 export default function CursoIndexPage({ list }: { list: Curso[] }) {
-	const { revalidate } = useRevalidator();
-	// undefined = fechado | null = novo curso | Curso = editando
-	const [editing, setEditing] = useState<Curso | null | undefined>(undefined);
 	const window = useWindow({
-		wrapper: (
-			<SaveCursoForm
-			// key={editing?.id ?? "novo"}
-			// curso={editing ?? undefined}
-			// onSaved={() => {
-			// 	setEditing(undefined);
-			// 	revalidate();
-			// }}
-			/>
-		),
+		wrapper: <SaveCursoForm />,
 	});
 	const table = new DefaultTableModel(list.map(mapper), [
 		"Curso",
@@ -64,19 +47,6 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 					<ComplexTableModelView data={table} />
 				</section>
 			</main>
-
-			{/*{editing !== undefined && (
-				<FormDialog onClose={() => setEditing(undefined)}>
-					<SaveCursoForm
-						key={editing?.id ?? "novo"}
-						curso={editing ?? undefined}
-						onSaved={() => {
-							setEditing(undefined);
-							revalidate();
-						}}
-					/>
-				</FormDialog>
-			)}*/}
 		</div>
 	);
 }

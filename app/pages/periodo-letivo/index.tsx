@@ -1,26 +1,18 @@
 import { useState } from "react";
-import { useRevalidator } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import FormDialog from "~/components/dialogs/FormDialog";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import SavePeriodoForm from "./@layouts/SavePeriodoForm";
-// import useWindow from "~/components/windows/useWindow";
 import mapper from "./@mappers/periodo-letivo-table.mapper";
 import useWindow from "~/components/windows/useWindow";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
-	// const { revalidate } = useRevalidator();
 	const window = useWindow({
 		wrapper: <SavePeriodoForm />,
 		initialData: { dismissible: true },
 	});
-	// undefined = fechado | null = novo período | PeriodoLetivo = editando
-	const [editing, setEditing] = useState<PeriodoLetivo | null | undefined>(
-		undefined,
-	);
 
 	const table = new DefaultTableModel(list.map(mapper), [
 		"Período",
@@ -62,18 +54,6 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 				</section>
 			</main>
 
-			{/*{editing !== undefined && (
-				<FormDialog onClose={() => setEditing(undefined)}>
-					<SavePeriodoForm
-						key={editing?.id ?? "novo"}
-						periodo={editing ?? undefined}
-						onSaved={() => {
-							setEditing(undefined);
-							revalidate();
-						}}
-					/>
-				</FormDialog>
-			)}*/}
 		</div>
 	);
 }

@@ -21,7 +21,6 @@ export default function SavePeriodoForm({
 	});
 	const window = useContext(WindowContext)
 
-	// console.log("jsaodaksodk")
 	return (
 		<ShadowCenter onClick={() => {window.dismissible && window.hide()}}>
 			<BasicFormLayout

@@ -5,7 +5,6 @@ import FormSection from "~/layouts/forms/FormSection";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import actions from "~/modules/disciplina/@actions/save.action";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
-// import useWindow from "~/components/windows/useWindow";
 import { WindowContext } from "~/components/windows/window.contexts";
 import { useContext } from "react";
 

@@ -1,10 +1,8 @@
 import { useMemo, useState, type ChangeEvent } from "react";
 import { useRevalidator } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import FormDialog from "~/components/dialogs/FormDialog";
 import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
-// import useDialogs from "~/hooks/useDialogs";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
@@ -16,15 +14,13 @@ import deactivateWindow from "./@windows/deactivate.window";
 import useToast from "~/components/toasts/useToast";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
-	// const dialogs = useDialogs();
 	const { revalidate } = useRevalidator();
 	const [term, setTerm] = useState("");
-	// undefined = fechado | null = nova disciplina | Disciplina = editando
 	const [editing, setEditing] = useState<Disciplina | null | undefined>(
 		undefined,
 	);
 	const window = useWindow();
-	const toast = useToast()
+	const toast = useToast();
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
@@ -36,29 +32,35 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	}, [list, term]);
 
 	async function removeDiscipline(item: Disciplina) {
-		window.show({
-			...deactivateWindow.initialData,
-			description: `A disciplina ${item.nome ?? ""} será excluída. Esta ação não pode ser desfeita.`,
-			tone: "danger",
-			extras: {
-				onConfirm: async () => {
-					const deleted = await DisciplinaService.delete(
-						item.id!,
-						AuthService.getUserToken(),
-					);
-					if (!deleted) {
-						throw new Error(
-							"Não foi possível excluir a disciplina. Tente novamente.",
+		window.show(
+			{
+				...deactivateWindow.initialData,
+				description: `A disciplina ${item.nome ?? ""} será excluída. Esta ação não pode ser desfeita.`,
+				tone: "danger",
+				extras: {
+					onConfirm: async () => {
+						const deleted = await DisciplinaService.delete(
+							item.id!,
+							AuthService.getUserToken(),
 						);
-					} else {
-						toast.push({tone: "success", message: "Disciplina excluída com sucesso."})
-						// dialogs.toast.success();
-						revalidate();
-						window.hide();
-					}
+						if (!deleted) {
+							throw new Error(
+								"Não foi possível excluir a disciplina. Tente novamente.",
+							);
+						} else {
+							toast.push({
+								tone: "success",
+								message: "Disciplina excluída com sucesso.",
+							});
+							// dialogs.toast.success();
+							revalidate();
+							window.hide();
+						}
+					},
 				},
 			},
-		}, deactivateWindow.wrapper);
+			deactivateWindow.wrapper,
+		);
 	}
 
 	function search(event: ChangeEvent<HTMLInputElement>) {
@@ -120,17 +122,7 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 								data-variant="outline"
 								data-size="sm"
 								onClick={() => {
-									window.show(
-										{ dismissible: true },
-										<SaveDisciplinaForm
-											// key={editing?.id ?? "nova"}
-											// disciplina={editing ?? undefined}
-											// onSaved={() => {
-												// setEditing(undefined);
-												// revalidate();
-											// }}
-										/>,
-									);
+									window.show({ dismissible: true }, <SaveDisciplinaForm />);
 								}}
 							>
 								+ Nova Disciplina
@@ -150,19 +142,6 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 
 				<ComplexTableModelView data={table} />
 			</main>
-
-			{/*{editing !== undefined && (
-				<FormDialog onClose={() => setEditing(undefined)}>
-					<SaveDisciplinaForm
-						key={editing?.id ?? "nova"}
-						disciplina={editing ?? undefined}
-						onSaved={() => {
-							setEditing(undefined);
-							revalidate();
-						}}
-					/>
-				</FormDialog>
-			)}*/}
 		</div>
 	);
 }

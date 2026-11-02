@@ -3,12 +3,6 @@ import type Professor from "~/modules/professor/professor.class";
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
 
-// async function getList(auth, state) {
-// 	const list = await ProfessorService.get(auth)
-
-// 	state(list)
-// }
-
 export default function useProfessorList({
 	initialList,
 }: {

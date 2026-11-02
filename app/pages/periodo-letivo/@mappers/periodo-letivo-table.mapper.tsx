@@ -3,46 +3,24 @@ import formatPeriodoDate from "~/modules/periodo-letivo/format-date";
 import { useRevalidator } from "react-router";
 import useWindow from "~/components/windows/useWindow";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
-// import useDialogs from "~/hooks/useDialogs";
-// import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
-// import BasicWindow from "~/layouts/windows/BasicWindow";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import SavePeriodoForm from "../@layouts/SavePeriodoForm";
 
 function RowActions({ item }: { item: Disciplina }) {
 	const windowData: WindowAPIConstructor = {
-		// title: "Excluir disciplina?",
 		dismissible: true,
-		// description: `A disciplina selecionada será excluída. Esta ação não pode ser desfeita.`,
-		// tone: "danger",
-		// actions: <ConfirmationWindowAction idleState={"Excluir"} />,
 	};
 	const { revalidate } = useRevalidator();
-	// const dialogs = useDialogs();
 	const window = useWindow({
-		// wrapper: (
-
-		// ),
 		initialData: windowData,
 	});
 
 	function edit() {
-		// window.setWrapper(() => (
-		// 	<SavePeriodoForm
-		// 		periodo={item}
-		// 		onSaved={() => {
-		// 			// setEditing(undefined);
-		// 			window.hide();
-		// 			revalidate();
-		// 		}}
-		// 	/>
-		// ));
 		window.show(
 			{ ...windowData },
 			<SavePeriodoForm
 				periodo={item}
 				onSaved={() => {
-					// setEditing(undefined);
 					window.hide();
 					revalidate();
 				}}

@@ -1,12 +1,8 @@
 import { Link, useRevalidator } from "react-router";
-// import useDialogs from "~/hooks/useDialogs";
 import useWindow from "~/components/windows/useWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import BasicWindow from "~/layouts/windows/BasicWindow";
-import type Disciplina from "~/modules/disciplina/disciplina.class";
-import DisciplinaService from "~/modules/disciplina/disciplina.service";
 import AuthService from "~/modules/user/auth.service";
-// import SaveDisciplinaForm from "../@layouts/SaveDisciplinaForm";
 import type { WindowAPIConstructor } from "~/components/windows/window.types";
 import type User from "~/modules/user/user.class";
 import getErrorMessage from "~/classes/errors/get-error-message";
@@ -22,74 +18,12 @@ function RowActions({ user }: { user: User }) {
 		actions: <ConfirmationWindowAction idleState={"Excluir"} />,
 	};
 	const { revalidate } = useRevalidator();
-	// const dialogs = useDialogs();
 	const toast = useToast();
 	const window = useWindow({
 		wrapper: <BasicWindow />,
 		initialData: windowData,
 	});
 
-	// async function removeDiscipline() {
-	// 	window.show({
-	// 		...windowData,
-	// 		// description: `O usuário ${user.name ?? ""} perderá o acesso ao sistema enquanto estiver desativado.`,
-	// 		extras: {
-	// 			onConfirm: async () => {
-	// 				const deleted = await DisciplinaService.delete(
-	// 					user.id!,
-	// 					AuthService.getUserToken(),
-	// 				);
-	// 				if (!deleted) {
-	// 					throw new Error(
-	// 						"Não foi possível excluir a disciplina. Tente novamente.",
-	// 					);
-	// 				} else {
-	// 					dialogs.toast.success("Disciplina excluída com sucesso.");
-	// 					revalidate();
-	// 					window.hide();
-	// 				}
-	// 			},
-	// 		},
-	// 	});
-	// }
-
-	// async function edit() {
-	// window.setWrapper(() => (
-	// 	<SaveDisciplinaForm
-	// 		disciplina={item}
-	// 		onSaved={() => {
-	// 			// setEditing(undefined);
-	// 			window.hide();
-	// 			revalidate();
-	// 		}}
-	// 	/>
-	// ));
-	// window.show(
-	// 	{ dismissible: true },
-	// 	<SaveDisciplinaForm
-	// 		disciplina={item}
-	// 		onSaved={() => {
-	// 			// setEditing(undefined);
-	// 			window.hide();
-	// 			revalidate();
-	// 		}}
-	// 	/>,
-	// );
-	// window.show({
-	// wrapper: BasicWindow,
-	// dismissible: true,
-	// body: (
-	// 	<SaveDisciplinaForm
-	// 		disciplina={item}
-	// 		onSaved={() => {
-	// 			// setEditing(undefined);
-	// 			window.hide();
-	// 			revalidate();
-	// 		}}
-	// 	/>
-	// ),
-	// });
-	// }
 
 	async function activateUser(user: User) {
 		try {
@@ -98,7 +32,6 @@ function RowActions({ user }: { user: User }) {
 				AuthService.getUserToken(),
 			);
 			if (!res) throw new Error();
-			// dialogs.toast.success(`${user.name} foi ativado.`);
 			toast.push({ tone: "success", message: `${user.name} foi ativado.` });
 			revalidate();
 		} catch (error) {
@@ -107,9 +40,6 @@ function RowActions({ user }: { user: User }) {
 				message: getErrorMessage(error, "Não foi possível ativar o usuário."),
 			});
 
-			// dialogs.toast.error(
-			// 	,
-			// );
 		}
 	}
 
@@ -134,7 +64,6 @@ function RowActions({ user }: { user: User }) {
 		if (done) {
 			toast.push({ tone: "success", message: `${user.name} foi desativado.` });
 
-			// dialogs.toast.success(`${user.name} foi desativado.`);
 			revalidate();
 		}
 	}

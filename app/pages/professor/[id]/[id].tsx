@@ -20,7 +20,13 @@ type AboutProps = {
 	disciplinas: Disciplina[];
 };
 
-function InfoItem({ label, children }: { label: string; children?: ReactNode }) {
+function InfoItem({
+	label,
+	children,
+}: {
+	label: string;
+	children?: ReactNode;
+}) {
 	return (
 		<div className="flex flex-col">
 			<dt className="text-xs text-ink-muted">{label}</dt>
@@ -50,14 +56,6 @@ export default function About({
 						</h1>
 						<div className="flex flex-wrap items-center gap-1.5">
 							<p className="text-xs text-ink-muted">Docente</p>
-							{/*<p className="text-xs text-ink-muted">Docente |</p>*/}
-							{/*<span
-								className="badge"
-								data-tone={professor.status === "ATIVO" ? "ok" : undefined}
-							>
-								{professor.status}
-							</span>
-							<span className="chip">{professor.contract}</span>*/}
 						</div>
 					</div>
 				</div>
