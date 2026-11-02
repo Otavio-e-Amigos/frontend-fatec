@@ -8,6 +8,7 @@ import type { ProfessorInterface } from "../professor.class";
 import AuthService from "~/modules/user/auth.service";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import { ProfessorGenericSaveFailedToast, ProfessorSavedToast, ProfessorUpdatedToast } from "../professor.toasts";
+import BasicWindow from "~/layouts/windows/BasicWindow";
 
 // savedId é preenchido pela action e lido pelo onSuccess (mesmo objeto extras na submissão).
 type ProfessorExtras = { id?: number; savedId?: number };
@@ -67,13 +68,14 @@ async function action({
 	// Confirmação apenas na edição, depois que a validação passou.
 	// Se o usuário cancelar, o useForm ignora o erro e o formulário continua aberto.
 	if (extras.id) {
-		const confirmed = await window?.confirm({
+		// TODO change to confirm(), for some reason normal confirm() doesn't work properly.
+		const confirmed = await window?.confirmExtra({
 			title: "Salvar alterações?",
 			description: `As alterações no cadastro do docente ${name} serão aplicadas.`,
 			dismissible: true,
 			actions: <ConfirmationWindowAction idleState={"Editar"} />,
-		});
-
+		}, <BasicWindow/>);
+		console.log(window)
 		if (!confirmed) throw new FormCancelledError();
 	}
 
@@ -89,6 +91,7 @@ async function action({
 		id: extras.id,
 	};
 
+	console.log("saving!")
 	const auth = AuthService.getUserToken();
 	const res = extras.id
 		? await ProfessorService.edit(extras.id, profRaw, auth)
