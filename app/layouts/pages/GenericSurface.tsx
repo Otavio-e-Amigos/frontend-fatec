@@ -12,11 +12,9 @@ export type GenericSurfaceOptions = {
 export default function GenericSurface({
 	children,
 	header,
-	options,
+	// options,
 	className,
 }: GenericSurfaceProps) {
-	// const genericHeaderClass = `floor-accent rounded-b-none border-0 border-b flex flex-col ${!options?.withoutSpacing && "px-4 py-3"}`;
-	// const genericClass = `flex flex-col ${!options?.withoutSpacing && "p-5"}`;
 	const headerChildren = header && (
 		<div className={`surface-accent rounded-b-none border-0 border-b`}>
 			{header}
