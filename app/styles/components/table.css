@@ -1,7 +1,7 @@
 @layer components {
 	/* moldura: borda fina e rolagem horizontal em telas estreitas */
 	.table-wrap {
-		@apply w-full overflow-x-auto rounded-card border border-line bg-surface;
+		@apply w-full overflow-x-auto rounded-card border border-page-line bg-page-surface;
 	}
 
 	.table {
@@ -16,13 +16,13 @@
 
 	/* -= cabeçalho: texto escuro sobre fundo prata, linha mais grossa embaixo =- */
 	.table-head th {
-		@apply whitespace-nowrap p-0 font-semibold text-ink;
-		background: var(--color-surface-sunken);
-		border-bottom: 2px solid var(--color-line-strong);
+		@apply whitespace-nowrap p-0 font-semibold text-text;
+		background: var(--color-table-column);
+		border-bottom: 2px solid var(--color-page-line-strong);
 	}
 
 	.table-sort {
-		@apply flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left font-semibold text-ink;
+		@apply flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left font-semibold text-text;
 		transition: background-color 0.12s;
 
 		&:hover {
@@ -30,16 +30,16 @@
 		}
 
 		& svg {
-			@apply size-4 shrink-0 text-ink-faint;
+			@apply size-4 shrink-0 text-text-faint;
 			transition: color 0.12s, transform 0.12s;
 		}
 		&:hover svg {
-			@apply text-ink-muted;
+			@apply text-text-muted;
 		}
 
 		/* coluna ordenada: ícone escuro; em ordem decrescente ele inverte na vertical */
 		&[data-sorted] svg {
-			@apply text-ink;
+			@apply text-text;
 		}
 		&[data-sorted="desc"] svg {
 			transform: scaleY(-1);
@@ -48,12 +48,13 @@
 
 	/* -= linhas =- */
 	.table-row {
+		background: var(--color-table-row);
 		height: var(--row-h);
-		border-bottom: 1px solid var(--color-line);
+		border-bottom: 1px solid var(--color-page-line);
 		transition: background-color 0.12s;
 
 		&:hover {
-			background: var(--color-row-hover);
+			background: var(--color-table-row-hover);
 		}
 		&[data-expanded] {
 			border-bottom-color: transparent;
@@ -71,10 +72,10 @@
 	   Usa data-odd em vez de :nth-child porque a linha de detalhes
 	   aberta também é um <tr> e bagunçaria a contagem. */
 	.table[data-striped] .table-row[data-odd] {
-		background: var(--color-row-alt);
+		background: var(--color-table-row-odd);
 
 		&:hover {
-			background: var(--color-row-hover);
+			background: var(--color-table-row-hover);
 		}
 	}
 
@@ -84,11 +85,11 @@
 	}
 
 	.table-toggle {
-		@apply grid size-6 shrink-0 cursor-pointer place-items-center rounded-control text-ink-muted;
+		@apply grid size-6 shrink-0 cursor-pointer place-items-center rounded-control text-text-muted;
 		transition: background-color 0.12s;
 
 		&:hover {
-			background: color-mix(in srgb, var(--color-ink) 8%, transparent);
+			background: color-mix(in srgb, var(--color-text) 8%, transparent);
 		}
 		& svg {
 			@apply size-4;
@@ -102,8 +103,8 @@
 	/* linha de detalhes: faixa cinza clara, alinhada ao texto da primeira coluna */
 	.table-details td {
 		@apply py-3 pl-14 pr-4;
-		background: var(--color-surface-sunken);
-		border-bottom: 1px solid var(--color-line);
+		background: var(--color-page-surface-accent);
+		border-bottom: 1px solid var(--color-page-line);
 	}
 
 	/* grupo de botões de ícone, alinhado à direita da linha */
@@ -118,6 +119,6 @@
 	}
 
 	.table-empty {
-		@apply px-4 py-10 text-center text-ink-muted;
+		@apply px-4 py-10 text-center text-text-muted;
 	}
 }

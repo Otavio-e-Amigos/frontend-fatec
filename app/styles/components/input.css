@@ -1,7 +1,7 @@
 @layer components {
 	/* serve tanto para <input> quanto para wrappers (busca com ícone) */
 	.form-input {
-		@apply h-9 rounded-control border border-line-strong bg-surface px-3 text-sm text-ink placeholder:text-ink-faint;
+		@apply h-9 rounded-control border border-page-line-strong bg-white px-3 text-sm text-text placeholder:text-text-faint;
 		transition: border-color 0.12s, box-shadow 0.12s;
 
 		&:focus-within {
@@ -23,11 +23,11 @@
 
 	/* botão pequeno dentro do campo (olhinho da senha) */
 	.input-toggle {
-		@apply grid size-7 shrink-0 cursor-pointer place-items-center rounded-control text-ink-faint;
+		@apply grid size-7 shrink-0 cursor-pointer place-items-center rounded-control text-text-faint;
 		transition: background-color 0.12s, color 0.12s;
 
 		&:hover {
-			@apply text-ink;
+			@apply text-text;
 			background: color-mix(in srgb, var(--color-ink) 8%, transparent);
 		}
 	}

@@ -1,5 +1,5 @@
 .login-page {
-	--login-bg: #f2f2f0;
+	/*--login-bg: #f2f2f0;
 	--login-surface: #fff;
 	--login-line: #c8c8c4;
 	--login-line-strong: #888884;
@@ -9,7 +9,18 @@
 	--login-brand-hover: #7e0000;
 	--login-brand-soft: #f9ebeb;
 	--login-teal: #005c6d;
-	--login-danger: #7e0000;
+	--login-danger: #7e0000;*/
+	--login-bg: var(--color-page-bg);
+	--login-surface: var(--color-page-surface);
+	--login-line: var(--color-page-line);
+	--login-line-strong: var(--color-page-line-strong);
+	--login-text: var(--color-text);
+	--login-muted: var(--color-text-muted);
+	--login-brand: var(--color-brand);
+	--login-brand-hover: var(--color-brand-shade);
+	--login-brand-soft: var(--color-brand-soft);
+	--login-teal: var(--color-brand-accent);
+	--login-danger: var(--color-hint-alert-fg);
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -22,7 +33,7 @@
 	height: 52px;
 	flex: 0 0 52px;
 	border-bottom: 1px solid #dededb;
-	background: var(--login-surface);
+	background: var(--color-white);
 	box-shadow: 0 2px 8px rgb(26 26 24 / 6%);
 }
 
