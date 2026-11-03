@@ -56,6 +56,7 @@ export async function clientLoader({}: Route.LoaderArgs) {
 
 export default function App({ loaderData }: Route.ComponentProps) {
 	const navigation = useNavigation();
+	console.log(loaderData);
 	const isNavigating = Boolean(navigation.location);
 
 	return (
