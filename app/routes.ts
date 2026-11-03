@@ -50,7 +50,7 @@ export default [
 			// route("edit", "routes/curso/edit.tsx"),
 		// ]),
 	]),
-
+    route("folha-ponto", "routes/folha-ponto/index.tsx"),
 	route("periodo-letivo", "routes/periodo-letivo/router.outlet.tsx", [
 		index("routes/periodo-letivo/index.tsx"),
 		// route("add", "routes/periodo-letivo/add.tsx"),

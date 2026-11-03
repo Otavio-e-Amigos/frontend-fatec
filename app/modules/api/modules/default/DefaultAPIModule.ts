@@ -79,6 +79,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 				params,
 				data: req.body,
 				headers: headers,
+				responseType: req.responseType,
 				timeout: 15000,
 			})
 			.then((res) => {
