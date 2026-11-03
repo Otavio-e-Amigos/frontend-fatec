@@ -42,6 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
+				<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 				{children}
 				<ScrollRestoration />
 				<Scripts />
