@@ -14,7 +14,7 @@ export default function ExpressiveWindow() {
 	function ExitButton() {
 		return (
 			<div
-				className="floor-accent border-y-0 border-r-0 rounded-l-none rounded-b-none flex items-center w-fit cursor-pointer hover:bg-surface"
+				className="floor-accent border-y-0 border-r-0 rounded-l-none rounded-b-none flex items-center w-fit cursor-pointer hover:bg-page-surface"
 				onClick={exitWindow}
 			>
 				<h2 id="alert-title" className="px-3 text-xl font-semibold text-ink">
@@ -37,7 +37,7 @@ export default function ExpressiveWindow() {
 					<ExitButton />
 				</div>
 				<div className="p-6">
-					<p className="mt-2 text-sm text-ink-muted">{window?.description}</p>
+					<p className="mt-2 text-sm text-text-muted">{window?.description}</p>
 					<div className="mt-6 flex justify-end">
 						{window?.body}
 

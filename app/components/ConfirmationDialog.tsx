@@ -67,7 +67,7 @@ export default function ConfirmationDialog({
 				<h2 id="confirmation-title" className="text-xl font-semibold text-ink">
 					{title}
 				</h2>
-				<p id="confirmation-description" className="mt-2 text-sm text-ink-muted">
+				<p id="confirmation-description" className="mt-2 text-sm text-text-muted">
 					{description}
 				</p>
 				{errorMessage && (

@@ -7,7 +7,7 @@ const toneClass: Record<ToastTone, string> = {
 	success: "border-green-300 bg-green-50 text-green-900",
 	error: "border-red-300 bg-brand-soft text-red-950",
 	warning: "border-amber-300 bg-amber-50 text-amber-900",
-	info: "border-line bg-surface text-ink",
+	info: "border-line bg-page-surface text-ink",
 };
 
 function ToastCard({

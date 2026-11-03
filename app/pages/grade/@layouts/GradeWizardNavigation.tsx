@@ -43,21 +43,21 @@ export default function GradeWizardNavigation({
 											? "bg-ok-bg text-ok-fg"
 											: active
 												? "bg-brand text-white"
-												: "bg-surface-sunken text-ink-muted"
+												: "bg-page-surface-accent text-text-muted"
 									}`}
 								>
 									{complete ? "✓" : stepNumber}
 								</span>
 								<span
 									className={
-										active ? "font-semibold text-ink" : "text-ink-muted"
+										active ? "font-semibold text-ink" : "text-text-muted"
 									}
 								>
 									{label}
 								</span>
 								{index < 2 && (
 									<span
-										className="mx-1 h-px w-6 bg-line-strong"
+										className="mx-1 h-px w-6 bg-page-line-strong"
 										aria-hidden
 									/>
 								)}

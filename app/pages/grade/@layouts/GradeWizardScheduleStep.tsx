@@ -63,13 +63,13 @@ export default function GradeWizardScheduleStep({
 			<header className="flex flex-wrap items-start justify-between gap-2 border-b border-line pb-3">
 				<div>
 					<h1 className="text-lg font-semibold text-brand">Grade Horária</h1>
-					<p className="mt-1 text-sm text-ink-muted">
+					<p className="mt-1 text-sm text-text-muted">
 						Digite horários flexíveis manualmente ou selecione os blocos
 						oficiais na grade. Cada bloco equivale a 50 minutos e intervalos
 						não precisam ser cadastrados.
 					</p>
 				</div>
-				<p className="text-sm text-ink-muted">
+				<p className="text-sm text-text-muted">
 					{items.reduce((count, item) => count + getAllocatedBlocks(item), 0)}{" "}
 					bloco(s) alocado(s)
 				</p>
@@ -95,7 +95,7 @@ export default function GradeWizardScheduleStep({
 			/>
 			{selectedItem && (
 				<p
-					className="rounded-control border border-brand/20 bg-brand-soft/40 px-3 py-2 text-xs text-ink-muted"
+					className="rounded-control border border-brand/20 bg-brand-soft/40 px-3 py-2 text-xs text-text-muted"
 					role="status"
 				>
 					{selectedItem.disciplina} só pode ser alocada no turno{" "}
@@ -140,7 +140,7 @@ function ActiveDisciplineSelector({
 }) {
 	return (
 		<div className="flex flex-wrap items-center gap-2">
-			<span className="text-xs font-medium text-ink-muted">
+			<span className="text-xs font-medium text-text-muted">
 				Disciplina ativa:
 			</span>
 			{items.map((item, index) => {
@@ -166,7 +166,7 @@ function ActiveDisciplineSelector({
 					</button>
 				);
 			})}
-			<span className="ml-auto text-xs text-ink-muted">
+			<span className="ml-auto text-xs text-text-muted">
 				Selecione os intervalos disponíveis na grade para alocar aulas.
 			</span>
 		</div>
@@ -189,13 +189,13 @@ function ManualLessonForm({
 }: ManualLessonFormProps) {
 	return (
 		<fieldset
-			className="grid gap-3 rounded-control border border-line bg-surface-sunken p-4 sm:grid-cols-2 lg:grid-cols-5"
+			className="grid gap-3 rounded-control border border-line bg-page-surface-accent p-4 sm:grid-cols-2 lg:grid-cols-5"
 			disabled={hasPersistedData || !items.length}
 		>
-			<legend className="px-1 text-xs font-semibold text-ink-muted">
+			<legend className="px-1 text-xs font-semibold text-text-muted">
 				Adicionar horário manualmente
 			</legend>
-			<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+			<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 				Disciplina
 				<select
 					className="form-input"
@@ -209,7 +209,7 @@ function ManualLessonForm({
 					))}
 				</select>
 			</label>
-			<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+			<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 				Dia
 				<select
 					className="form-input"
@@ -223,7 +223,7 @@ function ManualLessonForm({
 					))}
 				</select>
 			</label>
-			<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+			<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 				Início da aula
 				<input
 					className="form-input"
@@ -233,7 +233,7 @@ function ManualLessonForm({
 					required
 				/>
 			</label>
-			<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+			<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 				Fim da aula
 				<input
 					className="form-input"
@@ -272,7 +272,7 @@ function ScheduledLessons({
 	return (
 		<div className="overflow-x-auto rounded-control border border-line">
 			<table className="w-full min-w-[620px] text-left text-sm">
-				<thead className="bg-surface-sunken text-xs text-ink-muted">
+				<thead className="bg-page-surface-accent text-xs text-text-muted">
 					<tr>
 						{["Disciplina", "Dia", "Horário", "Turno", "Ação"].map((heading) => (
 							<th key={heading} className="px-3 py-2">

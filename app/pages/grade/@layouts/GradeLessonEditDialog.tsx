@@ -72,16 +72,16 @@ export default function GradeLessonEditDialog({
 					>
 						Editar horário
 					</h2>
-					<p className="mt-1 text-sm text-ink-muted">{disciplineName}</p>
+					<p className="mt-1 text-sm text-text-muted">{disciplineName}</p>
 					{isLoading && (
-						<p className="mt-3 text-sm text-ink-muted" role="status">
+						<p className="mt-3 text-sm text-text-muted" role="status">
 							Carregando os dados atuais do horário...
 						</p>
 					)}
 				</header>
 
 				<form className="flex flex-col gap-5 p-6" onSubmit={handleSubmit}>
-					<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 						Dia da semana
 						<select
 							className="form-input"
@@ -99,11 +99,11 @@ export default function GradeLessonEditDialog({
 					</label>
 
 					<fieldset className="rounded-control border border-line p-4">
-						<legend className="px-1 text-sm font-medium text-ink-muted">
+						<legend className="px-1 text-sm font-medium text-text-muted">
 							Intervalo da aula
 						</legend>
 						<div className="grid gap-3 sm:grid-cols-2">
-							<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+							<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 								Início
 								<input
 									className="form-input"
@@ -116,7 +116,7 @@ export default function GradeLessonEditDialog({
 									required
 								/>
 							</label>
-							<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+							<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 								Fim
 								<input
 									className="form-input"

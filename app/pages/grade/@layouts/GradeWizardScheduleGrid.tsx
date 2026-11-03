@@ -84,10 +84,10 @@ function ShiftScheduleTable({
 }) {
   return (
     <section className="overflow-hidden rounded-control border border-line">
-      <h2 className="border-b border-line bg-surface-sunken px-3 py-2 text-sm font-semibold text-brand">
+      <h2 className="border-b border-line bg-page-surface-accent px-3 py-2 text-sm font-semibold text-brand">
         {shift.label}
         {selectedItem && selectedItem.periodo !== shift.value && (
-          <span className="ml-2 text-xs font-normal text-ink-muted">
+          <span className="ml-2 text-xs font-normal text-text-muted">
             Bloqueado: a disciplina selecionada pertence ao turno{" "}
             {formatTurno(selectedItem.periodo)}.
           </span>
@@ -96,7 +96,7 @@ function ShiftScheduleTable({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] border-collapse text-xs">
           <thead>
-            <tr className="bg-surface-sunken text-ink-muted">
+            <tr className="bg-page-surface-accent text-text-muted">
               <th className="w-28 border border-line px-2 py-2 text-left">
                 Horário
               </th>
@@ -113,7 +113,7 @@ function ShiftScheduleTable({
           <tbody>
             {shift.slots.map((slot, slotIndex) => (
               <tr key={slot.start}>
-                <th className="border border-line bg-surface-sunken px-2 py-2 text-left font-normal text-ink-muted">
+                <th className="border border-line bg-page-surface-accent px-2 py-2 text-left font-normal text-text-muted">
                   {slot.start}–{slot.end}
                 </th>
                 {weekDays.slice(0, 6).map((weekday) => (
@@ -202,7 +202,7 @@ function ScheduleCell({
     <td className="h-10 border border-line p-0">
       <button
         type="button"
-        className="grid h-full min-h-10 w-full place-items-center px-1 text-center disabled:cursor-not-allowed disabled:bg-surface-sunken/40"
+        className="grid h-full min-h-10 w-full place-items-center px-1 text-center disabled:cursor-not-allowed disabled:bg-page-surface-accent/40"
         style={
           color
             ? {

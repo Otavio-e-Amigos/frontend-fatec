@@ -42,11 +42,11 @@ export default function GradeWizardSummary({
 			<header className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
 				<div>
 					<h1 className="text-lg font-semibold text-brand">Resumo de Horas</h1>
-					<p className="mt-1 text-sm text-ink-muted">
+					<p className="mt-1 text-sm text-text-muted">
 						Período {selectedPeriod.ano}/{selectedPeriod.semestre}
 					</p>
 				</div>
-				<p className="text-sm text-ink-muted">Professor: {professor.name}</p>
+				<p className="text-sm text-text-muted">Professor: {professor.name}</p>
 			</header>
 
 			<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -79,13 +79,13 @@ export default function GradeWizardSummary({
 			<div className="flex flex-col gap-2">
 				<div className="flex flex-wrap items-center justify-between gap-2">
 					<h2 className="font-semibold text-ink">Detalhamento por disciplina</h2>
-					<span className="text-xs text-ink-muted">
+					<span className="text-xs text-text-muted">
 						Período {selectedPeriod.ano}/{selectedPeriod.semestre}
 					</span>
 				</div>
 				<div className="overflow-x-auto rounded-control border border-line">
 					<table className="w-full min-w-[1050px] border-collapse text-left text-xs">
-						<thead className="bg-surface-sunken text-ink-muted">
+						<thead className="bg-page-surface-accent text-text-muted">
 							<tr>
 								{[
 									"Disciplina",
@@ -120,7 +120,7 @@ export default function GradeWizardSummary({
 										>
 											{item.disciplina}
 										</td>
-										<td className="px-3 py-3 text-ink-muted">{item.curso}</td>
+										<td className="px-3 py-3 text-text-muted">{item.curso}</td>
 										<td className="px-3 py-3">{item.semestreCurso}º</td>
 										<td className="px-3 py-3">{formatTurno(item.periodo)}</td>
 										<td className="px-3 py-3">{item.quantidadeAulas}</td>
@@ -139,7 +139,7 @@ export default function GradeWizardSummary({
 								);
 							})}
 						</tbody>
-						<tfoot className="bg-surface-sunken font-semibold text-ink">
+						<tfoot className="bg-page-surface-accent font-semibold text-ink">
 							<tr>
 								<td className="px-3 py-3" colSpan={4}>
 									Total geral · {items.length} disciplina(s)
@@ -158,7 +158,7 @@ export default function GradeWizardSummary({
 						</tfoot>
 					</table>
 				</div>
-				<p className="rounded-control border border-line bg-surface-sunken p-3 text-xs leading-relaxed text-ink-muted">
+				<p className="rounded-control border border-line bg-page-surface-accent p-3 text-xs leading-relaxed text-text-muted">
 					Cálculo: cada aula equivale a 50 minutos; hora-aula mensal = horas
 					semanais × 4 semanas; hora atividade = 50% da hora-aula mensal; total
 					mensal = hora-aula mensal + hora atividade; total semestral = total

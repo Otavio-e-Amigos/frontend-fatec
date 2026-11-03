@@ -57,7 +57,7 @@ export default function NewProfessorGrade({ loaderData }: Route.ComponentProps) 
 
 export function HydrateFallback() {
 	return (
-		<main className="grid min-h-screen place-items-center text-ink-muted">
+		<main className="grid min-h-screen place-items-center text-text-muted">
 			Carregando cursos, disciplinas e períodos letivos...
 		</main>
 	);

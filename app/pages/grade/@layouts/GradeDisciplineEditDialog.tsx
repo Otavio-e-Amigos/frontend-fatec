@@ -118,14 +118,14 @@ export default function GradeDisciplineEditDialog({
 					>
 						Editar disciplina da grade
 					</h2>
-					<p className="mt-1 text-sm text-ink-muted">
+					<p className="mt-1 text-sm text-text-muted">
 						Os horários já cadastrados não são alterados por este formulário.
 					</p>
 				</header>
 
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 					<div className="grid gap-3 sm:grid-cols-2">
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 							Disciplina
 							<select
 								className="form-input"
@@ -143,7 +143,7 @@ export default function GradeDisciplineEditDialog({
 								))}
 							</select>
 						</label>
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 							Curso
 							<select
 								className="form-input"
@@ -159,7 +159,7 @@ export default function GradeDisciplineEditDialog({
 								))}
 							</select>
 						</label>
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 							Semestre do curso
 							<input
 								className="form-input"
@@ -174,7 +174,7 @@ export default function GradeDisciplineEditDialog({
 								required
 							/>
 						</label>
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 							Turno
 							<input
 								className="form-input"
@@ -186,7 +186,7 @@ export default function GradeDisciplineEditDialog({
 								readOnly
 							/>
 						</label>
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 							Aulas por semana
 							<input
 								className="form-input"
@@ -200,14 +200,14 @@ export default function GradeDisciplineEditDialog({
 								required
 							/>
 							{discipline.lessons.length > 0 && (
-								<span className="text-xs font-normal text-ink-muted">
+								<span className="text-xs font-normal text-text-muted">
 									A carga não pode ficar abaixo dos {allocatedBlocks} blocos já
 									ocupados; para trocar de turno, remova primeiro os horários
 									cadastrados.
 								</span>
 							)}
 						</label>
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 							OP (opcional)
 							<input
 								className="form-input"
@@ -219,7 +219,7 @@ export default function GradeDisciplineEditDialog({
 								onChange={(event) => setOp(event.currentTarget.value)}
 							/>
 						</label>
-						<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted sm:col-span-2">
+						<label className="flex flex-col gap-1 text-sm font-medium text-text-muted sm:col-span-2">
 							Status
 							<select
 								className="form-input"
