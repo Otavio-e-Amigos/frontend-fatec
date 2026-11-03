@@ -3,8 +3,9 @@ import type { WindowAPIConstructor } from "~/components/windows/window.types";
 import type Disciplina from "~/modules/disciplina/disciplina.class";
 import formatTurno from "~/modules/curso/format-turno";
 import type Curso from "~/modules/curso/curso.class";
+import SaveCursoFrom from "../@layouts/SaveCursoForm";
 
-function RowActions({ item }: { item: Disciplina }) {
+function RowActions({ item }: { item: Curso }) {
 	const windowData: WindowAPIConstructor = {
 		dismissible: true,
 	};
@@ -14,7 +15,7 @@ function RowActions({ item }: { item: Disciplina }) {
 	});
 
 	function edit() {
-		window.show();
+		window.show({...windowData}, <SaveCursoFrom curso={item}/>);
 	}
 
 	return (
