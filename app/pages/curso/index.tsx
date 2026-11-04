@@ -6,6 +6,7 @@ import type Curso from "~/modules/curso/curso.class";
 import mapper from "./@mappers/curso-table.mapper";
 import useWindow from "~/components/windows/useWindow";
 import SaveCursoForm from "./@layouts/SaveCursoForm";
+import { Plus } from "iconoir-react";
 
 export default function CursoIndexPage({ list }: { list: Curso[] }) {
 	const window = useWindow({
@@ -38,7 +39,8 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 									window.show();
 								}}
 							>
-								+ Novo Curso
+								<Plus/>
+								Novo Curso
 							</button>
 						}
 					/>

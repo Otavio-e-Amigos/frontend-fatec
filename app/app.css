@@ -1,21 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 
+/* Temas do Sistema */
+@import "./styles/theme.css";
 
-@import "./styles/dev.css";
-@import "./styles/components-dev.css";
-
-
-/* 1. tokens: decisões de design (cores, formas, fontes) */
+/* 1. tokens: utilitários base (definições de borda, radio, etc) */
 @import "./styles/tokens.css";
-/*@import "./styles/legacy.css";*/
 
 /* 2. base: reset de elementos (html, body, foco) */
 @import "./styles/base.css";
 
 
 /* 3. componentes: um arquivo por componente */
-@import "./styles/components/card.css";
+/*@import "./styles/components/card.css";*/
 @import "./styles/components/badge.css";
 @import "./styles/components/chip.css";
 @import "./styles/components/table.css";

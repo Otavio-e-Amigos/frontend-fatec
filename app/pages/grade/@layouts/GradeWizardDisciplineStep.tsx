@@ -145,11 +145,11 @@ export default function GradeWizardDisciplineStep({
 					<h1 className="text-lg font-semibold text-brand">
 						Histórico de Grades
 					</h1>
-					<p className="mt-1 text-sm text-ink-muted">
+					<p className="mt-1 text-sm text-text-muted">
 						Professor: {professor.name}
 					</p>
 				</div>
-				<p className="text-sm text-ink-muted">
+				<p className="text-sm text-text-muted">
 					{items.length} disciplina(s) adicionada(s)
 				</p>
 			</header>
@@ -174,12 +174,12 @@ export default function GradeWizardDisciplineStep({
 				</p>
 			)}
 
-			<div className="rounded-control border border-line bg-surface-sunken p-4">
-				<p className="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-muted">
+			<div className="rounded-control border border-line bg-page-surface-accent p-4">
+				<p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
 					Adicionar disciplina
 				</p>
 				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Período letivo
 						<select
 							className="form-input w-full"
@@ -195,7 +195,7 @@ export default function GradeWizardDisciplineStep({
 							))}
 						</select>
 					</label>
-					<div className="relative flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<div className="relative flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Disciplina
 						<input
 							className="form-input w-full"
@@ -221,7 +221,7 @@ export default function GradeWizardDisciplineStep({
 						{showDisciplineSuggestions && !hasPersistedData && (
 							<div
 								id="grade-discipline-results"
-								className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-surface shadow-lg"
+								className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-page-surface shadow-lg"
 							>
 								{matchingDisciplines.slice(0, 5).map((discipline) => (
 									<button
@@ -238,23 +238,23 @@ export default function GradeWizardDisciplineStep({
 									</button>
 								))}
 								{matchingDisciplines.length > 5 && (
-									<p className="border-t border-line bg-surface-sunken px-3 py-2 text-xs text-ink-muted">
+									<p className="border-t border-line bg-page-surface-accent px-3 py-2 text-xs text-text-muted">
 										Exibindo 5 de {matchingDisciplines.length} disciplinas.
 										Refine a busca.
 									</p>
 								)}
 								{!matchingDisciplines.length && (
-									<p className="px-3 py-2 text-sm text-ink-muted">
+									<p className="px-3 py-2 text-sm text-text-muted">
 										Nenhuma disciplina encontrada.
 									</p>
 								)}
 							</div>
 						)}
-						<span className="text-[11px] font-normal text-ink-muted">
+						<span className="text-[11px] font-normal text-text-muted">
 							Escolha uma disciplina cadastrada para vinculá-la à grade.
 						</span>
 					</div>
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Curso
 						<select
 							className="form-input w-full"
@@ -270,7 +270,7 @@ export default function GradeWizardDisciplineStep({
 							))}
 						</select>
 					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Semestre do curso
 						<input
 							className="form-input w-full"
@@ -283,7 +283,7 @@ export default function GradeWizardDisciplineStep({
 							disabled={hasPersistedData}
 						/>
 					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Turno do curso
 						<div className="form-input flex items-center">
 							{selectedCourse?.turno
@@ -291,7 +291,7 @@ export default function GradeWizardDisciplineStep({
 								: "Selecione um curso"}
 						</div>
 					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Status
 						<div className="form-input flex items-center">
 							<span className="rounded-control bg-ok-bg px-2 py-1 text-xs font-semibold text-ok-fg">
@@ -299,7 +299,7 @@ export default function GradeWizardDisciplineStep({
 							</span>
 						</div>
 					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Aulas por semana
 						<input
 							className="form-input w-full"
@@ -313,7 +313,7 @@ export default function GradeWizardDisciplineStep({
 							disabled={hasPersistedData}
 						/>
 					</label>
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						OP (opcional)
 						<input
 							className="form-input w-full"
@@ -360,7 +360,7 @@ export default function GradeWizardDisciplineStep({
 
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div className="flex flex-wrap gap-2">
-					<label className="flex items-center gap-2 text-xs text-ink-muted">
+					<label className="flex items-center gap-2 text-xs text-text-muted">
 						Filtrar curso
 						<select
 							className="form-input"
@@ -379,7 +379,7 @@ export default function GradeWizardDisciplineStep({
 							))}
 						</select>
 					</label>
-					<label className="flex items-center gap-2 text-xs text-ink-muted">
+					<label className="flex items-center gap-2 text-xs text-text-muted">
 						Filtrar turno
 						<select
 							className="form-input"
@@ -395,7 +395,7 @@ export default function GradeWizardDisciplineStep({
 						</select>
 					</label>
 				</div>
-				<span className="text-xs text-ink-muted">
+				<span className="text-xs text-text-muted">
 					{visibleItems.length} disciplina(s)
 				</span>
 			</div>
@@ -415,25 +415,25 @@ export default function GradeWizardDisciplineStep({
 								style={{ borderLeftWidth: 3, borderLeftColor: color }}
 							>
 								<strong className="text-sm text-ink">{item.disciplina}</strong>
-								<span className="text-xs text-ink-muted">{item.curso}</span>
+								<span className="text-xs text-text-muted">{item.curso}</span>
 								<span className="rounded-control bg-brand-soft px-2 py-1 text-xs text-brand">
 									{formatTurno(item.periodo)}
 								</span>
 								<span className="rounded-control bg-ok-bg px-2 py-1 text-xs text-ok-fg">
 									{item.status}
 								</span>
-								<span className="text-xs text-ink-muted">
+								<span className="text-xs text-text-muted">
 									{item.quantidadeAulas} aula(s)/sem
 								</span>
-								<span className="text-xs text-ink-muted">
+								<span className="text-xs text-text-muted">
 									{item.semestreCurso}º semestre
 								</span>
 								{item.op !== null && (
-									<span className="text-xs text-ink-muted">OP {item.op}</span>
+									<span className="text-xs text-text-muted">OP {item.op}</span>
 								)}
 								<button
 									type="button"
-									className="ml-auto grid size-7 place-items-center rounded-control border border-line text-ink-muted hover:bg-danger-bg hover:text-danger-fg"
+									className="ml-auto grid size-7 place-items-center rounded-control border border-line text-text-muted hover:bg-danger-bg hover:text-danger-fg"
 									aria-label={`Remover ${item.disciplina}`}
 									onClick={() => onRemoveItem(item.key)}
 									disabled={hasPersistedData}
@@ -445,7 +445,7 @@ export default function GradeWizardDisciplineStep({
 					})}
 				</ul>
 			) : (
-				<p className="rounded-control border border-dashed border-line-strong px-4 py-8 text-center text-sm text-ink-muted">
+				<p className="rounded-control border border-dashed border-page-line-strong px-4 py-8 text-center text-sm text-text-muted">
 					Adicione disciplinas para montar a grade horária.
 				</p>
 			)}

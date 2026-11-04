@@ -74,13 +74,13 @@ export default function GradeEditDialog({
 					>
 						Editar grade
 					</h2>
-					<p className="mt-1 text-sm text-ink-muted">
+					<p className="mt-1 text-sm text-text-muted">
 						Atualize o período letivo e as cargas horárias registradas.
 					</p>
 				</header>
 
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-					<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 						Professor
 						<input
 							className="form-input"
@@ -89,7 +89,7 @@ export default function GradeEditDialog({
 							aria-readonly="true"
 						/>
 					</label>
-					<label className="flex flex-col gap-1 text-sm font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 						Período letivo
 						<select
 							className="form-input"
@@ -125,7 +125,7 @@ export default function GradeEditDialog({
 							onChange={setTotal}
 						/>
 					</div>
-					<p className="text-xs leading-relaxed text-ink-muted">
+					<p className="text-xs leading-relaxed text-text-muted">
 						Esses totais são informações próprias da grade. Alterá-los não
 						modifica automaticamente a carga horária de cada disciplina.
 					</p>
@@ -167,7 +167,7 @@ function HourField({
 	onChange: (value: string) => void;
 }) {
 	return (
-		<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+		<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 			{label}
 			<input
 				className="form-input min-w-0"

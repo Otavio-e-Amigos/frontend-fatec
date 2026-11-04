@@ -1,7 +1,5 @@
 import { useMemo } from "react";
-import {
-	Link,
-} from "react-router";
+import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import useBlockedPage from "~/hooks/useBlockedPage";
@@ -10,13 +8,13 @@ import PageHeader from "~/layouts/pages/PageHeader";
 import AuthService from "~/modules/user/auth.service";
 import type User from "~/modules/user/user.class";
 import mapper from "./@mappers/user-table.mapper";
+import { Plus } from "iconoir-react";
 
 // No sistema, quem administra é o perfil "TI". "RESPONSAVEL" não acessa a Gestão.
 const ADMIN_PROFILE = "TI";
 
 // users pode chegar undefined: o UserService.get devolve undefined quando a API recusa a listagem.
 export default function Page({ users }: { users?: User[] }) {
-
 	const currentUser = AuthService.hasUserToken()
 		? AuthService.getUserToken()
 		: null;
@@ -66,7 +64,8 @@ export default function Page({ users }: { users?: User[] }) {
 							data-size="sm"
 							to="user/add"
 						>
-							+ Novo Usuário
+							<Plus />
+							<p>Novo Usuário</p>
 						</Link>
 					}
 				/>

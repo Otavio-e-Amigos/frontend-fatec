@@ -5,7 +5,7 @@
 @layer base {
 	html,
 	body {
-		@apply bg-floor text-ink antialiased font-roboto;
+		@apply bg-page-bg text-text antialiased font-roboto;
 	}
 
 	body {
@@ -21,7 +21,7 @@
 
 @layer components {
 	.link {
-		@apply text-brand underline-offset-2 hover:underline hover:text-brand-hover;
+		@apply text-text-hyperlink underline-offset-2 hover:underline hover:text-text-hyperlink-hover;
 	}
 
 	.floor {

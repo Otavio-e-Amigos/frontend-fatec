@@ -29,7 +29,7 @@ function HeaderLink({
 			className={`inline-flex h-8 items-center rounded-control px-2.5 text-sm font-medium transition-colors ${
 				active
 					? "bg-brand-soft text-brand"
-					: "text-ink-muted hover:bg-brand-soft hover:text-brand"
+					: "text-text-muted hover:bg-brand-soft hover:text-brand-hover"
 			}`}
 		>
 			{label}
@@ -63,7 +63,7 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 
 	return (
 		// relative + z-10: o brilho da faixa vermelha aparece por cima do conteúdo abaixo
-		<header className="relative z-10 bg-surface shadow-card">
+		<header className="relative z-10 bg-white shadow-card">
 			<div className="flex min-h-14 flex-wrap items-center gap-x-6 gap-y-2 px-5 py-2">
 				{/* Esquerda: marca (flex-1 para equilibrar com o lado direito) */}
 				<div className="flex flex-1 basis-0 items-center">
@@ -117,7 +117,7 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 			{/* Faixa vermelha translúcida com brilho */}
 			<div
 				aria-hidden
-				className="h-[3px] bg-brand/45"
+				className="h-0.75 bg-brand/45"
 			/>
 		</header>
 	);

@@ -35,7 +35,7 @@ export default function GradeDisciplineCard({
 		return (
 			<header className="flex flex-wrap items-start justify-between gap-3 p-4 sm:p-5">
 				<div className="min-w-0">
-					<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+					<p className="text-xs font-medium uppercase tracking-wide text-text-muted">
 						{discipline.course} · {formatTurno(discipline.shift)}
 					</p>
 					<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
@@ -54,11 +54,11 @@ export default function GradeDisciplineCard({
 	}
 	return (
 		<GenericSurface className="overflow-hidden" header={<Header/>}>
-			{/*<article className="rounded-card border border-line bg-surface">*/}
+			{/*<article className="rounded-card border border-line bg-page-surface">*/}
 				<div className="flex flex-col gap-4 p-4 sm:p-5">
 					{/*<header className="flex flex-wrap items-start justify-between gap-3">
 						<div className="min-w-0">
-							<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+							<p className="text-xs font-medium uppercase tracking-wide text-text-muted">
 								{discipline.course} · {formatTurno(discipline.shift)}
 							</p>
 							<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
@@ -76,10 +76,10 @@ export default function GradeDisciplineCard({
 
 					<section aria-label={`Horários de ${discipline.name}`}>
 						<div className="mb-2 flex items-center justify-between gap-2">
-							<h4 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+							<h4 className="text-xs font-semibold uppercase tracking-wide text-text-muted">
 								Horários da disciplina
 							</h4>
-							<span className="text-xs text-ink-muted">
+							<span className="text-xs text-text-muted">
 								{discipline.lessons.length} cadastrado(s)
 							</span>
 						</div>
@@ -97,13 +97,13 @@ export default function GradeDisciplineCard({
 								))}
 							</ul>
 						) : (
-							<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
+							<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-text-muted">
 								Nenhum horário cadastrado para esta disciplina.
 							</p>
 						)}
 					</section>
 
-					<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-ink-muted">
+					<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-text-muted">
 						<InfoPill>{discipline.quantidadeAulas} aula(s)/semana</InfoPill>
 						<InfoPill>{discipline.semestreCurso}º semestre</InfoPill>
 						{discipline.op !== null && <InfoPill>OP {discipline.op}</InfoPill>}
@@ -149,11 +149,11 @@ export default function GradeDisciplineCard({
 	);
 }
 
-// <article className="overflow-hidden rounded-card border border-line bg-surface">
+// <article className="overflow-hidden rounded-card border border-line bg-page-surface">
 // 			<div className="flex flex-col gap-4 p-4 sm:p-5">
 // 				<header className="flex flex-wrap items-start justify-between gap-3">
 // 					<div className="min-w-0">
-// 						<p className="text-xs font-medium uppercase tracking-wide text-ink-muted">
+// 						<p className="text-xs font-medium uppercase tracking-wide text-text-muted">
 // 							{discipline.course} · {formatTurno(discipline.shift)}
 // 						</p>
 // 						<h3 className="mt-1 font-semibold text-ink">{discipline.name}</h3>
@@ -171,10 +171,10 @@ export default function GradeDisciplineCard({
 
 // 				<section aria-label={`Horários de ${discipline.name}`}>
 // 					<div className="mb-2 flex items-center justify-between gap-2">
-// 						<h4 className="text-xs font-semibold uppercase tracking-wide text-ink-muted">
+// 						<h4 className="text-xs font-semibold uppercase tracking-wide text-text-muted">
 // 							Horários da disciplina
 // 						</h4>
-// 						<span className="text-xs text-ink-muted">
+// 						<span className="text-xs text-text-muted">
 // 							{discipline.lessons.length} cadastrado(s)
 // 						</span>
 // 					</div>
@@ -192,13 +192,13 @@ export default function GradeDisciplineCard({
 // 							))}
 // 						</ul>
 // 					) : (
-// 						<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-ink-muted">
+// 						<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-text-muted">
 // 							Nenhum horário cadastrado para esta disciplina.
 // 						</p>
 // 					)}
 // 				</section>
 
-// 				<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-ink-muted">
+// 				<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-text-muted">
 // 					<InfoPill>{discipline.quantidadeAulas} aula(s)/semana</InfoPill>
 // 					<InfoPill>{discipline.semestreCurso}º semestre</InfoPill>
 // 					{discipline.op !== null && <InfoPill>OP {discipline.op}</InfoPill>}
@@ -256,7 +256,7 @@ function LessonRow({
 	onDelete: () => void;
 }) {
 	return (
-		<li className="flex flex-col gap-3 rounded-control border border-line bg-surface-sunken/60 p-3 sm:flex-row sm:items-center sm:justify-between">
+		<li className="flex flex-col gap-3 rounded-control border border-line bg-page-surface-accent/60 p-3 sm:flex-row sm:items-center sm:justify-between">
 			<div className="flex min-w-0 items-center gap-3">
 				<span
 					className="grid size-9 shrink-0 place-items-center rounded-control bg-brand-soft text-brand"
@@ -282,7 +282,7 @@ function LessonRow({
 					<p className="truncate text-sm font-medium text-ink">
 						{displayDay(lesson.diaSemana)}
 					</p>
-					<p className="text-sm text-ink-muted">
+					<p className="text-sm text-text-muted">
 						{lesson.horaInicio.slice(0, 5)}–{lesson.horaFim.slice(0, 5)}
 					</p>
 				</div>
@@ -334,7 +334,7 @@ function DisciplineStatusMessage({
 	}
 
 	return (
-		<p className="rounded-control border border-brand/20 bg-brand-soft/50 px-3 py-2 text-xs leading-relaxed text-ink-muted">
+		<p className="rounded-control border border-brand/20 bg-brand-soft/50 px-3 py-2 text-xs leading-relaxed text-text-muted">
 			{hasLessons
 				? "Status CANCELADA. Exclua os horários acima para habilitar a exclusão definitiva do vínculo."
 				: "Status CANCELADA e nenhum horário associado. O vínculo pode ser excluído definitivamente."}
@@ -345,7 +345,7 @@ function DisciplineStatusMessage({
 /** Presents workload metadata in a consistent compact style. */
 function InfoPill({ children }: { children: React.ReactNode }) {
 	return (
-		<span className="rounded-control bg-surface-sunken px-2.5 py-1">
+		<span className="rounded-control bg-page-surface-accent px-2.5 py-1">
 			{children}
 		</span>
 	);

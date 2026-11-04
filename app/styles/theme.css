@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+/* System default theme, where tokens are defined by default on @theme directive */
+@import "themes/default.theme.css";
+
+/* Custom themes, defined by classes */
+@import "themes/example.theme.css";
+
+@import "themes/protanopia.theme.css";
+
+@import "themes/monochromatic.theme.css";

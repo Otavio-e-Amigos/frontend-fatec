@@ -8,6 +8,7 @@ import type Disciplina from "~/modules/disciplina/disciplina.class";
 import SaveDisciplinaForm from "./@layouts/SaveDisciplinaForm";
 import useWindow from "~/components/windows/useWindow";
 import mapper from "./@mappers/discipline-table.mapper";
+import { Plus } from "iconoir-react";
 
 export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 	const [term, setTerm] = useState("");
@@ -53,7 +54,8 @@ export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
 									window.show({ dismissible: true }, <SaveDisciplinaForm />);
 								}}
 							>
-								+ Nova Disciplina
+								<Plus/>
+								<p>Nova Disciplina</p>
 							</button>
 						}
 					/>

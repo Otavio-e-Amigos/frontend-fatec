@@ -8,6 +8,8 @@ import PageHeader from "~/layouts/pages/PageHeader";
 import type Professor from "~/modules/professor/professor.class";
 import mapper from "./@mappers/professor-table.mapper";
 import filter from "./@filters/professor-table.filter";
+// import { Search } from "iconoir-react";
+import { Plus } from "iconoir-react";
 
 export default function Page({ list }: { list: Professor[] }) {
 	const [term, setTerm] = useState("");
@@ -47,7 +49,8 @@ export default function Page({ list }: { list: Professor[] }) {
 							data-size="sm"
 							to="add"
 						>
-							+ Novo Professor
+							<Plus/>
+							<p>Novo Professor</p>
 						</Link>
 					}
 				/>

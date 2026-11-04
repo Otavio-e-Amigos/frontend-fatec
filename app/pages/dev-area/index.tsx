@@ -14,6 +14,7 @@ import ShadowCenter from "~/layouts/containers/ShadowCenter";
 import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import useToast from "~/components/toasts/useToast";
+import { useTheme } from "~/components/themes/ThemeProvider";
 
 const defaultTableTest = new DefaultTableModel(
 	[
@@ -115,6 +116,8 @@ export default function Page() {
 		},
 	});
 	const toast = useToast();
+	const theme = useTheme();
+
 	return (
 		// <main className="bg-cps min-h-full">
 		<main>
@@ -144,7 +147,7 @@ export default function Page() {
 				<p className="mb-3">Others</p>
 				<section className="grid grid-cols-3 gap-3 w-fit">
 					{/*<div className="chip">hello</div>*/}
-					<button
+					{/*<button
 						className="btn btn-normal"
 						onClick={() => {
 							window.show();
@@ -173,13 +176,13 @@ export default function Page() {
 						}}
 					>
 						Summon Confirmation Window
-					</button>
-					<button
+					</button>*/}
+					{/*<button
 						className="btn btn-normal"
 						onClick={() => {toast.push("warning", "something happened ig")}}
 					>
 						Summon toast
-					</button>
+					</button>*/}
 					{/*<button
 						className="btn btn-normal"
 						onClick={(e) => {
@@ -188,6 +191,38 @@ export default function Page() {
 					>
 						Summon Expressive Window
 					</button>*/}
+					<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							theme.setTheme("default");
+						}}
+					>
+						Change theme to "default"
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							theme.setTheme("example");
+						}}
+					>
+						Change theme to "example"
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							theme.setTheme("protanopia");
+						}}
+					>
+						Change theme to "Protanopia"
+					</button>
+					<button
+						className="btn btn-normal"
+						onClick={(e) => {
+							theme.setTheme("monochromatic");
+						}}
+					>
+						Change theme to "Monochromatic"
+					</button>
 				</section>
 				<br />
 

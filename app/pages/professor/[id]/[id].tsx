@@ -29,7 +29,7 @@ function InfoItem({
 }) {
 	return (
 		<div className="flex flex-col">
-			<dt className="text-xs text-ink-muted">{label}</dt>
+			<dt className="text-xs text-text-muted">{label}</dt>
 			<dd className="text-sm font-medium text-ink">{children || "—"}</dd>
 		</div>
 	);
@@ -55,7 +55,7 @@ export default function About({
 							{professor.name ?? "Professor"}
 						</h1>
 						<div className="flex flex-wrap items-center gap-1.5">
-							<p className="text-xs text-ink-muted">Docente</p>
+							<p className="text-xs text-text-muted">Docente</p>
 						</div>
 					</div>
 				</div>

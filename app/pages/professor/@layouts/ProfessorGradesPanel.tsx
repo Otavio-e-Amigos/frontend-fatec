@@ -52,7 +52,7 @@ export default function ProfessorGradesPanel({
 			{state.grades.length > 1 && selectedGrade && (
 				<select
 					aria-label="Período da grade"
-					className="rounded-control border border-line bg-surface px-2 py-1 text-sm text-ink"
+					className="rounded-control border border-line bg-page-surface px-2 py-1 text-sm text-ink"
 					value={selectedGrade.id}
 					onChange={(event) => state.selectGrade(Number(event.target.value))}
 				>
@@ -69,7 +69,7 @@ export default function ProfessorGradesPanel({
 	let body: React.ReactNode;
 
 	if (state.loadingGrades) {
-		body = <p className="text-sm text-ink-muted">Carregando grades...</p>;
+		body = <p className="text-sm text-text-muted">Carregando grades...</p>;
 	} else if (state.gradesError) {
 		body = (
 			<StateMessage
@@ -120,7 +120,7 @@ export default function ProfessorGradesPanel({
 				</div>
 
 				{state.loadingSchedule ? (
-					<p className="text-sm text-ink-muted">Carregando horários...</p>
+					<p className="text-sm text-text-muted">Carregando horários...</p>
 				) : state.scheduleError ? (
 					<StateMessage
 						message={state.scheduleError}

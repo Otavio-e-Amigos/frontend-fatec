@@ -25,7 +25,7 @@ export default function BasicWindow() {
 				>
 					{window?.title}
 				</h2>
-				<p id="alert-description" className="mt-2 text-sm text-ink-muted">
+				<p id="alert-description" className="mt-2 text-sm text-text-muted">
 					{window?.description}
 				</p>
 				<div className="mt-6 flex justify-end">

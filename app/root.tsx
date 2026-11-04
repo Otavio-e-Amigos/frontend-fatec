@@ -14,6 +14,9 @@ import { LoadingGeral } from "./components/loaders/LoadingGeral";
 import Footer from "./layouts/Footer";
 import WindowProvider from "./components/windows/WindowProvider";
 import ToastProvider from "./components/toasts/ToastProvider";
+import { ThemeProvider } from "./components/themes/ThemeProvider";
+
+// import VLibras from "@djpfs/react-vlibras/dist/types";
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
 	{
@@ -39,6 +42,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 				<Links />
 			</head>
 			<body>
+				<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
 				{children}
 				<ScrollRestoration />
 				<Scripts />
@@ -47,18 +51,25 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	);
 }
 
-export default function App() {
+export async function clientLoader({}: Route.LoaderArgs) {
+	return { localStorage };
+}
+
+export default function App({ loaderData }: Route.ComponentProps) {
 	const navigation = useNavigation();
+	console.log(loaderData);
 	const isNavigating = Boolean(navigation.location);
 
 	return (
-		<ToastProvider>
+		<ThemeProvider storage={loaderData.localStorage}>
+			<ToastProvider>
 				<WindowProvider>
 					<Outlet />
 					<Footer />
 					{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
 				</WindowProvider>
-		</ToastProvider>
+			</ToastProvider>
+		</ThemeProvider>
 	);
 }
 

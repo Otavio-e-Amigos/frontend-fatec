@@ -13,7 +13,7 @@ function GradePageHeader({ data }: { data: any }) {
 					Grade em foco
 				</p>
 				<h2 className="mt-1 font-semibold text-ink">{data.periodLabel}</h2>
-				<p className="mt-1 text-sm text-ink-muted">
+				<p className="mt-1 text-sm text-text-muted">
 					Confira as aulas cadastradas para este professor.
 				</p>
 			</div>
@@ -35,7 +35,7 @@ function GradePageHeader({ data }: { data: any }) {
 				>
 					Excluir grade
 				</button>
-				<span className="rounded-control border border-line bg-surface px-3 py-2 text-xs text-ink-muted">
+				<span className="rounded-control border border-line bg-page-surface px-3 py-2 text-xs text-text-muted">
 					{data.gradeNumber}ª Grade
 				</span>
 			</div>
@@ -71,12 +71,12 @@ export default function GradeFocusPanel({
 			isDeleting,
 			gradeNumber,
 		}}/>}>
-			{/*<section className="overflow-hidden rounded-card border border-brand/40 bg-surface">*/}
+			{/*<section className="overflow-hidden rounded-card border border-brand/40 bg-page-surface">*/}
 
 
 				<div className="flex flex-col gap-4 p-5">
 					{loadingSchedule && (
-						<p className="text-sm text-ink-muted" role="status">
+						<p className="text-sm text-text-muted" role="status">
 							Carregando disciplinas e horários...
 						</p>
 					)}
@@ -116,7 +116,7 @@ export default function GradeFocusPanel({
 						</>
 					)}
 					{!loadingSchedule && !scheduleError && schedule.length === 0 && (
-						<p className="text-sm text-ink-muted">
+						<p className="text-sm text-text-muted">
 							Esta grade ainda não possui disciplinas e horários cadastrados.
 						</p>
 					)}
@@ -127,14 +127,14 @@ export default function GradeFocusPanel({
 }
 
 // return (
-// 		<section className="overflow-hidden rounded-card border border-brand/40 bg-surface">
+// 		<section className="overflow-hidden rounded-card border border-brand/40 bg-page-surface">
 // 			<header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-brand-soft/40 px-5 py-4">
 // 				<div>
 // 					<p className="text-xs font-semibold uppercase tracking-wide text-brand">
 // 						Grade em foco
 // 					</p>
 // 					<h2 className="mt-1 font-semibold text-ink">{periodLabel}</h2>
-// 					<p className="mt-1 text-sm text-ink-muted">
+// 					<p className="mt-1 text-sm text-text-muted">
 // 						Confira as aulas cadastradas para este professor.
 // 					</p>
 // 				</div>
@@ -156,7 +156,7 @@ export default function GradeFocusPanel({
 // 					>
 // 						Excluir grade
 // 					</button>
-// 					<span className="rounded-control border border-line bg-surface px-3 py-2 text-xs text-ink-muted">
+// 					<span className="rounded-control border border-line bg-page-surface px-3 py-2 text-xs text-text-muted">
 // 						{gradeNumber}ª Grade
 // 					</span>
 // 				</div>
@@ -164,7 +164,7 @@ export default function GradeFocusPanel({
 
 // 			<div className="flex flex-col gap-4 p-5">
 // 				{loadingSchedule && (
-// 					<p className="text-sm text-ink-muted" role="status">
+// 					<p className="text-sm text-text-muted" role="status">
 // 						Carregando disciplinas e horários...
 // 					</p>
 // 				)}
@@ -204,7 +204,7 @@ export default function GradeFocusPanel({
 // 					</>
 // 				)}
 // 				{!loadingSchedule && !scheduleError && schedule.length === 0 && (
-// 					<p className="text-sm text-ink-muted">
+// 					<p className="text-sm text-text-muted">
 // 						Esta grade ainda não possui disciplinas e horários cadastrados.
 // 					</p>
 // 				)}

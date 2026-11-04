@@ -30,13 +30,13 @@ export default function GradeSelectionPanel({
 		<GenericFloor className="p-5">
 			{/*<section className="surface rounded-card border border-line p-5">*/}
 				<h2 className="font-semibold text-ink">Selecione os dados da grade</h2>
-				<p className="mt-1 text-sm text-ink-muted">
+				<p className="mt-1 text-sm text-text-muted">
 					Ao escolher um professor, a grade mais recente é carregada
 					automaticamente.
 				</p>
 
 				<div className="mt-4 grid gap-3 md:grid-cols-3">
-					<div className="relative flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<div className="relative flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Professor
 						<input
 							className="form-input w-full"
@@ -55,7 +55,7 @@ export default function GradeSelectionPanel({
 						{showProfessorSuggestions && (
 							<div
 								id="grade-professor-results"
-								className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-surface shadow-lg"
+								className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-page-surface shadow-lg"
 							>
 								{matchingProfessors.slice(0, 5).map((entry) => (
 									<button
@@ -69,13 +69,13 @@ export default function GradeSelectionPanel({
 									</button>
 								))}
 								{matchingProfessors.length > 5 && (
-									<p className="border-t border-line bg-surface-sunken px-3 py-2 text-xs text-ink-muted">
+									<p className="border-t border-line bg-page-surface-accent px-3 py-2 text-xs text-text-muted">
 										Exibindo 5 de {matchingProfessors.length} professores.
 										Refine a busca.
 									</p>
 								)}
 								{!matchingProfessors.length && (
-									<p className="px-3 py-2 text-sm text-ink-muted">
+									<p className="px-3 py-2 text-sm text-text-muted">
 										Nenhum professor encontrado.
 									</p>
 								)}
@@ -83,7 +83,7 @@ export default function GradeSelectionPanel({
 						)}
 					</div>
 
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Período letivo
 						<select
 							className="form-input w-full"
@@ -102,7 +102,7 @@ export default function GradeSelectionPanel({
 						</select>
 					</label>
 
-					<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Grade
 						<select
 							className="form-input w-full"
@@ -139,7 +139,7 @@ export default function GradeSelectionPanel({
 				)}
 
 				{!professor && (
-					<p className="mt-4 rounded-control bg-surface-sunken p-3 text-sm text-ink-muted">
+					<p className="mt-4 rounded-control bg-page-surface-accent p-3 text-sm text-text-muted">
 						{professorNotFound
 							? "Professor não encontrado. Confira o nome ou cadastre o professor para continuar."
 							: "Pesquise e selecione um professor cadastrado para consultar a grade."}
@@ -161,7 +161,7 @@ export default function GradeSelectionPanel({
 				)}
 				{professor && !loadingGrades && !gradesError && (
 					<div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-						<p className="text-sm text-ink-muted">
+						<p className="text-sm text-text-muted">
 							{gradesForPeriod.length
 								? `${gradesForPeriod.length} grade(s) encontrada(s) neste período.`
 								: `Este professor ainda não possui grade em ${periodLabel(selectedPeriod)}.`}
@@ -185,7 +185,7 @@ export default function GradeSelectionPanel({
 function ProfileField({ label, value }: { label: string; value?: string }) {
 	return (
 		<div>
-			<dt className="text-[10px] font-semibold uppercase tracking-wide text-ink-muted">
+			<dt className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">
 				{label}
 			</dt>
 			<dd className="mt-1 text-sm font-medium text-ink">{value || "—"}</dd>
@@ -195,13 +195,13 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 
 // <section className="surface rounded-card border border-line p-5">
 // 			<h2 className="font-semibold text-ink">Selecione os dados da grade</h2>
-// 			<p className="mt-1 text-sm text-ink-muted">
+// 			<p className="mt-1 text-sm text-text-muted">
 // 				Ao escolher um professor, a grade mais recente é carregada
 // 				automaticamente.
 // 			</p>
 
 // 			<div className="mt-4 grid gap-3 md:grid-cols-3">
-// 				<div className="relative flex flex-col gap-1 text-xs font-medium text-ink-muted">
+// 				<div className="relative flex flex-col gap-1 text-xs font-medium text-text-muted">
 // 					Professor
 // 					<input
 // 						className="form-input w-full"
@@ -220,7 +220,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 // 					{showProfessorSuggestions && (
 // 						<div
 // 							id="grade-professor-results"
-// 							className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-surface shadow-lg"
+// 							className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-page-surface shadow-lg"
 // 						>
 // 							{matchingProfessors.slice(0, 5).map((entry) => (
 // 								<button
@@ -234,13 +234,13 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 // 								</button>
 // 							))}
 // 							{matchingProfessors.length > 5 && (
-// 								<p className="border-t border-line bg-surface-sunken px-3 py-2 text-xs text-ink-muted">
+// 								<p className="border-t border-line bg-page-surface-accent px-3 py-2 text-xs text-text-muted">
 // 									Exibindo 5 de {matchingProfessors.length} professores.
 // 									Refine a busca.
 // 								</p>
 // 							)}
 // 							{!matchingProfessors.length && (
-// 								<p className="px-3 py-2 text-sm text-ink-muted">
+// 								<p className="px-3 py-2 text-sm text-text-muted">
 // 									Nenhum professor encontrado.
 // 								</p>
 // 							)}
@@ -248,7 +248,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 // 					)}
 // 				</div>
 
-// 				<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+// 				<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 // 					Período letivo
 // 					<select
 // 						className="form-input w-full"
@@ -267,7 +267,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 // 					</select>
 // 				</label>
 
-// 				<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted">
+// 				<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 // 					Grade
 // 					<select
 // 						className="form-input w-full"
@@ -304,7 +304,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 // 			)}
 
 // 			{!professor && (
-// 				<p className="mt-4 rounded-control bg-surface-sunken p-3 text-sm text-ink-muted">
+// 				<p className="mt-4 rounded-control bg-page-surface-accent p-3 text-sm text-text-muted">
 // 					{professorNotFound
 // 						? "Professor não encontrado. Confira o nome ou cadastre o professor para continuar."
 // 						: "Pesquise e selecione um professor cadastrado para consultar a grade."}
@@ -326,7 +326,7 @@ function ProfileField({ label, value }: { label: string; value?: string }) {
 // 			)}
 // 			{professor && !loadingGrades && !gradesError && (
 // 				<div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-// 					<p className="text-sm text-ink-muted">
+// 					<p className="text-sm text-text-muted">
 // 						{gradesForPeriod.length
 // 							? `${gradesForPeriod.length} grade(s) encontrada(s) neste período.`
 // 							: `Este professor ainda não possui grade em ${periodLabel(selectedPeriod)}.`}

@@ -16,10 +16,10 @@
 		@apply flex flex-wrap items-end justify-between gap-3;
 	}
 	.page-title {
-		@apply text-xl font-semibold tracking-tight text-accent;
+		@apply text-xl font-semibold tracking-tight text-brand-accent;
 	}
 	.page-description {
-		@apply mt-0.5 text-sm text-ink-muted;
+		@apply mt-0.5 text-sm text-text-muted;
 	}
 	.toolbar {
 		@apply flex flex-wrap items-center gap-2;
@@ -33,12 +33,12 @@
 	}
 
 	.empty-state {
-		@apply flex flex-col items-center gap-1 rounded-card border border-dashed border-line-strong px-6 py-10 text-center;
+		@apply flex flex-col items-center gap-1 rounded-card border border-dashed border-page-line-strong px-6 py-10 text-center;
 		& p:first-child {
 			@apply font-medium;
 		}
 		& p:last-child {
-			@apply text-ink-muted;
+			@apply text-text-muted;
 		}
 	}
 }

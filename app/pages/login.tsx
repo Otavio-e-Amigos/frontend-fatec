@@ -5,6 +5,7 @@ import login from "~/modules/user/@actions/login.action";
 import { Link, useSearchParams } from "react-router";
 import { useEffect } from "react";
 import useToast from "~/components/toasts/useToast";
+import { Lock, User } from "iconoir-react";
 
 /** Displays the application login using the institutional visual identity. */
 export default function LoginPage() {
@@ -65,16 +66,7 @@ export default function LoginPage() {
 
 					<FormContainer className="login-form">
 						<div className="login-field-wrap">
-							<svg
-								viewBox="0 0 20 20"
-								fill="none"
-								stroke="currentColor"
-								strokeWidth="1.5"
-								aria-hidden="true"
-							>
-								<circle cx="10" cy="6.5" r="3" />
-								<path d="M4.5 17c.4-3.1 2.2-4.7 5.5-4.7s5.1 1.6 5.5 4.7" />
-							</svg>
+							<User/>
 							<FormInput
 								required
 								name="user"
@@ -102,6 +94,7 @@ export default function LoginPage() {
 								<rect x="4.5" y="8.5" width="11" height="8" rx="1.5" />
 								<path d="M7 8.5V6a3 3 0 0 1 6 0v2.5" />
 							</svg>
+							{/*<Lock/>*/}
 							<FormInput
 								required
 								hideRequiredLabel

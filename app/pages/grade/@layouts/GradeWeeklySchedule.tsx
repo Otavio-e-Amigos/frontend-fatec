@@ -23,7 +23,7 @@ export default function GradeWeeklySchedule({
 					>
 						<table className="w-full min-w-[760px] border-collapse text-xs">
 							<thead>
-								<tr className="bg-surface-sunken text-ink-muted">
+								<tr className="bg-page-surface-accent text-text-muted">
 									<th className="w-24 border border-line px-3 py-2 text-left">
 										{formatTurno(shift)}
 									</th>
@@ -39,7 +39,7 @@ export default function GradeWeeklySchedule({
 							</thead>
 							<tbody>
 								<tr>
-									<th className="border border-line bg-surface-sunken px-3 py-2 text-left font-normal text-ink-muted">
+									<th className="border border-line bg-page-surface-accent px-3 py-2 text-left font-normal text-text-muted">
 										Aulas
 									</th>
 									{weekdays.map((weekday) => (
@@ -84,7 +84,7 @@ function LessonCell({
 			a.lesson.horaInicio.localeCompare(b.lesson.horaInicio),
 		);
 
-	if (!lessons.length) return <span className="text-ink-muted">—</span>;
+	if (!lessons.length) return <span className="text-text-muted">—</span>;
 
 	return (
 		<div className="flex flex-col gap-1">
