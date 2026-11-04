@@ -15,14 +15,21 @@ export default function GradePage(props: GradePageProps) {
 		<div className="flex flex-1 min-h-screen flex-col">
 			<Header activeItem="Grade" />
 			<main className="flex flex-1 flex-col gap-5 mx-5 my-4">
-				<PageHeader subTitle={"Recursos Acadêmicos"} description="Consulte a grade de um professor ou cadastre uma nova." title={"Histórico de Grades"} headerItems={(
-					<Link className="btn" data-variant="outline" to="/professor">
-						Ver professores
-					</Link>
-				)} />
-				<Link className="btn" data-variant="outline" to="/grade/importar">
-					Importar Grade
-				</Link>
+				<PageHeader
+					subTitle={"Recursos Acadêmicos"}
+					description="Consulte a grade de um professor ou cadastre uma nova."
+					title={"Histórico de Grades"}
+					headerItems={
+						<div className="flex flex-col gap-2">
+							<Link className="btn" data-variant="outline" to="/professor">
+								Ver professores
+							</Link>
+							<Link className="btn" data-variant="outline" to="/grade/importar">
+								Importar Grade
+							</Link>
+						</div>
+					}
+				/>
 				<GradeSelectionPanel {...page.selection} />
 				<GradeFocusPanel {...page.focus} />
 			</main>
