@@ -97,15 +97,19 @@
 		}
 
 		&[data-icon="edit"] {
-			--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.5 3 13 5.5 5.5 13H3v-2.5L10.5 3Z'/%3E%3Cpath d='m9 4.5 2.5 2.5'/%3E%3C/svg%3E");
+			/*--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.5 3 13 5.5 5.5 13H3v-2.5L10.5 3Z'/%3E%3Cpath d='m9 4.5 2.5 2.5'/%3E%3C/svg%3E");*/
+			--icon: url("/icons/edit-pencil.svg");
 		}
 
 		&[data-icon="power"] {
-			--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2v5.5'/%3E%3Cpath d='M4.7 4.4a5 5 0 1 0 6.6 0'/%3E%3C/svg%3E");
+			/*--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2v5.5'/%3E%3Cpath d='M4.7 4.4a5 5 0 1 0 6.6 0'/%3E%3C/svg%3E");*/
+			--icon: url("/icons/xmark-circle.svg");
 		}
 
 		&[data-icon="delete"] {
-			--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5h10'/%3E%3Cpath d='M6.5 4.5V3h3v1.5'/%3E%3Cpath d='m4.5 4.5.6 8.5h5.8l.6-8.5'/%3E%3Cpath d='M6.8 7v3.5M9.2 7v3.5'/%3E%3C/svg%3E");
+			/*--icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 4.5h10'/%3E%3Cpath d='M6.5 4.5V3h3v1.5'/%3E%3Cpath d='m4.5 4.5.6 8.5h5.8l.6-8.5'/%3E%3Cpath d='M6.8 7v3.5M9.2 7v3.5'/%3E%3C/svg%3E");*/
+			--icon: url("/icons/trash.svg");
+
 		}
 	}
 }

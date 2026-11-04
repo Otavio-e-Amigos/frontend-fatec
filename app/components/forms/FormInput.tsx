@@ -12,6 +12,7 @@ import AbstractValueFormatter, {
 	type AbstractValueFormatterInterface,
 	// type AdvancedAbstractValueFormatterReturn,
 } from "~/classes/base/AbstractValueFormatter";
+import { Search } from "iconoir-react/regular";
 
 function EyeIcon({ off }: { off?: boolean }) {
 	return (
@@ -285,7 +286,8 @@ export default function FormInput({
 		case "search": {
 			return (
 				<div className="form-input flex flex-row gap-3 items-center">
-					<img src="/favicon.ico" className="size-5" />
+					{/*<img src="/icons/search.svg" className="size-5" />*/}
+					<Search/>
 					<input
 						{...basicInputParameters}
 						type="search"
