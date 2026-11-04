@@ -5,7 +5,7 @@ import AuthService from "~/modules/user/auth.service";
 import User from "~/modules/user/user.class";
 
 const staticLinks = [
-	{ label: "Gestão", href: "/system" },
+	{ label: "Gestão", href: "/system", allowed: ["TI"] },
 	{ label: "Grade", href: "/grade" },
 	{ label: "Professores", href: "/professor" },
 	{ label: "Disciplinas", href: "/disciplina" },
@@ -42,6 +42,7 @@ const nonLoggedUser = new User({
 	id: 0,
 	name: "Não logado",
 	password: "123456",
+	profile: "RESPONSAVEL"
 });
 
 export default function Header({ activeItem }: { activeItem?: string }) {
@@ -82,14 +83,18 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 
 				{/* Centro: navegação */}
 				<nav className="flex flex-wrap items-center justify-center gap-1">
-					{staticLinks.map(({ label, href }) => (
-						<HeaderLink
+					{staticLinks.map(({ label, href, allowed }) => {
+						if (allowed && !allowed.includes(currentUser.profile as string)) {
+							return
+						}
+						return <HeaderLink
 							key={href}
 							label={label}
 							href={href}
 							active={isActive(label, href)}
 						/>
-					))}
+					}
+					)}
 					{process.env.NODE_ENV === "development" && (
 						<HeaderLink
 							label="dev-area"
