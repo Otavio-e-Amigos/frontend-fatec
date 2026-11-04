@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const ThemeContext = createContext<any>(undefined);
 
-const AVAILABLE_THEMES = ['default', 'example', 'protanopia', 'monochromatic'];
+// const AVAILABLE_THEMES = ['default', 'example', 'protanopia', 'monochromatic'];
 const THEMES = [
 	{
 		category: "normal",
@@ -15,6 +15,10 @@ const THEMES = [
 		category: "acessibility",
 		label: "Acessibilidade",
 		themes: [
+			{ value: "deuteranopia", label: "Deuteranopia" },
+			{ value: "tritanopia", label: "Tritanopia" },
+			{ value: "protanomaly", label: "Protanomia" },
+			{ value: "deuteranomaly", label: "Deuteranomalia" },
 			{ value: "protanopia", label: "Protanopia" },
 			{ value: "monochromatic", label: "Monocromático" },
 		]
@@ -83,7 +87,7 @@ export function ThemeProvider({ children, storage }: {children: any, storage:any
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, AVAILABLE_THEMES, THEMES }}>
+    <ThemeContext.Provider value={{ theme, setTheme, THEMES }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -1,0 +1,80 @@
+/** template */
+.theme-tritanopia {
+	/* -= Brand elements =- */
+	--color-brand: #b20000;
+
+	--color-brand-hover: #7e0000;
+	--color-brand-highlight: #f54538;
+	--color-brand-pressed: #5e0000;
+	--color-brand-soft: #f9ebeb;
+	--color-brand-shade: #7e0000;
+
+/* -=                =- */
+
+/* -= Brand accent elements =- */
+	--color-brand-accent: #4a7c94;
+
+	--color-brand-accent-hover: #3a657d;
+	--color-brand-accent-highlight: #6b9da8;
+	--color-brand-accent-highlight-hover: #5aa1b0;
+/* -=                =- */
+
+/* -= Page colors =- */
+	--color-page-bg: #ffffff;
+
+	--color-page-floor: #ffffff;
+	--color-page-floor-outline: #000000;
+	--color-page-floor-accent: #e8e8e8;
+	--color-page-floor-accent-outline: #cccccc;
+
+	--color-page-surface: #b2bec3;
+	--color-page-surface-accent: #6c766e;
+	--color-page-surface-outline: #000000;
+
+	--color-page-line: #949494;
+	--color-page-line-strong: #5a6b7d;
+/* -=             =- */
+
+/* -= Text elements =- */
+	--color-text: #000000;
+
+	--color-text-hyperlink: #b20000;
+	--color-text-hyperlink-hover: #7e0000;
+
+	--color-text-faint: #888888;
+	--color-text-muted: #666666;
+/* -=               =- */
+
+/* -= Visual hints elements =- */
+	--color-hint-info: #ffffff;
+	--color-hint-neutral: #000000;
+
+/* -=                =- */
+
+	--color-hint-success: #5b9f6c;
+	--color-hint-success-fg: #4a5e38;
+	--color-hint-success-dot: #8da953;
+
+	--color-hint-warning: #000000;
+
+	--color-hint-warning-fg: #e8c9a6;
+	--color-hint-warning-dot: #d4b85b;
+
+	--color-hint-alert: #ffffff;
+
+	--color-hint-alert-fg: #b20000;
+	--color-hint-alert-dot: #ff3333;
+/* -=                       =- */
+
+/* -= Table elements =- */
+	--color-table-column: #94a3b8;
+
+	--color-table-row: #e8ece9;
+	--color-table-row-hover: #000000;
+
+	--color-table-row-odd: #ffffff;
+/* -=                =- */
+}
+
+
+@custom-variant theme-tritanopia (:where(.theme-tritanopia, .theme-tritanopia *));

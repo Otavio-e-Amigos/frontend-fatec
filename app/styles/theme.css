@@ -3,9 +3,16 @@
 /* System default theme, where tokens are defined by default on @theme directive */
 @import "themes/default.theme.css";
 
-/* Custom themes, defined by classes */
+/* theme implementation example class */
 @import "themes/example.theme.css";
 
+/* Color blindness-safe theme variants */
+@import "themes/deuteranopia.theme.css";
+@import "themes/tritanopia.theme.css";
+@import "themes/protanomaly.theme.css";
+@import "themes/deuteranomaly.theme.css";
 @import "themes/protanopia.theme.css";
 
+
+/* High-Contrast themes */
 @import "themes/monochromatic.theme.css";

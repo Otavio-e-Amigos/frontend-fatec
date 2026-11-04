@@ -1,0 +1,81 @@
+/** template */
+.theme-deuteranopia {
+	/* -= Brand elements =- */
+	--color-brand: #3c2b0f;
+
+	--color-brand-hover: #2a1d0a;
+	--color-brand-highlight: #5d4008;
+	--color-brand-pressed: #1a1205;
+	--color-brand-soft: #fff6eb;
+	--color-brand-shade: #2a1d0a;
+
+/* -=                =- */
+
+/* -= Brand accent elements =- */
+	--color-brand-accent: #4a7c94;
+
+	--color-brand-accent-hover: #3a657d;
+	--color-brand-accent-highlight: #6b9da8;
+	--color-brand-accent-highlight-hover: #5aa1b0;
+/* -=                =- */
+
+/* -= Page colors =- */
+	--color-page-bg: #f5fafb;
+
+	--color-page-floor: #f5fafb;
+	--color-page-floor-outline: #2a1d0a;
+	--color-page-floor-accent: #e8edee;
+	--color-page-floor-accent-outline: #e8edee;
+
+	--color-page-surface: #eceff3;
+	--color-page-surface-accent: #dfe0c7;
+	--color-page-surface-outline: #4a7c94;
+
+	--color-page-line: #b2bec3;
+	--color-page-line-strong: #636b76;
+/* -=             =- */
+
+/* -= Text elements =- */
+	--color-text: #1b1f24;
+
+	--color-text-hyperlink: #3c2b0f;
+	--color-text-hyperlink-hover: #2a1d0a;
+
+	--color-text-faint: #767676;
+	--color-text-muted: #636b76;
+/* -=               =- */
+
+/* -= Visual hints elements =- */
+	--color-hint-info: #000000;
+
+	--color-hint-neutral: #e6e6e6;
+
+/* -=                =- */
+
+	--color-hint-success: #1d280c;
+	--color-hint-success-fg: #4a5e38;
+	--color-hint-success-dot: #8da953;
+
+	--color-hint-warning: #fffad3;
+
+	--color-hint-warning-fg: #7a6b0c;
+	--color-hint-warning-dot: #cbaf4f;
+
+	--color-hint-alert: #e8c9a6;
+
+	--color-hint-alert-fg: #5d482a;
+	--color-hint-alert-dot: #a78c4f;
+/* -=                       =- */
+
+/* -= Table elements =- */
+	--color-table-column: #e2e5e9;
+
+	--color-table-row: #eceff3;
+	--color-table-row-hover: #e0e5ef;
+
+	--color-table-row-odd: #ffffff;
+/* -=                =- */
+}
+
+
+@custom-variant theme-deuteranopia (:where(.theme-deuteranopia, .theme-deuteranopia *));
