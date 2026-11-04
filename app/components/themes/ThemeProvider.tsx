@@ -3,6 +3,23 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const ThemeContext = createContext<any>(undefined);
 
 const AVAILABLE_THEMES = ['default', 'example', 'protanopia', 'monochromatic'];
+const THEMES = [
+	{
+		category: "normal",
+		label: "Normal",
+		themes: [
+			{value: "default", label: "Sistema"}
+		]
+	},
+	{
+		category: "acessibility",
+		label: "Acessibilidade",
+		themes: [
+			{ value: "protanopia", label: "Protanopia" },
+			{ value: "monochromatic", label: "Monocromático" },
+		]
+	}
+]
 const DEFAULT_THEME = 'default'
 
 export function ThemeProvider({ children, storage }: {children: any, storage:any}) {
@@ -17,12 +34,21 @@ export function ThemeProvider({ children, storage }: {children: any, storage:any
     // const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     // const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-		AVAILABLE_THEMES.forEach(
-			(t) => {
-				console.log(t)
-				root.classList.remove(`theme-${t}`)
+    THEMES.forEach(
+			(c) => {
+				c.themes.forEach((t) => {
+					console.log(c)
+					root.classList.remove(`theme-${t.value}`)
+				})
 			}
 		);
+
+		// AVAILABLE_THEMES.forEach(
+		// 	(t) => {
+		// 		console.log(t)
+		// 		root.classList.remove(`theme-${t}`)
+		// 	}
+		// );
 
 		if (theme !== DEFAULT_THEME)
 			root.classList.add(`theme-${theme}`)
@@ -57,7 +83,7 @@ export function ThemeProvider({ children, storage }: {children: any, storage:any
   }, [theme]);
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, AVAILABLE_THEMES }}>
+    <ThemeContext.Provider value={{ theme, setTheme, AVAILABLE_THEMES, THEMES }}>
       {children}
     </ThemeContext.Provider>
   );
