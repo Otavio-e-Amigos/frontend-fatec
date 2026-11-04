@@ -40,6 +40,13 @@ const homeShortcuts: HomeShortcut[] = [
 		href: "/periodo-letivo?add=true",
 		image: "/home/periodos.jpeg",
 	},
+
+	{
+		title: "Gerenciar Folhas de Ponto",
+		description: "Gerencie as Folhas de Ponto.",
+		href: "/folha-ponto",
+		image: "/home/gestao.jpeg",
+	},
 	{
 		title: "Gestão",
 		description: "Gerencie os usuários e os recursos do sistema.",
@@ -47,10 +54,11 @@ const homeShortcuts: HomeShortcut[] = [
 		profiles: ["TI"],
 		image: "/home/gestao.jpeg",
 	},
-		{
-		title: "Gerenciar Folhas de Ponto",
-		description: "Gerencie as Folhas de Ponto.",
-		href: "/folha-ponto",
+	{
+		title: "Gestão - Adicionar Usuário",
+		description: "Cadastre um novo usuário do sistema.",
+		href: "/system/user/add",
+		profiles: ["TI"],
 		image: "/home/gestao.jpeg",
 	},
 ];

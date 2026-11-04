@@ -27,11 +27,10 @@ function HeaderLink({
 		<Link
 			to={href}
 			aria-current={active ? "page" : undefined}
-			className={`inline-flex h-8 items-center rounded-control px-2.5 text-sm font-medium transition-colors ${
-				active
+			className={`inline-flex h-8 items-center rounded-control px-2.5 text-sm font-medium transition-colors ${active
 					? "bg-brand-soft text-brand"
 					: "text-text-muted hover:bg-brand-soft hover:text-brand-hover"
-			}`}
+				}`}
 		>
 			{label}
 		</Link>
@@ -110,7 +109,10 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 				{/* Centro: navegação */}
 				<nav className="flex flex-wrap items-center justify-center gap-1">
 					{staticLinks.map(({ label, href, allowed }) => {
-						if (allowed && !allowed.includes(currentUser.profile as string)) {
+						if (
+							allowed &&
+							!allowed.includes(String(currentUser.profile ?? "").toUpperCase())
+						) {
 							return;
 						}
 						return (

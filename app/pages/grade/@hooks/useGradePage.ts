@@ -13,7 +13,7 @@ import type {
 	GradePageProps,
 	ScheduleDiscipline,
 } from "../grade-page.types";
-import { academicKey, periodLabel } from "../grade-page.utils";
+import { academicKey, disciplineLabel, periodLabel } from "../grade-page.utils";
 
 /** Owns grade selection, API data, and edit/delete actions for the page. */
 export default function useGradePage({
@@ -180,10 +180,12 @@ export default function useGradePage({
 						);
 						return {
 							...entry,
-							name:
+							name: disciplineLabel(
 								disciplinas.find(
 									(discipline) => discipline.id === entry.disciplinaId,
-								)?.nome ?? `Disciplina ${entry.disciplinaId}`,
+								),
+								entry.disciplinaId,
+							),
 							course:
 								cursos.find((course) => course.id === entry.cursoId)?.nome ??
 								`Curso ${entry.cursoId}`,
@@ -264,17 +266,18 @@ export default function useGradePage({
 				current.map((item) =>
 					item.id === updated.id
 						? {
-								...item,
-								...updated,
-								name:
-									disciplinas.find(
-										(subject) => subject.id === updated.disciplinaId,
-									)?.nome ?? `Disciplina ${updated.disciplinaId}`,
-								course:
-									cursos.find((course) => course.id === updated.cursoId)?.nome ??
-									`Curso ${updated.cursoId}`,
-								shift: updated.periodo,
-							}
+							...item,
+							...updated,
+							name: disciplineLabel(
+								disciplinas.find((subject) => subject.id === updated.disciplinaId),
+								updated.disciplinaId,
+							),
+							course:
+								cursos.find((course) => course.id === updated.cursoId)?.nome ??
+								`Curso ${updated.cursoId}`,
+							shift: updated.periodo,
+							/* ...resto igual... */
+						}
 						: item,
 				),
 			);
@@ -380,11 +383,11 @@ export default function useGradePage({
 					current.map((item) =>
 						item.id === deleteTarget.discipline.id
 							? {
-									...item,
-									lessons: item.lessons.filter(
-										(lesson) => lesson.id !== deleteTarget.lesson.id,
-									),
-								}
+								...item,
+								lessons: item.lessons.filter(
+									(lesson) => lesson.id !== deleteTarget.lesson.id,
+								),
+							}
 							: item,
 					),
 				);
