@@ -14,6 +14,7 @@ export default interface AbstractQueryObject {
 	headers?: Record<string, string>;
 	credentials?: any //credentials that some systems may require along the request
 	responseType?: "json" | "blob"; //formato esperado da resposta (padrão: json). Use "blob" para baixar arquivos.
+	timeout?: number; //tempo limite em ms (padrão do módulo: 15000)
 }
 
 /**

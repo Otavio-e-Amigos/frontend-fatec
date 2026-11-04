@@ -19,10 +19,10 @@ export default function GradePage(props: GradePageProps) {
 					<Link className="btn" data-variant="outline" to="/professor">
 						Ver professores
 					</Link>
-				)}/>
-					<Link className="btn" data-variant="outline" to="/professor">
-						Importar Grade
-					</Link>
+				)} />
+				<Link className="btn" data-variant="outline" to="/grade/importar">
+					Importar Grade
+				</Link>
 				<GradeSelectionPanel {...page.selection} />
 				<GradeFocusPanel {...page.focus} />
 			</main>

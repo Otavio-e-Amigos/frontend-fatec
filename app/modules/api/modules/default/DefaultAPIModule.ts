@@ -58,7 +58,10 @@ export class DefaultAPIModule extends AbstractAPIModule {
 		}
 
 		const path = parsePath(req.path);
-		const headers: Record<string, any> = { "Content-Type": "application/json" };
+		// troque a linha do headers (linha ~61):
+		const isFormData = typeof FormData !== "undefined" && req.body instanceof FormData;
+		// em upload o navegador define o multipart e o boundary sozinho
+		const headers: Record<string, any> = isFormData ? {} : { "Content-Type": "application/json" };
 		const params = req.arguments
 			? new URLSearchParams(
 				req.arguments.map(({ param, value }) => [param, String(value)]),
@@ -80,7 +83,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 				data: req.body,
 				headers: headers,
 				responseType: req.responseType,
-				timeout: 15000,
+				timeout: req.timeout ?? 15000,
 			})
 			.then((res) => {
 				apiStatus.report(true);
@@ -114,7 +117,7 @@ export class DefaultAPIModule extends AbstractAPIModule {
 							sendToLogin();
 							// Nunca resolve: a página está sendo trocada, então nada abaixo
 							// (toasts, tela de erro) precisa rodar.
-							return new Promise<never>(() => {});
+							return new Promise<never>(() => { });
 						}
 						data.error = new APIValidationError(data.rawData.mensagem, data);
 						throw data

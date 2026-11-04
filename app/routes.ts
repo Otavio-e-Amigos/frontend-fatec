@@ -6,7 +6,7 @@ export default [
 
 	route("login", "routes/login.tsx"),
 	route("grade", "routes/grade/index.tsx"),
-
+	route("grade/importar", "routes/grade/import.tsx"),
 	route("system", "routes/system/router.outlet.tsx", [
 		index("routes/system/index.tsx"),
 		route("user", "routes/system/user/router.outlet.tsx", [
@@ -37,8 +37,8 @@ export default [
 		index("routes/disciplina/index.tsx"),
 		route("add", "routes/disciplina/add.tsx"),
 		// route(":id", "routes/disciplina/[id]/router.outlet.tsx", [
-			// index("routes/disciplina/[id]/[id].tsx"),
-			// route("edit", "routes/disciplina/edit.tsx"),
+		// index("routes/disciplina/[id]/[id].tsx"),
+		// route("edit", "routes/disciplina/edit.tsx"),
 		// ]),
 	]),
 
@@ -46,17 +46,17 @@ export default [
 		index("routes/curso/index.tsx"),
 		// route("add", "routes/curso/add.tsx"),
 		// route(":id", "routes/curso/[id]/router.outlet.tsx", [
-			// index("routes/curso/[id]/[id].tsx"),
-			// route("edit", "routes/curso/edit.tsx"),
+		// index("routes/curso/[id]/[id].tsx"),
+		// route("edit", "routes/curso/edit.tsx"),
 		// ]),
 	]),
-    route("folha-ponto", "routes/folha-ponto/index.tsx"),
+	route("folha-ponto", "routes/folha-ponto/index.tsx"),
 	route("periodo-letivo", "routes/periodo-letivo/router.outlet.tsx", [
 		index("routes/periodo-letivo/index.tsx"),
 		// route("add", "routes/periodo-letivo/add.tsx"),
 		// route(":id", "routes/periodo-letivo/[id]/router.outlet.tsx", [
-			// index("routes/periodo-letivo/[id]/[id].tsx"),
-			// route("edit", "routes/periodo-letivo/[id]/edit.tsx"),
+		// index("routes/periodo-letivo/[id]/[id].tsx"),
+		// route("edit", "routes/periodo-letivo/[id]/edit.tsx"),
 		// ]),
 	]),
 ] satisfies RouteConfig;
