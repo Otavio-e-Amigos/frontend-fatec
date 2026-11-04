@@ -1,4 +1,5 @@
 import React from "react";
+import { HeaderBrand } from "~/layouts/Header";
 
 // interface LoadingProps {
   // mensagem?: string;
@@ -8,8 +9,10 @@ export const LoadingGeralWIP: React.FC = ({
   // mensagem = "Processando dados do sistema...",
 }) => {
   return (
-		<div className="fixed w-screen h-svh z-50 place-items-center grid bg-slate-800/50 backdrop-blur-md">
-			Loading
+		<div className="fixed w-screen h-svh z-50 place-items-end grid bg-slate-800/50 backdrop-blur-md">
+			<div className="fixed w-screen h-svh place-items-end grid -top-6 right-10">
+				<HeaderBrand noRedirect/>
+			</div>
    </div>
   );
 };

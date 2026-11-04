@@ -45,6 +45,32 @@ const nonLoggedUser = new User({
 	profile: "RESPONSAVEL"
 });
 
+export function HeaderBrand({ noRedirect }: { noRedirect?: boolean }) {
+	const content = (
+		<div className="flex items-center gap-2 text-ink">
+			<BrandMark className="size-9 text-brand" />
+			<span className="flex flex-col leading-none">
+				<strong className="text-base font-bold">Appointer</strong>
+			</span>
+		</div>
+	);
+	return (
+		<div className="flex flex-1 basis-0 items-center">
+			{noRedirect && content}
+
+			{!noRedirect && (
+				<Link
+					to="/"
+					aria-label="Appointer - início"
+					className="flex items-center gap-2 text-ink"
+				>
+					{content}
+				</Link>
+			)}
+		</div>
+	);
+}
+
 export default function Header({ activeItem }: { activeItem?: string }) {
 	const [currentUser, setCurrentUser] = useState(nonLoggedUser);
 	const { pathname } = useLocation();
