@@ -15,7 +15,7 @@ import ExpressiveWindow from "~/layouts/windows/ExpressiveWindow";
 import ConfirmationWindowAction from "~/layouts/windows/actions/Confirmation.window-action";
 import useToast from "~/components/toasts/useToast";
 import { useTheme } from "~/components/themes/ThemeProvider";
-
+import GeminiKeyTester from "./GeminiKeyTester";
 const defaultTableTest = new DefaultTableModel(
 	[
 		[
@@ -122,6 +122,7 @@ export default function Page() {
 		// <main className="bg-cps min-h-full">
 		<main>
 			<Header activeItem="dev-area" />
+			<GeminiKeyTester />
 			<section className="mt-5 flex flex-col mx-5">
 				<Link to={"style-testing"}>Styles</Link>
 				{/*<PageSection name="Dynamic table layouts with same table model" />*/}
@@ -177,12 +178,17 @@ export default function Page() {
 					>
 						Summon Confirmation Window
 					</button>*/}
-					{/*<button
+					<button
 						className="btn btn-normal"
-						onClick={() => {toast.push("warning", "something happened ig")}}
+						onClick={() => {
+							toast.push({ tone: "success", message: "Toast de sucesso" });
+							toast.push({ tone: "error", message: "Toast de erro" });
+							toast.push({ tone: "warning", message: "Toast de aviso" });
+							toast.push({ tone: "info", message: "Toast de informação com um texto um pouco mais longo para testar a quebra de linha e o novo tamanho" });
+						}}
 					>
 						Summon toast
-					</button>*/}
+					</button>
 					{/*<button
 						className="btn btn-normal"
 						onClick={(e) => {

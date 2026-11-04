@@ -28,7 +28,7 @@ function ToastCard({
 	return (
 		<div
 			role={toast.tone === "error" ? "alert" : "status"}
-			className={`pointer-events-auto flex items-start gap-3 rounded-card border px-4 py-3 text-sm shadow-card ${toneClass[toast.tone]}`}
+			className={`pointer-events-auto flex animate-[toast-down_0.3s_ease-out] items-start gap-4 rounded-card border px-5 py-4 text-[1.09rem] shadow-card ${toneClass[toast.tone]}`}
 		>
 			<p className="flex-1">{toast.message}</p>
 			<button
@@ -51,7 +51,7 @@ export default function ToastViewport({
 	onDismiss: (id: number) => void;
 }) {
 	return (
-		<div className="pointer-events-none fixed bottom-4 right-4 z-[60] flex w-80 max-w-[calc(100vw-2rem)] flex-col gap-2">
+		<div className="pointer-events-none fixed top-4 left-1/2 z-[60] flex w-100 max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-col gap-2">
 			{toasts.map((toast) => (
 				<ToastCard key={toast.id} toast={toast} onDismiss={onDismiss} />
 			))}

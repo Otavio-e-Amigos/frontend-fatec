@@ -27,6 +27,7 @@ import {
 	validateGradeImport,
 } from "~/modules/grade/extraction/grade-extraction.validation";
 import AuthService from "~/modules/user/auth.service";
+import useToast from "~/components/toasts/useToast";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // same limit as the API
 
@@ -35,7 +36,7 @@ type ExtraGroup = "courseAcronyms" | "disciplineCodes" | "disciplineAcronyms";
 /** Controls the PDF upload, the review forms and the grade saving. */
 export default function useGradeImport(registry: GradeRegistry) {
 	const { revalidate } = useRevalidator();
-
+	const toast = useToast();
 	const [file, setFile] = useState<File | null>(null);
 	const [data, setData] = useState<ExtractedGrade | null>(null);
 	const [extras, setExtras] = useState<GradeImportExtras>(emptyExtras());
@@ -75,7 +76,11 @@ export default function useGradeImport(registry: GradeRegistry) {
 				file,
 				AuthService.getUserToken(),
 			);
+
 			setData(extracted);
+			if (extracted.avisos.length) {
+				toast.push({ tone: "warning", message: extracted.avisos.join(" • ") });
+			}
 			setExtras({
 				...emptyExtras(),
 				// acronym suggestions, editable in the form
@@ -99,104 +104,109 @@ export default function useGradeImport(registry: GradeRegistry) {
 		if (!data || !errors || isSaving) return;
 		setError("");
 		if (hasErrors(errors)) {
-			return setError("Corrija os campos destacados antes de salvar a grade.");
+			const message = "Corrija os campos destacados antes de salvar a grade.";
+			setError(message);
+			toast.push({ tone: "error", message });
+			return;
 		}
 		setIsSaving(true);
 		try {
 			setResult(await saveExtractedGrade(data, extras, AuthService.getUserToken()));
 		} catch (e) {
-			setError(getErrorMessage(e, "Não foi possível salvar a grade. Tente novamente."));
+			const message = getErrorMessage(e, "Não foi possível salvar a grade. Tente novamente.");
+			setError(message);
+			toast.push({ tone: "error", message });
 		} finally {
-			setIsSaving(false);
-			// refreshes the "already registered" panel, also after partial saves
-			revalidate();
-		}
+		setIsSaving(false);
+		// refreshes the "already registered" panel, also after partial saves
+		revalidate();
 	}
+}
 
-	function reset() {
-		setData(null);
-		setFile(null);
-		setError("");
-		setExtras(emptyExtras());
-	}
+function reset() {
+	setData(null);
+	setFile(null);
+	setError("");
+	setExtras(emptyExtras());
+}
 
-	// --- form editing (immutable) ---
-	const update = (patch: Partial<ExtractedGrade>) =>
-		setData((current) => current && { ...current, ...patch });
-	const updateProfessor = (patch: Partial<ExtractedProfessor>) =>
-		setData((current) => current && { ...current, professor: { ...current.professor, ...patch } });
-	const updateHours = (patch: Partial<ExtractedHours>) =>
-		setData((current) => current && { ...current, horas: { ...current.horas, ...patch } });
+// --- form editing (immutable) ---
+const update = (patch: Partial<ExtractedGrade>) =>
+	setData((current) => current && { ...current, ...patch });
+const updateProfessor = (patch: Partial<ExtractedProfessor>) =>
+	setData((current) => current && { ...current, professor: { ...current.professor, ...patch } });
+const updateHours = (patch: Partial<ExtractedHours>) =>
+	setData((current) => current && { ...current, horas: { ...current.horas, ...patch } });
 
-	const updateDiscipline = (index: number, patch: Partial<ExtractedDiscipline>) =>
-		setData(
-			(current) =>
-				current && {
-					...current,
-					disciplinas: current.disciplinas.map((item, i) =>
-						i === index ? { ...item, ...patch } : item,
-					),
-				},
-		);
-	const addDiscipline = () =>
-		setData((current) => current && { ...current, disciplinas: [...current.disciplinas, emptyDiscipline()] });
-	const removeDiscipline = (index: number) =>
-		setData((current) => current && { ...current, disciplinas: current.disciplinas.filter((_, i) => i !== index) });
+const updateDiscipline = (index: number, patch: Partial<ExtractedDiscipline>) =>
+	setData(
+		(current) =>
+			current && {
+				...current,
+				disciplinas: current.disciplinas.map((item, i) =>
+					i === index ? { ...item, ...patch } : item,
+				),
+			},
+	);
+const addDiscipline = () =>
+	setData((current) => current && { ...current, disciplinas: [...current.disciplinas, emptyDiscipline()] });
+const removeDiscipline = (index: number) =>
+	setData((current) => current && { ...current, disciplinas: current.disciplinas.filter((_, i) => i !== index) });
 
-	const updateLesson = (index: number, lessonIndex: number, patch: Partial<ExtractedLesson>) =>
-		setData(
-			(current) =>
-				current && {
-					...current,
-					disciplinas: current.disciplinas.map((item, i) =>
-						i !== index
-							? item
-							: {
-									...item,
-									aulas: item.aulas.map((lesson, n) =>
-										n === lessonIndex ? { ...lesson, ...patch } : lesson,
-									),
-								},
-					),
-				},
-		);
-	const addLesson = (index: number) =>
-		setData(
-			(current) =>
-				current && {
-					...current,
-					disciplinas: current.disciplinas.map((item, i) =>
-						i === index ? { ...item, aulas: [...item.aulas, emptyLesson()] } : item,
-					),
-				},
-		);
-	const removeLesson = (index: number, lessonIndex: number) =>
-		setData(
-			(current) =>
-				current && {
-					...current,
-					disciplinas: current.disciplinas.map((item, i) =>
-						i === index
-							? { ...item, aulas: item.aulas.filter((_, n) => n !== lessonIndex) }
-							: item,
-					),
-				},
-		);
+const updateLesson = (index: number, lessonIndex: number, patch: Partial<ExtractedLesson>) =>
+	setData(
+		(current) =>
+			current && {
+				...current,
+				disciplinas: current.disciplinas.map((item, i) =>
+					i !== index
+						? item
+						: {
+							...item,
+							aulas: item.aulas.map((lesson, n) =>
+								n === lessonIndex ? { ...lesson, ...patch } : lesson,
+							),
+						},
+				),
+			},
+	);
+const addLesson = (index: number) =>
+	setData(
+		(current) =>
+			current && {
+				...current,
+				disciplinas: current.disciplinas.map((item, i) =>
+					i === index ? { ...item, aulas: [...item.aulas, emptyLesson()] } : item,
+				),
+			},
+	);
+const removeLesson = (index: number, lessonIndex: number) =>
+	setData(
+		(current) =>
+			current && {
+				...current,
+				disciplinas: current.disciplinas.map((item, i) =>
+					i === index
+						? { ...item, aulas: item.aulas.filter((_, n) => n !== lessonIndex) }
+						: item,
+				),
+			},
+	);
 
-	// --- complementary data (what the PDF does not carry) ---
-	const updateExtras = (patch: Partial<GradeImportExtras>) =>
-		setExtras((current) => ({ ...current, ...patch }));
-	const updateExtraEntry = (group: ExtraGroup, key: string, value: string) =>
-		setExtras((current) => ({ ...current, [group]: { ...current[group], [key]: value } }));
+// --- complementary data (what the PDF does not carry) ---
+const updateExtras = (patch: Partial<GradeImportExtras>) =>
+	setExtras((current) => ({ ...current, ...patch }));
+const updateExtraEntry = (group: ExtraGroup, key: string, value: string) =>
+	setExtras((current) => ({ ...current, [group]: { ...current[group], [key]: value } }));
 
-	return {
-		registry, file, data, extras, errors, error, result, isExtracting, isSaving,
-		selectFile, extract, save, reset,
-		update, updateProfessor, updateHours,
-		updateDiscipline, addDiscipline, removeDiscipline,
-		updateLesson, addLesson, removeLesson,
-		updateExtras, updateExtraEntry,
-	};
+return {
+	registry, file, data, extras, errors, error, result, isExtracting, isSaving,
+	selectFile, extract, save, reset,
+	update, updateProfessor, updateHours,
+	updateDiscipline, addDiscipline, removeDiscipline,
+	updateLesson, addLesson, removeLesson,
+	updateExtras, updateExtraEntry,
+};
 }
 
 export type GradeImportState = ReturnType<typeof useGradeImport>;

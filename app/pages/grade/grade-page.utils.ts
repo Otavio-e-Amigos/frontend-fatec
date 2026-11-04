@@ -1,5 +1,13 @@
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
+import type Disciplina from "~/modules/disciplina/disciplina.class";
 
+/** Display name of a discipline, with its acronym and code when registered. */
+/** Display name of a discipline, with its acronym and code when registered. */
+export function disciplineLabel(discipline: Disciplina | undefined, id: number) {
+	const name = discipline?.nome ?? `Disciplina ${id}`;
+	const details = [discipline?.sigla, discipline?.codigo].filter(Boolean).join(" · ");
+	return details ? `${name} (${details})` : name;
+}
 export const weekdays = [
 	{ value: 1, label: "Segunda" },
 	{ value: 2, label: "Terça" },

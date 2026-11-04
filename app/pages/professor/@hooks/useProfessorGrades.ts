@@ -6,7 +6,7 @@ import GradeService, { type SavedGrade } from "~/modules/grade/grade.service";
 import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import AuthService from "~/modules/user/auth.service";
 import type { ScheduleDiscipline } from "~/pages/grade/grade-page.types";
-import { academicKey, periodLabel } from "~/pages/grade/grade-page.utils";
+import { academicKey, disciplineLabel, periodLabel } from "~/pages/grade/grade-page.utils";
 
 type Options = {
 	professorId: number;
@@ -98,9 +98,10 @@ export default function useProfessorGrades({
 				const results: ScheduleDiscipline[] = await Promise.all(
 					entries.map(async (entry) => ({
 						...entry,
-						name:
-							disciplinas.find((d) => d.id === entry.disciplinaId)?.nome ??
-							`Disciplina ${entry.disciplinaId}`,
+						name: disciplineLabel(
+							disciplinas.find((d) => d.id === entry.disciplinaId),
+							entry.disciplinaId,
+						),
 						course:
 							cursos.find((c) => c.id === entry.cursoId)?.nome ??
 							`Curso ${entry.cursoId}`,

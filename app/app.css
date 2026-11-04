@@ -21,3 +21,14 @@
 
 /* 4. layouts: arranjo de página, sem cara de componente */
 @import "./styles/layout.css";
+
+@keyframes toast-down {
+	from {
+		opacity: 0;
+		transform: translateY(-100%);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
