@@ -15,6 +15,7 @@ import Footer from "./layouts/Footer";
 import WindowProvider from "./components/windows/WindowProvider";
 import ToastProvider from "./components/toasts/ToastProvider";
 import { ThemeProvider } from "./components/themes/ThemeProvider";
+import { LoadingGeralWIP } from "./components/loaders/LoadingGeral.wip";
 
 // import VLibras from "@djpfs/react-vlibras/dist/types";
 export const links: Route.LinksFunction = () => [
@@ -58,6 +59,7 @@ export async function clientLoader({}: Route.LoaderArgs) {
 export default function App({ loaderData }: Route.ComponentProps) {
 	const navigation = useNavigation();
 	console.log(loaderData);
+	// const isNavigating = true;
 	const isNavigating = Boolean(navigation.location);
 
 	return (
@@ -66,7 +68,8 @@ export default function App({ loaderData }: Route.ComponentProps) {
 				<WindowProvider>
 					<Outlet />
 					<Footer />
-					{isNavigating && <LoadingGeral mensagem="Carregando página..." />}
+					{/*{isNavigating && <LoadingGeral mensagem="Carregando página..." />}*/}
+					{isNavigating && <LoadingGeralWIP mensagem="Carregando página..." />}
 				</WindowProvider>
 			</ToastProvider>
 		</ThemeProvider>
