@@ -42,7 +42,7 @@ const nonLoggedUser = new User({
 	id: 0,
 	name: "Não logado",
 	password: "123456",
-	profile: "RESPONSAVEL"
+	profile: "RESPONSAVEL",
 });
 
 export function HeaderBrand({ noRedirect }: { noRedirect?: boolean }) {
@@ -91,7 +91,7 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 
 	return (
 		// relative + z-10: o brilho da faixa vermelha aparece por cima do conteúdo abaixo
-		<header className="relative z-10 bg-white shadow-card">
+		<header className="sticky top-0 z-10 bg-white shadow-card">
 			<div className="flex min-h-14 flex-wrap items-center gap-x-6 gap-y-2 px-5 py-2">
 				{/* Esquerda: marca (flex-1 para equilibrar com o lado direito) */}
 				<div className="flex flex-1 basis-0 items-center">
@@ -111,16 +111,17 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 				<nav className="flex flex-wrap items-center justify-center gap-1">
 					{staticLinks.map(({ label, href, allowed }) => {
 						if (allowed && !allowed.includes(currentUser.profile as string)) {
-							return
+							return;
 						}
-						return <HeaderLink
-							key={href}
-							label={label}
-							href={href}
-							active={isActive(label, href)}
-						/>
-					}
-					)}
+						return (
+							<HeaderLink
+								key={href}
+								label={label}
+								href={href}
+								active={isActive(label, href)}
+							/>
+						);
+					})}
 					{process.env.NODE_ENV === "development" && (
 						<HeaderLink
 							label="dev-area"
@@ -132,7 +133,10 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 
 				{/* Direita: usuário */}
 				<div className="flex flex-1 basis-0 items-center justify-end gap-4">
-					<Link to="/login" className="link inline-flex h-8 items-center text-sm">
+					<Link
+						to="/login"
+						className="link inline-flex h-8 items-center text-sm"
+					>
 						Login
 					</Link>
 
@@ -147,10 +151,7 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 			</div>
 
 			{/* Faixa vermelha translúcida com brilho */}
-			<div
-				aria-hidden
-				className="h-0.75 bg-brand/45"
-			/>
+			<div aria-hidden className="h-0.75 bg-brand/45" />
 		</header>
 	);
 }

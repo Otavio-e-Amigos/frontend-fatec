@@ -43,7 +43,7 @@ export default function Footer() {
 	}
 
 	return (
-		<footer className="mt-auto w-full bg-brand-shade text-white">
+		<footer className="sticky bottom-0 mt-auto w-full bg-brand-shade text-white">
 			<div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 px-3 py-2 text-xs">
 				<div className="flex flex-wrap gap-2">
 					<ThemeWidget/>
