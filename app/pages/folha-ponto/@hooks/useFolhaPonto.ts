@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import getErrorMessage from "~/classes/errors/get-error-message";
 import useToast from "~/components/toasts/useToast";
 import type FolhaPontoPreview from "~/modules/folha-ponto/folha-ponto.class";
@@ -8,14 +9,28 @@ import { FolhaPontoDownloadedToast } from "~/modules/folha-ponto/folha-ponto.toa
 import AuthService from "~/modules/user/auth.service";
 
 /** Controla os filtros, a prévia e o download da folha de ponto. */
-export default function useFolhaPonto() {
+type FolhaPontoInitial = {
+	professor: string;
+	grade: string;
+	mes: string;
+	ano: string;
+	preview: boolean;
+};
+
+export default function useFolhaPonto(initial: FolhaPontoInitial) {
 	const toast = useToast();
 	const today = new Date();
 
-	const [professorId, setProfessorId] = useState("");
-	const [mes, setMes] = useState(String(today.getMonth() + 1));
-	const [ano, setAno] = useState(String(today.getFullYear()));
+	const [professorId, setProfessorId] = useState(initial.professor);
+	const [gradeId, setGradeId] = useState(initial.grade);
+	const [mes, setMes] = useState(
+		initial.mes || String(today.getMonth() + 1),
+	);
+	const [ano, setAno] = useState(
+		initial.ano || String(today.getFullYear()),
+	);
 	const [preview, setPreview] = useState<FolhaPontoPreview | null>(null);
+
 	// Requisição usada na prévia: o download sempre usa exatamente ela.
 	const [request, setRequest] = useState<FolhaPontoRequest | null>(null);
 	const [loadingPreview, setLoadingPreview] = useState(false);
@@ -32,9 +47,17 @@ export default function useFolhaPonto() {
 		};
 	}
 
+	/** Ao mudar o professor, limpa a grade selecionada. */
+	function handleProfessorChange(value: string) {
+		changeFilter(setProfessorId)(value);
+		setGradeId("");
+	}
+
 	async function loadPreview() {
 		const year = Number(ano);
+
 		if (!professorId) return setError("Selecione um professor.");
+
 		if (!Number.isInteger(year) || year < 2000 || year > 2050)
 			return setError("Informe um ano entre 2000 e 2050.");
 
@@ -48,6 +71,7 @@ export default function useFolhaPonto() {
 		setError("");
 		setPreview(null);
 		setRequest(null);
+
 		try {
 			setPreview(
 				await FolhaPontoService.preview(next, AuthService.getUserToken()),
@@ -62,10 +86,19 @@ export default function useFolhaPonto() {
 		}
 	}
 
+	/** Gera a prévia automaticamente quando solicitado pela URL. */
+	useEffect(() => {
+		if (initial.preview && initial.professor) {
+			loadPreview();
+		}
+	}, []);
+
 	async function download() {
 		if (!request) return;
+
 		setDownloading(true);
 		setError("");
+
 		try {
 			await FolhaPontoService.download(request, AuthService.getUserToken());
 			toast.push(FolhaPontoDownloadedToast);
@@ -79,13 +112,15 @@ export default function useFolhaPonto() {
 	return {
 		form: {
 			professorId,
+			gradeId,
 			mes,
 			ano,
 			loadingPreview,
 			error,
-			onProfessorChange: changeFilter(setProfessorId),
+			onProfessorChange: handleProfessorChange,
 			onMesChange: changeFilter(setMes),
 			onAnoChange: changeFilter(setAno),
+			onGradeChange: changeFilter(setGradeId),
 			onPreview: loadPreview,
 		},
 		preview: {

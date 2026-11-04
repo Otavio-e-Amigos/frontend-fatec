@@ -8,10 +8,18 @@ import FolhaPontoPreview from "./@layouts/FolhaPontoPreview";
 /** Escolha de professor/mês, prévia da folha e download do documento. */
 export default function FolhaPontoPage({
 	professores,
+	initial,
 }: {
 	professores: Professor[];
+	initial: {
+		professor: string;
+		grade: string;
+		mes: string;
+		ano: string;
+		preview: boolean;
+	};
 }) {
-	const page = useFolhaPonto();
+	const page = useFolhaPonto(initial);
 
 	return (
 		<div className="flex flex-1 min-h-screen flex-col">
