@@ -69,7 +69,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
 					<Outlet />
 					<Footer />
 					{/*{isNavigating && <LoadingGeral mensagem="Carregando página..." />}*/}
-					{isNavigating && <LoadingGeralWIP mensagem="Carregando página..." />}
+					{isNavigating && <LoadingGeralWIP/>}
 				</WindowProvider>
 			</ToastProvider>
 		</ThemeProvider>
