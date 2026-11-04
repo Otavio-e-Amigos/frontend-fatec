@@ -7,6 +7,7 @@ import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import SavePeriodoForm from "./@layouts/SavePeriodoForm";
 import mapper from "./@mappers/periodo-letivo-table.mapper";
 import useWindow from "~/components/windows/useWindow";
+import { Plus } from "iconoir-react";
 
 export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 	const window = useWindow({
@@ -44,7 +45,8 @@ export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
 									window.show();
 								}}
 							>
-								+ Novo Período Letivo
+								<Plus/>
+								<p>Novo Período Letivo</p>
 							</button>
 						}
 					/>
