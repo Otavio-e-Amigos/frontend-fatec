@@ -9,11 +9,15 @@ import mapper from "./@mappers/periodo-letivo-table.mapper";
 import useWindow from "~/components/windows/useWindow";
 import { Plus } from "iconoir-react";
 
-export default function PeriodoIndex({ list }: { list: PeriodoLetivo[] }) {
+export default function PeriodoIndex({ list, initial }: { list: PeriodoLetivo[], initial: any }) {
 	const window = useWindow({
 		wrapper: <SavePeriodoForm />,
 		initialData: { dismissible: true },
 	});
+
+	if (initial && initial.addResourceWindow) {
+		window.show()
+	}
 
 	const table = new DefaultTableModel(list.map(mapper), [
 		"Período",

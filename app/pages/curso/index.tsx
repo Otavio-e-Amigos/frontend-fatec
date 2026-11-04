@@ -8,7 +8,7 @@ import useWindow from "~/components/windows/useWindow";
 import SaveCursoForm from "./@layouts/SaveCursoForm";
 import { Plus } from "iconoir-react";
 
-export default function CursoIndexPage({ list }: { list: Curso[] }) {
+export default function CursoIndexPage({ list, initial }: { list: Curso[], initial:any }) {
 	const window = useWindow({
 		wrapper: <SaveCursoForm />,
 	});
@@ -18,6 +18,10 @@ export default function CursoIndexPage({ list }: { list: Curso[] }) {
 		"Turno",
 		"Ações",
 	]);
+
+	if (initial && initial.addResourceWindow) {
+		window.show()
+	}
 
 	return (
 		<div className="flex flex-col flex-1">

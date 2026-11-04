@@ -10,9 +10,18 @@ import useWindow from "~/components/windows/useWindow";
 import mapper from "./@mappers/discipline-table.mapper";
 import { Plus } from "iconoir-react";
 
-export default function DisciplinaIndexPage({ list }: { list: Disciplina[] }) {
+export default function DisciplinaIndexPage({ list, initial }: { list: Disciplina[], initial: any }) {
 	const [term, setTerm] = useState("");
-	const window = useWindow();
+	const window = useWindow({
+		wrapper: <SaveDisciplinaForm />,
+		initialData: {
+			dismissible: true
+		}
+	});
+
+	if (initial && initial.addResourceWindow) {
+		window.show();
+	}
 
 	const filtered = useMemo(() => {
 		if (!term) return list;

@@ -25,19 +25,19 @@ const homeShortcuts: HomeShortcut[] = [
 	{
 		title: "Adicionar Disciplina",
 		description: "Cadastre uma disciplina para usar na criação das grades.",
-		href: "/disciplina/add",
+		href: "/disciplina?add=true",
 		image: "/home/disciplinas.jpeg",
 	},
 	{
 		title: "Adicionar Curso",
 		description: "Cadastre um novo curso no sistema.",
-		href: "/curso/add",
+		href: "/curso?add=true",
 		image: "/home/cursos.jpeg",
 	},
 	{
 		title: "Adicionar Período Letivo",
 		description: "Cadastre um novo período letivo.",
-		href: "/periodo-letivo/add",
+		href: "/periodo-letivo?add=true",
 		image: "/home/periodos.jpeg",
 	},
 	{
