@@ -71,6 +71,13 @@ export default function About({
 					>
 						Criar grade horária
 					</Link>
+					<Link
+						className="btn"
+						data-variant="outline"
+						to={`/folha-ponto?professor=${professor.id}&preview=1`}
+					>
+						Criar folha de ponto
+					</Link>
 				</div>
 			</section>
 

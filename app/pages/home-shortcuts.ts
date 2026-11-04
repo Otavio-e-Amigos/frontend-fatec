@@ -47,6 +47,12 @@ const homeShortcuts: HomeShortcut[] = [
 		profiles: ["TI"],
 		image: "/home/gestao.jpeg",
 	},
+		{
+		title: "Gerenciar Folhas de Ponto",
+		description: "Gerencie as Folhas de Ponto.",
+		href: "/folha-ponto",
+		image: "/home/gestao.jpeg",
+	},
 ];
 
 export default homeShortcuts;
