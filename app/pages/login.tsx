@@ -20,9 +20,9 @@ export default function LoginPage() {
 	}, []);
 	return (
 		<div className="login-page">
-			{isSubmitting && (
+			{/*{isSubmitting && (
 				<LoadingGeral mensagem="Validando suas credenciais..." />
-			)}
+			)}*/}
 			<header className="login-header">
 				<div className="login-header-inner">
 					<Link className="login-brand" to="/" aria-label="Appointer - início">
