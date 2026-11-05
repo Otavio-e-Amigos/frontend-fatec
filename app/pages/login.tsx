@@ -151,7 +151,7 @@ function LoginIllustration() {
 	return (
 		<div className="login-illustration" aria-hidden="true">
 			<svg viewBox="0 0 420 280" fill="none">
-				<ellipse cx="206" cy="202" rx="174" ry="60" fill="#F9EBEB" />
+				<ellipse cx="206" cy="202" rx="174" ry="60" fill="#F9EBEB" className="fill-brand-soft" />
 				<rect
 					x="85"
 					y="73"
@@ -162,11 +162,11 @@ function LoginIllustration() {
 					stroke="#949494"
 					strokeWidth="3"
 				/>
-				<rect x="103" y="91" width="177" height="13" rx="4" fill="#F9EBEB" />
+				<rect x="103" y="91" width="177" height="13" rx="4" fill="#F9EBEB" className="fill-brand-soft" />
 				<rect x="103" y="114" width="94" height="9" rx="4.5" fill="#DADADA" />
 				<rect x="103" y="133" width="147" height="9" rx="4.5" fill="#DADADA" />
 				<rect x="103" y="152" width="127" height="9" rx="4.5" fill="#DADADA" />
-				<rect x="103" y="183" width="176" height="22" rx="5" fill="#B20000" />
+				<rect x="103" y="183" width="176" height="22" rx="5" fill="#B20000" className="fill-brand" />
 				<path d="M191 227v20m0 0h-27m27 0h27" stroke="#555" strokeWidth="4" />
 				<rect
 					x="56"
@@ -178,24 +178,26 @@ function LoginIllustration() {
 					stroke="#949494"
 					strokeWidth="3"
 				/>
-				<path d="M57 93h76" stroke="#B20000" strokeWidth="7" />
-				<path d="M74 57v18m42-18v18" stroke="#B20000" strokeWidth="4" />
-				<rect x="71" y="105" width="12" height="12" rx="2" fill="#F9EBEB" />
-				<rect x="91" y="105" width="12" height="12" rx="2" fill="#B20000" />
-				<rect x="111" y="105" width="12" height="12" rx="2" fill="#F9EBEB" />
+				<path d="M57 93h76" stroke="#B20000" strokeWidth="7" className="stroke-brand"/>
+				<path d="M74 57v18m42-18v18" stroke="#B20000" strokeWidth="4" className="stroke-brand" />
+				<rect x="71" y="105" width="12" height="12" rx="2" fill="#F9EBEB" className="fill-brand-soft" />
+				<rect x="91" y="105" width="12" height="12" rx="2" fill="#B20000" className="fill-brand-soft" />
+				<rect x="111" y="105" width="12" height="12" rx="2" fill="#F9EBEB" className="fill-brand-soft" />
 				<path
 					d="M277 77a10 10 0 0 1 10-10h65l30 30v92a10 10 0 0 1-10 10h-85a10 10 0 0 1-10-10V77Z"
 					fill="white"
 					stroke="#B20000"
 					strokeWidth="3"
+					className="stroke-brand"
 				/>
-				<path d="M352 68v31h30" stroke="#B20000" strokeWidth="3" />
+				<path d="M352 68v31h30" stroke="#B20000" strokeWidth="3" className="stroke-brand" />
 				<rect x="295" y="117" width="62" height="9" rx="4.5" fill="#DADADA" />
 				<rect x="295" y="136" width="69" height="9" rx="4.5" fill="#DADADA" />
 				<rect x="295" y="155" width="45" height="9" rx="4.5" fill="#DADADA" />
 				<path
 					d="m344 185 26-12 26 12v25c0 22-15 37-26 43-11-6-26-21-26-43v-25Z"
 					fill="#B20000"
+					className="fill-brand"
 				/>
 				<path
 					d="m359 207 8 8 15-18"
@@ -204,8 +206,8 @@ function LoginIllustration() {
 					strokeLinecap="round"
 					strokeLinejoin="round"
 				/>
-				<circle cx="22" cy="75" r="5" stroke="#D32719" />
-				<circle cx="402" cy="94" r="4" fill="#D32719" />
+				<circle cx="22" cy="75" r="5" stroke="#D32719" className="stroke-brand"/>
+				<circle cx="402" cy="94" r="4" fill="#D32719" className="fill-brand" />
 			</svg>
 		</div>
 	);
