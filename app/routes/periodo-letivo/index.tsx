@@ -3,6 +3,11 @@ import Service from "~/modules/periodo-letivo/periodo-letivo.service";
 import AuthService from "~/modules/user/auth.service";
 import Page from "~/pages/periodo-letivo/index";
 
+export function meta() {
+	return [{ title: "Appointer: Períodos Letivos" }];
+}
+
+
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
   const url = new URL(request.url);
 

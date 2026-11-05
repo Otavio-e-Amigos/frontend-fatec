@@ -6,6 +6,11 @@ import PeriodoLetivoService from "~/modules/periodo-letivo/periodo-letivo.servic
 import ProfessorService from "~/modules/professor/professor.service";
 import AuthService from "~/modules/user/auth.service";
 
+export function meta() {
+	return [{ title: "Appointer: Professores" }];
+}
+
+
 export async function clientLoader({ params }: Route.LoaderArgs) {
 	const id = Number(params.id);
 	const auth = AuthService.getUserToken();

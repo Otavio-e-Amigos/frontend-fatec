@@ -3,6 +3,10 @@ import CursoService from "~/modules/curso/curso.service";
 import AuthService from "~/modules/user/auth.service";
 import Page from "~/pages/curso/index";
 
+export function meta() {
+	return [{ title: "Appointer: Cursos" }];
+}
+
 export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 
 	const url = new URL(request.url)
