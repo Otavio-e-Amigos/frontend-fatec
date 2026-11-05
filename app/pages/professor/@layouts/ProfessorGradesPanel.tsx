@@ -52,7 +52,7 @@ export default function ProfessorGradesPanel({
 			{state.grades.length > 1 && selectedGrade && (
 				<select
 					aria-label="Período da grade"
-					className="rounded-control border border-line bg-page-surface px-2 py-1 text-sm text-ink"
+					className="rounded-control border border-line bg-page-surface px-2 py-1 text-sm text-text"
 					value={selectedGrade.id}
 					onChange={(event) => state.selectGrade(Number(event.target.value))}
 				>

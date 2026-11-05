@@ -23,7 +23,7 @@ export default function GradeWeeklySchedule({
 					>
 						<table className="w-full min-w-[760px] border-collapse text-xs">
 							<thead>
-								<tr className="bg-page-surface-accent text-text-muted">
+								<tr className="bg-page-surface-accent text-text">
 									<th className="w-24 border border-line px-3 py-2 text-left">
 										{formatTurno(shift)}
 									</th>
@@ -39,7 +39,7 @@ export default function GradeWeeklySchedule({
 							</thead>
 							<tbody>
 								<tr>
-									<th className="border border-line bg-page-surface-accent px-3 py-2 text-left font-normal text-text-muted">
+									<th className="border border-line bg-page-surface-accent px-3 py-2 text-left font-normal text-text">
 										Aulas
 									</th>
 									{weekdays.map((weekday) => (

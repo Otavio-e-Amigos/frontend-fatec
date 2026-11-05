@@ -61,7 +61,7 @@ export default function GradeSelectionPanel({
 									<button
 										key={entry.id}
 										type="button"
-										className="block w-full border-b border-line px-3 py-2 text-left text-sm text-ink last:border-b-0 hover:bg-brand-soft focus:bg-brand-soft"
+										className="block w-full border-b border-line px-3 py-2 text-left text-sm text-text last:border-b-0 hover:bg-brand-soft focus:bg-brand-soft"
 										onMouseDown={(event) => event.preventDefault()}
 										onClick={() => onSelectProfessor(entry)}
 									>
@@ -69,7 +69,7 @@ export default function GradeSelectionPanel({
 									</button>
 								))}
 								{matchingProfessors.length > 5 && (
-									<p className="border-t border-line bg-page-surface-accent px-3 py-2 text-xs text-text-muted">
+									<p className="border-t border-line bg-page-surface-accent px-3 py-2 text-xs text-text">
 										Exibindo 5 de {matchingProfessors.length} professores.
 										Refine a busca.
 									</p>
@@ -139,7 +139,7 @@ export default function GradeSelectionPanel({
 				)}
 
 				{!professor && (
-					<p className="mt-4 rounded-control bg-page-surface-accent p-3 text-sm text-text-muted">
+					<p className="mt-4 rounded-control bg-page-surface-accent p-3 text-sm text-text">
 						{professorNotFound
 							? "Professor não encontrado. Confira o nome ou cadastre o professor para continuar."
 							: "Pesquise e selecione um professor cadastrado para consultar a grade."}
