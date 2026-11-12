@@ -1,11 +1,14 @@
 import FormInput from "~/components/forms/FormInput";
-import { LoadingGeral } from "~/components/loaders/LoadingGeral";
+// import { LoadingGeral } from "~/components/loaders/LoadingGeral";
 import useForm from "~/hooks/useForm";
 import login from "~/modules/user/@actions/login.action";
 import { Link, useSearchParams } from "react-router";
 import { useEffect } from "react";
 import useToast from "~/components/toasts/useToast";
-import { Lock, User } from "iconoir-react";
+import {
+	// Lock,
+	User
+} from "iconoir-react";
 
 /** Displays the application login using the institutional visual identity. */
 export default function LoginPage() {
@@ -83,7 +86,7 @@ export default function LoginPage() {
 							<label htmlFor="pass">Senha</label>
 						</div>
 						<div className="login-field-wrap">
-							<svg
+							{/*<svg
 								className="login-password-icon"
 								viewBox="0 0 20 20"
 								fill="none"
@@ -93,7 +96,7 @@ export default function LoginPage() {
 							>
 								<rect x="4.5" y="8.5" width="11" height="8" rx="1.5" />
 								<path d="M7 8.5V6a3 3 0 0 1 6 0v2.5" />
-							</svg>
+							</svg>*/}
 							{/*<Lock/>*/}
 							<FormInput
 								required
