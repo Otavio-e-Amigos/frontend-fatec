@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CPFFormatter from "~/classes/ValueFormatters/CPFFormatter";
 import NameFormatter from "~/classes/ValueFormatters/NameFormatter";
+import OnlyTextFormatter from "~/classes/ValueFormatters/OnlyTextFormatter";
 import FormController from "~/components/forms/FormController";
 import FormInput from "~/components/forms/FormInput";
 import useForm from "~/hooks/useForm";
@@ -62,6 +63,7 @@ export default function SaveProfessorForm({
 					ValueFormatter={NameFormatter}
 					submitFormattedData
 					lettersOnly
+					// ValueFormatter={OnlyTextFormatter}
 				/>
 				<FormInput
 					required={!edit}

@@ -7,6 +7,7 @@ import save from "~/modules/curso/@actions/save.action";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
 import { useContext } from "react";
 import { WindowContext } from "~/components/windows/window.contexts";
+import OnlyTextFormatter from "~/classes/ValueFormatters/OnlyTextFormatter";
 
 export default function SaveCursoFrom({
 	curso,
@@ -50,6 +51,7 @@ export default function SaveCursoFrom({
 					<FormInput
 						required
 						lettersOnly
+						// ValueFormatter={OnlyTextFormatter}
 						name="nome"
 						type="text"
 						label="Nome"
@@ -71,6 +73,7 @@ export default function SaveCursoFrom({
 						required
 						maxLength={10}
 						lettersOnly
+						// ValueFormatter={OnlyTextFormatter}
 						name="sigla"
 						type="text"
 						label="Sigla"

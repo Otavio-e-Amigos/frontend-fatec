@@ -7,6 +7,7 @@ import actions from "~/modules/disciplina/@actions/save.action";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
 import { WindowContext } from "~/components/windows/window.contexts";
 import { useContext } from "react";
+import OnlyTextFormatter from "~/classes/ValueFormatters/OnlyTextFormatter";
 
 export default function SaveDisciplinaForm({
 	disciplina,
@@ -50,7 +51,10 @@ export default function SaveDisciplinaForm({
 					section="Informações da disciplina"
 					description="Dados acadêmicos usados nas grades e folhas de frequência."
 				>
-					<FormInput required lettersOnly name="nome" type="text" label="Nome" />
+					<FormInput required
+						lettersOnly
+						// ValueFormatter={OnlyTextFormatter}
+						name="nome" type="text" label="Nome" />
 					<FormInput
 						required
 						maxLength={10}
@@ -62,6 +66,7 @@ export default function SaveDisciplinaForm({
 						required
 						maxLength={8}
 						lettersOnly
+						// ValueFormatter={OnlyTextFormatter}
 						name="sigla"
 						type="text"
 						label="Sigla"
