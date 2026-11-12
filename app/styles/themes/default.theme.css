@@ -67,6 +67,21 @@
 
 	--color-table-row-odd: #f8f8f8;
 	/* -=                =- */
+
+
+	/* -= Chart Colors =-*/
+	--color-chart-1: var(--color-brand);
+	--color-chart-2: var(--color-brand);
+	--color-chart-3: var(--color-brand);
+	--color-chart-4: var(--color-brand);
+	--color-chart-5: var(--color-brand);
+	--color-chart-6: var(--color-brand);
+	--color-chart-7: var(--color-brand);
+	--color-chart-8: var(--color-brand);
+	--color-chart-9: var(--color-brand);
+	--color-chart-10: var(--color-brand);
+	/* -= 			   =-*/
+
 }
 
 /*

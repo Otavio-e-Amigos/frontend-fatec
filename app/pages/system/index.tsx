@@ -9,6 +9,14 @@ import AuthService from "~/modules/user/auth.service";
 import type User from "~/modules/user/user.class";
 import mapper from "./@mappers/user-table.mapper";
 import { Plus } from "iconoir-react";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import {
+	LabelList,
+	Pie,
+	PieChart,
+	Sector,
+	type PieSectorShapeProps,
+} from "recharts";
 
 // No sistema, quem administra é o perfil "TI". "RESPONSAVEL" não acessa a Gestão.
 const ADMIN_PROFILE = "TI";
@@ -47,6 +55,48 @@ export default function Page({ users }: { users?: User[] }) {
 		);
 	}
 
+	const chartData = [
+		{ name: "Professores", value: 10, href: "/professor" },
+		{ name: "Disciplinas", value: 10, href: "/disciplina" },
+		{ name: "Cursos", value: 10, href: "/curso" },
+		{ name: "Períodos Letivos", value: 10, href: "/periodo-letivo" },
+		{ name: "Folhas de Pontos", value: 10, href: "/folha-ponto" },
+		{ name: "Grades", value: 10, href: "/grades" },
+		{ name: "Usuários", value: 10, href: "/system" },
+	];
+
+	const COLORS = [
+		"var(--color-chart-1)",
+		"var(--color-chart-2)",
+		"var(--color-chart-3)",
+		"var(--color-chart-4)",
+		"var(--color-chart-5)",
+		"var(--color-chart-6)",
+		"var(--color-chart-7)",
+	];
+
+	const MyCustomPie = (props: PieSectorShapeProps) => {
+		// const p = useActiveTooltipDataPoints();
+		// const isAnyPieActive = useIsTooltipActive();
+		// const isThisPieActive = isAnyPieActive && props.payload === p?.[0];
+		// let fillOpacity: number;
+		// if (isAnyPieActive && !isThisPieActive) {
+		//   fillOpacity = 0.5;
+		// } else {
+		//   fillOpacity = 1;
+		// }
+		return (
+			<Sector
+				{...props}
+				fill={COLORS[props.index % COLORS.length]}
+				// cursor={"pointer"}
+				// stroke="none"
+				// fillOpacity={fillOpacity}
+				// style={{ transition: "fill-opacity 0.3s ease" }}
+			/>
+		);
+	};
+
 	return (
 		<div className="flex flex-1 flex-col">
 			<Header />
@@ -69,6 +119,35 @@ export default function Page({ users }: { users?: User[] }) {
 						</Link>
 					}
 				/>
+				<GenericFloor className="p-2 flex flex-col">
+					pie chat lmao
+					<PieChart style={{ width: "32rem", height: "20rem" }} responsive>
+						{/*<PieChart className="w-full h-full" responsive>*/}
+						<Pie
+							data={chartData}
+							dataKey="value"
+							nameKey="name"
+							fill="var(--color-brand)"
+							// onClick={(d) => {
+							// 	console.log(d.href);
+							// }}
+							shape={MyCustomPie}
+							// innerRadius={"60%"}
+							// outerRadius="70%"
+						>
+							<LabelList dataKey={"value"} position={"inside"} fill="white" />
+							<LabelList dataKey={"name"} position={"outside"} />
+						</Pie>
+						{/*<Pie
+						data={chartData}
+						dataKey="value" nameKey="name"
+						fill="var(--color-brand)"
+
+							// innerRadius={"60%"}
+							outerRadius="57%"
+						/>*/}
+					</PieChart>
+				</GenericFloor>
 				<ComplexTableModelView data={usersTable} actionsColumn />
 			</main>
 		</div>
