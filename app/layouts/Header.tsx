@@ -12,6 +12,7 @@ const staticLinks = [
 	{ label: "Cursos", href: "/curso" },
 	{ label: "Períodos", href: "/periodo-letivo" },
 	{ label: "Folha de Ponto", href: "/folha-ponto" },
+	{ label: "Calendário", href: "/calendario" },
 ];
 
 function HeaderLink({
