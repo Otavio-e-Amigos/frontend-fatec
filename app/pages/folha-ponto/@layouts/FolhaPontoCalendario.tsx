@@ -20,6 +20,8 @@ import {
 import formatDate from "~/modules/periodo-letivo/format-date";
 import AuthService from "~/modules/user/auth.service";
 import { MESES } from "../folha-ponto-page.utils";
+import useWindow from "~/components/windows/useWindow";
+import ShadowCenter from "~/layouts/containers/ShadowCenter";
 
 type FolhaPontoCalendarioProps = {
 	/** Ano do filtro da folha: o calendário abre nele. */
@@ -101,7 +103,7 @@ export default function FolhaPontoCalendario({
 	const toast = useToast();
 	const fileInput = useRef<HTMLInputElement>(null);
 
-	const [open, setOpen] = useState(false);
+	const calendarWindow = useWindow();
 	const [year, setYear] = useState(() => Number(ano) || new Date().getFullYear());
 	const [events, setEvents] = useState<EventoCalendario[]>([]);
 	const [selected, setSelected] = useState<string | null>(null);
@@ -118,15 +120,16 @@ export default function FolhaPontoCalendario({
 	const fixedReason =
 		selected && !existing ? FERIADOS_FIXOS[selected.slice(5)] : undefined;
 
+		// a janela já abre carregando os eventos
 	useEffect(() => {
-		if (open) load();
-	}, [open]);
+		load();
+	}, []);
 
 	// o ano do filtro mudou: o calendário acompanha
+	// a janela já abre carregando os eventos
 	useEffect(() => {
-		const next = Number(ano);
-		if (Number.isInteger(next) && next >= 2000 && next <= 2050) setYear(next);
-	}, [ano]);
+		load();
+	}, []);
 
 	async function load() {
 		try {
@@ -241,147 +244,151 @@ export default function FolhaPontoCalendario({
 	}
 
 	return (
-		<section>
-			<button
-				type="button"
-				className="flex w-full items-center justify-between gap-3 text-left"
-				aria-expanded={open}
-				onClick={() => setOpen((current) => !current)}
+		<ShadowCenter onClick={() => calendarWindow.hide()}>
+			<section
+				role="dialog"
+				aria-label="Calendário acadêmico"
+				className="floor flex max-h-[90vh] w-full max-w-5xl flex-col gap-3 overflow-y-auto rounded-card p-5 shadow-card"
+				onClick={(event) => event.stopPropagation()}
 			>
-				<span className="text-sm font-semibold text-ink">Calendário acadêmico</span>
-				<span className="text-xs font-medium text-brand">
-					{open ? "Ocultar" : "Ver e editar calendário"}
-				</span>
-			</button>
+				<header className="flex items-center justify-between gap-3">
+					<h2 className="text-xl font-semibold text-ink">Calendário acadêmico</h2>
+					<button
+						type="button"
+						className="btn"
+						data-variant="outline"
+						data-size="sm"
+						onClick={() => calendarWindow.hide()}
+					>
+						Fechar
+					</button>
+				</header>
 
-			{open && (
-				<div className="mt-3 flex flex-col gap-3">
-					<div className="flex flex-wrap items-center justify-between gap-2">
-						<div className="flex items-center gap-2">
-							<button type="button" className="btn" data-variant="outline" data-size="sm"
-								onClick={() => setYear((current) => current - 1)}>
-								‹
-							</button>
-							<span className="min-w-12 text-center text-sm font-semibold text-ink">{year}</span>
-							<button type="button" className="btn" data-variant="outline" data-size="sm"
-								onClick={() => setYear((current) => current + 1)}>
-								›
-							</button>
-						</div>
-
-						<div className="flex gap-2">
-							<button type="button" className="btn" data-variant="outline" data-size="sm"
-								disabled={busy || events.length === 0} onClick={exportJson}>
-								Exportar JSON
-							</button>
-							<button type="button" className="btn" data-variant="outline" data-size="sm"
-								disabled={busy} onClick={() => fileInput.current?.click()}>
-								Importar JSON
-							</button>
-							<input
-								ref={fileInput}
-								type="file"
-								accept="application/json,.json"
-								className="hidden"
-								onChange={(event) => {
-									const file = event.currentTarget.files?.[0] ?? null;
-									event.currentTarget.value = "";
-									importJson(file);
-								}}
-							/>
-						</div>
+				<div className="flex flex-wrap items-center justify-between gap-2">
+					<div className="flex items-center gap-2">
+						<button type="button" className="btn" data-variant="outline" data-size="sm"
+							onClick={() => setYear((current) => current - 1)}>
+							‹
+						</button>
+						<span className="min-w-12 text-center text-sm font-semibold text-ink">{year}</span>
+						<button type="button" className="btn" data-variant="outline" data-size="sm"
+							onClick={() => setYear((current) => current + 1)}>
+							›
+						</button>
 					</div>
 
-					<p className="text-[11px] text-ink-muted">
-						Clique em um dia para atribuir um feriado. Em rosa: dia sem aula (feriado fixo ou
-						evento). Contorno: evento que mantém as aulas.
-					</p>
-
-					{selected && (
-						<div className="flex flex-col gap-2 rounded-control bg-surface-sunken p-3">
-							<p className="text-xs font-medium text-ink">
-								{formatDate(selected)} ({existing ? "editar evento" : "novo evento"})
-							</p>
-
-							{fixedReason && (
-								<p className="text-[11px] text-ink-muted">
-									Feriado fixo: {fixedReason}. Para reabri-lo como dia letivo, salve com
-									"Suspende as aulas?" = Não.
-								</p>
-							)}
-
-							<div className="grid gap-2 sm:grid-cols-4">
-								<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted sm:col-span-2">
-									Descrição
-									<input className="form-input w-full" value={descricao}
-										onChange={(event) => setDescricao(event.currentTarget.value)} />
-								</label>
-
-								<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted">
-									Tipo
-									<select className="form-input w-full" value={tipo}
-										onChange={(event) => setTipo(event.currentTarget.value)}>
-										{Object.entries(TIPOS_EVENTO).map(([label, value]) => (
-											<option key={value} value={value}>{label}</option>
-										))}
-									</select>
-								</label>
-
-								<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted">
-									Suspende as aulas?
-									<select className="form-input w-full" value={semAula}
-										onChange={(event) => setSemAula(event.currentTarget.value)}>
-										<option value="true">Sim</option>
-										<option value="false">Não</option>
-									</select>
-								</label>
-							</div>
-
-							<div className="flex flex-wrap items-center gap-2">
-								<button type="button" className="btn" data-size="sm" disabled={busy} onClick={save}>
-									{busy ? "Salvando..." : existing ? "Salvar alterações" : "Salvar evento"}
-								</button>
-
-								{existing && !confirmRemoval && (
-									<button type="button" className="btn" data-variant="outline" data-size="sm"
-										disabled={busy} onClick={() => setConfirmRemoval(true)}>
-										Remover
-									</button>
-								)}
-
-								{existing && confirmRemoval && (
-									<>
-										<span className="text-[11px] text-ink-muted">
-											Remover? Se for um feriado fixo, volta ao padrão do sistema.
-										</span>
-										<button type="button" className="btn" data-variant="outline" data-size="sm"
-											disabled={busy} onClick={remove}>
-											Confirmar remoção
-										</button>
-									</>
-								)}
-
-								<button type="button" className="btn" data-variant="outline" data-size="sm"
-									disabled={busy} onClick={() => setSelected(null)}>
-									Cancelar
-								</button>
-							</div>
-						</div>
-					)}
-
-					{error && (
-						<p className="text-xs text-danger-fg" role="alert">{error}</p>
-					)}
-					{info && <p className="text-xs text-ink-muted">{info}</p>}
-
-					<div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-						{Array.from({ length: 12 }, (_, month) => (
-							<MiniMonth key={month} year={year} month={month} byDate={byDate}
-								selected={selected} onSelect={select} />
-						))}
+					<div className="flex gap-2">
+						<button type="button" className="btn" data-variant="outline" data-size="sm"
+							disabled={busy || events.length === 0} onClick={exportJson}>
+							Exportar JSON
+						</button>
+						<button type="button" className="btn" data-variant="outline" data-size="sm"
+							disabled={busy} onClick={() => fileInput.current?.click()}>
+							Importar JSON
+						</button>
+						<input
+							ref={fileInput}
+							type="file"
+							accept="application/json,.json"
+							className="hidden"
+							onChange={(event) => {
+								const file = event.currentTarget.files?.[0] ?? null;
+								event.currentTarget.value = "";
+								importJson(file);
+							}}
+						/>
 					</div>
 				</div>
-			)}
-		</section>
+
+				<p className="text-[11px] text-ink-muted">
+					Clique em um dia para atribuir um feriado. Em rosa: dia sem aula (feriado fixo ou
+					evento). Contorno: evento que mantém as aulas.
+				</p>
+
+				{selected && (
+					<div className="flex flex-col gap-2 rounded-control bg-surface-sunken p-3">
+						<p className="text-xs font-medium text-ink">
+							{formatDate(selected)} ({existing ? "editar evento" : "novo evento"})
+						</p>
+
+						{fixedReason && (
+							<p className="text-[11px] text-ink-muted">
+								Feriado fixo: {fixedReason}. Para reabri-lo como dia letivo, salve com
+								"Suspende as aulas?" = Não.
+							</p>
+						)}
+
+						<div className="grid gap-2 sm:grid-cols-4">
+							<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted sm:col-span-2">
+								Descrição
+								<input className="form-input w-full" value={descricao}
+									onChange={(event) => setDescricao(event.currentTarget.value)} />
+							</label>
+
+							<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted">
+								Tipo
+								<select className="form-input w-full" value={tipo}
+									onChange={(event) => setTipo(event.currentTarget.value)}>
+									{Object.entries(TIPOS_EVENTO).map(([label, value]) => (
+										<option key={value} value={value}>{label}</option>
+									))}
+								</select>
+							</label>
+
+							<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted">
+								Suspende as aulas?
+								<select className="form-input w-full" value={semAula}
+									onChange={(event) => setSemAula(event.currentTarget.value)}>
+									<option value="true">Sim</option>
+									<option value="false">Não</option>
+								</select>
+							</label>
+						</div>
+
+						<div className="flex flex-wrap items-center gap-2">
+							<button type="button" className="btn" data-size="sm" disabled={busy} onClick={save}>
+								{busy ? "Salvando..." : existing ? "Salvar alterações" : "Salvar evento"}
+							</button>
+
+							{existing && !confirmRemoval && (
+								<button type="button" className="btn" data-variant="outline" data-size="sm"
+									disabled={busy} onClick={() => setConfirmRemoval(true)}>
+									Remover
+								</button>
+							)}
+
+							{existing && confirmRemoval && (
+								<>
+									<span className="text-[11px] text-ink-muted">
+										Remover? Se for um feriado fixo, volta ao padrão do sistema.
+									</span>
+									<button type="button" className="btn" data-variant="outline" data-size="sm"
+										disabled={busy} onClick={remove}>
+										Confirmar remoção
+									</button>
+								</>
+							)}
+
+							<button type="button" className="btn" data-variant="outline" data-size="sm"
+								disabled={busy} onClick={() => setSelected(null)}>
+								Cancelar
+							</button>
+						</div>
+					</div>
+				)}
+
+				{error && (
+					<p className="text-xs text-danger-fg" role="alert">{error}</p>
+				)}
+				{info && <p className="text-xs text-ink-muted">{info}</p>}
+
+				<div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+					{Array.from({ length: 12 }, (_, month) => (
+						<MiniMonth key={month} year={year} month={month} byDate={byDate}
+							selected={selected} onSelect={select} />
+					))}
+				</div>
+			</section>
+		</ShadowCenter>
 	);
 }

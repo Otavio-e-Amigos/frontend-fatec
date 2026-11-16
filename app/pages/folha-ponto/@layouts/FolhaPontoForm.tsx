@@ -3,6 +3,7 @@ import GenericFloor from "~/layouts/pages/GenericFloor";
 import type { FolhaPontoFormState } from "../@hooks/useFolhaPonto";
 import { MESES } from "../folha-ponto-page.utils";
 import FolhaPontoCalendario from "./FolhaPontoCalendario";
+import useWindow from "~/components/windows/useWindow";
 type FolhaPontoFormProps = FolhaPontoFormState & { professores: Professor[] };
 
 /** Filtros da folha: professor, mês e ano. */
@@ -19,6 +20,14 @@ export default function FolhaPontoForm({
 	onPreview,
 	onCalendarChanged,
 }: FolhaPontoFormProps) {
+	const calendarWindow = useWindow();
+
+	function openCalendar() {
+		calendarWindow.show(
+			{ dismissible: true },
+			<FolhaPontoCalendario ano={ano} onChanged={onCalendarChanged} />,
+		);
+	}
 	return (
 		<GenericFloor className="p-5">
 			<h2 className="font-semibold text-ink">Dados da folha</h2>
@@ -87,8 +96,23 @@ export default function FolhaPontoForm({
 					{loadingPreview ? "Gerando prévia..." : "Visualizar prévia"}
 				</button>
 			</div>
-			<div className="mt-4 border-t border-line pt-3">
-				<FolhaPontoCalendario ano={ano} onChanged={onCalendarChanged} />
+			<div className="mt-4 flex flex-wrap justify-end gap-2">
+				<button
+					type="button"
+					className="btn"
+					data-variant="outline"
+					onClick={openCalendar}
+				>
+					Calendário acadêmico
+				</button>
+				<button
+					type="button"
+					className="btn"
+					disabled={loadingPreview}
+					onClick={onPreview}
+				>
+					{loadingPreview ? "Gerando prévia..." : "Visualizar prévia"}
+				</button>
 			</div>
 		</GenericFloor>
 	);
