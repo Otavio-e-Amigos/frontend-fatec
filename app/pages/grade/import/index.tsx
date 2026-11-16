@@ -1,6 +1,8 @@
 import { Link } from "react-router";
+import useWindow from "~/components/windows/useWindow";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
+import RelatorioJanela from "~/pages/relatorio/@layouts/RelatorioJanela";
 import type { GradePageProps } from "../grade-page.types";
 import useGradeImport from "./@hooks/useGradeImport";
 import GradeImportDoneDialog from "./@layouts/GradeImportDoneDialog";
@@ -11,6 +13,7 @@ import GradeImportUpload from "./@layouts/GradeImportUpload";
 /** Composes the PDF upload, the review forms, the registry summary and the result dialog. */
 export default function GradeImportPage(props: GradePageProps) {
 	const state = useGradeImport(props);
+	const janela = useWindow();
 
 	return (
 		<div className="flex min-h-screen flex-1 flex-col">
@@ -21,9 +24,24 @@ export default function GradeImportPage(props: GradePageProps) {
 					title="Importar grade"
 					description="Envie a grade horária em PDF, confira os dados e salve."
 					headerItems={
-						<Link className="btn" data-variant="outline" to="/grade">
-							Voltar às grades
-						</Link>
+						<div className="flex gap-2">
+							<button
+								type="button"
+								className="btn"
+								data-variant="outline"
+								onClick={() =>
+									janela.show(
+										{ dismissible: true },
+										<RelatorioJanela tipo="EXTRACAO_GRADE" initial={{ periodo: "MENSAL" }} />,
+									)
+								}
+							>
+								Relatório de extrações
+							</button>
+							<Link className="btn" data-variant="outline" to="/grade">
+								Voltar às grades
+							</Link>
+						</div>
 					}
 				/>
 				<GradeImportUpload state={state} />
