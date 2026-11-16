@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import GenericFloor from "~/layouts/pages/GenericFloor";
 import type FolhaPontoPreviewData from "~/modules/folha-ponto/folha-ponto.class";
+import FolhaPontoCalendario from "./FolhaPontoCalendario";
 import {
 	FREQUENCY_COLUMNS,
 	SHIFTS,

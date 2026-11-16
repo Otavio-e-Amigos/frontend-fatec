@@ -2,7 +2,7 @@ import type Professor from "~/modules/professor/professor.class";
 import GenericFloor from "~/layouts/pages/GenericFloor";
 import type { FolhaPontoFormState } from "../@hooks/useFolhaPonto";
 import { MESES } from "../folha-ponto-page.utils";
-
+import FolhaPontoCalendario from "./FolhaPontoCalendario";
 type FolhaPontoFormProps = FolhaPontoFormState & { professores: Professor[] };
 
 /** Filtros da folha: professor, mês e ano. */
@@ -17,6 +17,7 @@ export default function FolhaPontoForm({
 	onMesChange,
 	onAnoChange,
 	onPreview,
+	onCalendarChanged,
 }: FolhaPontoFormProps) {
 	return (
 		<GenericFloor className="p-5">
@@ -85,6 +86,9 @@ export default function FolhaPontoForm({
 				>
 					{loadingPreview ? "Gerando prévia..." : "Visualizar prévia"}
 				</button>
+			</div>
+			<div className="mt-4 border-t border-line pt-3">
+				<FolhaPontoCalendario ano={ano} onChanged={onCalendarChanged} />
 			</div>
 		</GenericFloor>
 	);

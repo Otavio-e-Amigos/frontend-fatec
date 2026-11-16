@@ -85,7 +85,20 @@ export default function useFolhaPonto(initial: FolhaPontoInitial) {
 			setLoadingPreview(false);
 		}
 	}
+	/** Recarrega a prévia atual sem esconder a tela (usado após alterar o calendário). */
+	async function refreshPreview() {
+		if (!request) return;
 
+		try {
+			setPreview(
+				await FolhaPontoService.preview(request, AuthService.getUserToken()),
+			);
+		} catch (e) {
+			setError(
+				getErrorMessage(e, "Não foi possível atualizar a prévia da folha de ponto."),
+			);
+		}
+	}
 	/** Gera a prévia automaticamente quando solicitado pela URL. */
 	useEffect(() => {
 		if (initial.preview && initial.professor) {
@@ -110,7 +123,7 @@ export default function useFolhaPonto(initial: FolhaPontoInitial) {
 	}
 
 	return {
-		form: {
+			form: {
 			professorId,
 			gradeId,
 			mes,
@@ -122,6 +135,7 @@ export default function useFolhaPonto(initial: FolhaPontoInitial) {
 			onAnoChange: changeFilter(setAno),
 			onGradeChange: changeFilter(setGradeId),
 			onPreview: loadPreview,
+			onCalendarChanged: refreshPreview,
 		},
 		preview: {
 			data: preview,
