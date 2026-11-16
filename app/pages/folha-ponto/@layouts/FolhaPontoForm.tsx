@@ -1,9 +1,11 @@
+import useWindow from "~/components/windows/useWindow";
 import type Professor from "~/modules/professor/professor.class";
 import GenericFloor from "~/layouts/pages/GenericFloor";
 import type { FolhaPontoFormState } from "../@hooks/useFolhaPonto";
 import { MESES } from "../folha-ponto-page.utils";
 import FolhaPontoCalendario from "./FolhaPontoCalendario";
-import useWindow from "~/components/windows/useWindow";
+import RelatorioJanela from "~/pages/relatorio/@layouts/RelatorioJanela";
+import { dataDoMes } from "~/pages/relatorio/relatorio-page.utils";
 type FolhaPontoFormProps = FolhaPontoFormState & { professores: Professor[] };
 
 /** Filtros da folha: professor, mês e ano. */
@@ -20,10 +22,21 @@ export default function FolhaPontoForm({
 	onPreview,
 	onCalendarChanged,
 }: FolhaPontoFormProps) {
-	const calendarWindow = useWindow();
+	const janela = useWindow();
 
-	function openCalendar() {
-		calendarWindow.show(
+	/** Abre o relatório de folhas já no professor e no mês que a tela está mostrando. */
+	function openRelatorio() {
+		janela.show(
+			{ dismissible: true },
+			<RelatorioJanela
+				tipo="FOLHA_PONTO"
+				initial={{ periodo: "MENSAL", data: dataDoMes(ano, mes), professorId }}
+			/>,
+		);
+	}
+
+	function openCalendario() {
+		janela.show(
 			{ dismissible: true },
 			<FolhaPontoCalendario ano={ano} onChanged={onCalendarChanged} />,
 		);
@@ -86,31 +99,16 @@ export default function FolhaPontoForm({
 				</p>
 			)}
 
-			<div className="mt-4 flex justify-end">
-				<button
-					type="button"
-					className="btn"
-					disabled={loadingPreview}
-					onClick={onPreview}
-				>
-					{loadingPreview ? "Gerando prévia..." : "Visualizar prévia"}
-				</button>
-			</div>
-			<div className="mt-4 flex flex-wrap justify-end gap-2">
-				<button
-					type="button"
-					className="btn"
-					data-variant="outline"
-					onClick={openCalendar}
-				>
-					Calendário acadêmico
-				</button>
-				<button
-					type="button"
-					className="btn"
-					disabled={loadingPreview}
-					onClick={onPreview}
-				>
+			<div className="mt-4 flex items-center justify-between gap-2">
+				<div className="flex gap-2">
+					<button type="button" className="btn" data-variant="outline" onClick={openCalendario}>
+						Calendário acadêmico
+					</button>
+					<button type="button" className="btn" data-variant="outline" onClick={openRelatorio}>
+						Relatório de folhas
+					</button>
+				</div>
+				<button type="button" className="btn" disabled={loadingPreview} onClick={onPreview}>
 					{loadingPreview ? "Gerando prévia..." : "Visualizar prévia"}
 				</button>
 			</div>

@@ -120,17 +120,16 @@ export default function FolhaPontoCalendario({
 	const fixedReason =
 		selected && !existing ? FERIADOS_FIXOS[selected.slice(5)] : undefined;
 
-		// a janela já abre carregando os eventos
-	useEffect(() => {
-		load();
-	}, []);
-
-	// o ano do filtro mudou: o calendário acompanha
 	// a janela já abre carregando os eventos
 	useEffect(() => {
 		load();
 	}, []);
 
+	// o ano do filtro mudou: o calendário acompanha
+	useEffect(() => {
+		const next = Number(ano);
+		if (Number.isInteger(next) && next >= 2000 && next <= 2050) setYear(next);
+	}, [ano]);
 	async function load() {
 		try {
 			setEvents(await CalendarioService.get(AuthService.getUserToken()));
