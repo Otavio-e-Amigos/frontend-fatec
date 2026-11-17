@@ -69,17 +69,6 @@
 	/* -=                =- */
 
 
-	/* -= Chart Colors =-*/
-	--color-chart-1: var(--color-brand);
-	--color-chart-2: #475569;
-	--color-chart-3: #b78718;
-	--color-chart-4: #0f766e;
-	--color-chart-5: #1d4ed8;
-	--color-chart-6: #7e22ce;
-	--color-chart-7: #166534;
-	--color-chart-8: #c2410c;
-	--color-chart-9: #be185d;
-	--color-chart-10: #64748b;
 	/* -= 			   =-*/
 
 }
@@ -116,7 +105,7 @@ components:
 	- card
 	- form
 	- input
-	- table
+table:
 hints:
 	- ok
 	- alert
@@ -124,3 +113,17 @@ hints:
 	- pending
 	- unknown
 */
+
+/* Cores dos gráficos: usadas só via var() em TSX, então precisam de `static`. */
+@theme static {
+	--color-chart-1: var(--color-brand);
+	--color-chart-2: #475569;
+	--color-chart-3: #b78718;
+	--color-chart-4: #0f766e;
+	--color-chart-5: #1d4ed8;
+	--color-chart-6: #7e22ce;
+	--color-chart-7: #166534;
+	--color-chart-8: #c2410c;
+	--color-chart-9: #be185d;
+	--color-chart-10: #64748b;
+}
