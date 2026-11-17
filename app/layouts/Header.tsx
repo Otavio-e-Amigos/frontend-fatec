@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import BrandMark from "~/components/BrandMark";
+import NotificacoesSino from "./NotificacoesSino";
 import AuthService from "~/modules/user/auth.service";
 import User from "~/modules/user/user.class";
 
@@ -141,6 +142,8 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 					>
 						Login
 					</Link>
+
+					{isLogged && <NotificacoesSino />}
 
 					{isLogged ? (
 						<div className="flex h-8 items-center gap-2">
