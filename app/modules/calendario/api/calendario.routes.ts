@@ -20,6 +20,20 @@ const calendarioAPIRoutes = {
 		credentials: undefined, //required
 	},
 
+	// confirmação anual: o ano entra no caminho na hora da chamada
+	STATUS_ATUALIZACAO: {
+		method: "GET",
+		path: ["calendario", "atualizacao", undefined],
+		credentials: undefined, //required
+	},
+
+	CONFIRMAR_ATUALIZACAO: {
+		method: "POST",
+		path: ["calendario", "atualizacao", undefined, "confirmar"],
+		body: undefined,
+		credentials: undefined, //required
+	},
+
 	DELETE: {
 		method: "DELETE",
 		path: ["calendario", undefined],

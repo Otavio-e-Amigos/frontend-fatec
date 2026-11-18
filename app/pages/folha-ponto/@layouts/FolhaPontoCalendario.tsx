@@ -20,6 +20,7 @@ import {
 import formatDate from "~/modules/periodo-letivo/format-date";
 import AuthService from "~/modules/user/auth.service";
 import { MESES } from "../folha-ponto-page.utils";
+import CalendarioConfirmacaoAnual from "./CalendarioConfirmacaoAnual";
 import useWindow from "~/components/windows/useWindow";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
 
@@ -298,6 +299,8 @@ export default function FolhaPontoCalendario({
 						/>
 					</div>
 				</div>
+
+				<CalendarioConfirmacaoAnual year={year} eventsCount={events.length} />
 
 				<p className="text-[11px] text-ink-muted">
 					Clique em um dia para atribuir um feriado. Em rosa: dia sem aula (feriado fixo ou

@@ -43,7 +43,7 @@ export default function Page({ name, profile }: HomePageProps) {
 					description={`Bem-vindo de volta${name ? `, ${name}` : ""}! O que gostaria de realizar hoje?`}
 				/>
 
-				<div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+				<div className="grid items-start gap-5">
 					{/* Painel principal: os cards ficam um nível acima do site */}
 					<GenericFloor
 						className="grid grid-cols-[repeat(auto-fill,minmax(11rem,1fr))] gap-4 p-4"
@@ -57,17 +57,6 @@ export default function Page({ name, profile }: HomePageProps) {
 						{shortcuts.map((shortcut) => (
 							<ShortcutCard key={shortcut.href} {...shortcut} />
 						))}
-					</GenericFloor>
-
-					{/* Painel lateral */}
-					<GenericFloor
-						className="p-4"
-						header={<PanelHeader title="Notificações" />}
-					>
-						<div className="empty-state">
-							<p>Nenhuma notificação</p>
-							<p>Os avisos do sistema aparecerão aqui.</p>
-						</div>
 					</GenericFloor>
 				</div>
 			</main>
