@@ -8,7 +8,7 @@ const THEMES = [
 		category: "normal",
 		label: "Normal",
 		themes: [
-			{value: "default", label: "Sistema"}
+			{value: "default", label: "Nenhum"}
 		]
 	},
 	{
