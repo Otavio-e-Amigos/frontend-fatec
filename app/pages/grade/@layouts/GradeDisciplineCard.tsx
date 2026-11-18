@@ -3,6 +3,8 @@ import type { SavedGradeLesson } from "~/modules/grade/grade.service";
 import type { ScheduleDiscipline } from "../grade-page.types";
 import { displayDay } from "../grade-page.utils";
 import GenericSurface from "~/layouts/pages/GenericSurface";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import { Clock } from "iconoir-react/regular";
 
 type GradeDisciplineCardProps = {
 	discipline: ScheduleDiscipline;
@@ -53,7 +55,7 @@ export default function GradeDisciplineCard({
 		)
 	}
 	return (
-		<GenericSurface className="overflow-hidden" header={<Header/>}>
+		<GenericFloor className="overflow-hidden" header={<Header/>}>
 			{/*<article className="rounded-card border border-line bg-page-surface">*/}
 				<div className="flex flex-col gap-4 p-4 sm:p-5">
 					{/*<header className="flex flex-wrap items-start justify-between gap-3">
@@ -97,13 +99,13 @@ export default function GradeDisciplineCard({
 								))}
 							</ul>
 						) : (
-							<p className="rounded-control border border-dashed border-line px-3 py-4 text-sm text-text-muted">
+							<p className="rounded-control border border-dashed border-page-floor-outline px-3 py-4 text-sm text-text-muted">
 								Nenhum horário cadastrado para esta disciplina.
 							</p>
 						)}
 					</section>
 
-					<div className="flex flex-wrap items-center gap-2 border-t border-line pt-3 text-xs text-text-muted">
+					<div className="flex flex-wrap items-center gap-2 border-t border-page-floor-outline pt-3 text-xs text-text-muted">
 						<InfoPill>{discipline.quantidadeAulas} aula(s)/semana</InfoPill>
 						<InfoPill>{discipline.semestreCurso}º semestre</InfoPill>
 						{discipline.op !== null && <InfoPill>OP {discipline.op}</InfoPill>}
@@ -114,7 +116,7 @@ export default function GradeDisciplineCard({
 						hasLessons={discipline.lessons.length > 0}
 					/>
 
-					<footer className="flex flex-wrap justify-end gap-2 border-t border-line pt-3">
+					<footer className="flex flex-wrap justify-end gap-2 border-t border-page-floor-outline pt-3">
 						<button
 							type="button"
 							className="btn"
@@ -145,7 +147,7 @@ export default function GradeDisciplineCard({
 					</footer>
 				</div>
 			{/*</article>*/}
-		</GenericSurface>
+		</GenericFloor>
 	);
 }
 
@@ -256,13 +258,13 @@ function LessonRow({
 	onDelete: () => void;
 }) {
 	return (
-		<li className="flex flex-col gap-3 rounded-control border border-line bg-page-surface-accent/60 p-3 sm:flex-row sm:items-center sm:justify-between">
+		<li className="flex flex-col gap-3 rounded-control border border-page-floor-outline bg-page-floor-accent/60 p-3 sm:flex-row sm:items-center sm:justify-between">
 			<div className="flex min-w-0 items-center gap-3">
 				<span
 					className="grid size-9 shrink-0 place-items-center rounded-control bg-brand-soft text-brand"
 					aria-hidden="true"
 				>
-					<svg viewBox="0 0 20 20" fill="none" className="size-5">
+					{/*<svg viewBox="0 0 20 20" fill="none" className="size-5">
 						<circle
 							cx="10"
 							cy="10"
@@ -276,10 +278,11 @@ function LessonRow({
 							strokeWidth="1.5"
 							strokeLinecap="round"
 						/>
-					</svg>
+					</svg>*/}
+					<Clock/>
 				</span>
 				<div className="min-w-0">
-					<p className="truncate text-sm font-medium text-ink">
+					<p className="truncate text-sm font-medium text-text">
 						{displayDay(lesson.diaSemana)}
 					</p>
 					<p className="text-sm text-text-muted">
@@ -325,7 +328,7 @@ function DisciplineStatusMessage({
 }) {
 	if (!isCancelled) {
 		return (
-			<p className="rounded-control border border-warn-fg/20 bg-warn-bg px-3 py-2 text-xs leading-relaxed text-warn-fg">
+			<p className="rounded-control border border-hint-alert-dot bg-hint-alert/20 px-3 py-2 text-xs leading-relaxed text-hint-alert-fg">
 				“Desvincular” muda o status para CANCELADA. Depois, exclua os horários
 				associados; quando não restar nenhum, esta ação muda para “Excluir
 				vínculo”.
@@ -345,7 +348,7 @@ function DisciplineStatusMessage({
 /** Presents workload metadata in a consistent compact style. */
 function InfoPill({ children }: { children: React.ReactNode }) {
 	return (
-		<span className="rounded-control bg-page-surface-accent px-2.5 py-1">
+		<span className="rounded-control bg-page-floor-accent px-2.5 py-1">
 			{children}
 		</span>
 	);

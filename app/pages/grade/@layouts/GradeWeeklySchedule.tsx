@@ -19,18 +19,18 @@ export default function GradeWeeklySchedule({
 				return (
 					<div
 						key={shift}
-						className="overflow-x-auto rounded-control border border-line"
+						className="overflow-x-auto rounded-control border border-page-floor-outline"
 					>
 						<table className="w-full min-w-[760px] border-collapse text-xs">
 							<thead>
-								<tr className="bg-page-surface-accent text-text">
-									<th className="w-24 border border-line px-3 py-2 text-left">
+								<tr className="bg-page-floor-accent text-text">
+									<th className="w-24 border border-t-0 border-page-floor-outline border-l-0 border-line px-3 py-2 text-left">
 										{formatTurno(shift)}
 									</th>
-									{weekdays.map((weekday) => (
+									{weekdays.map((weekday, idx) => (
 										<th
 											key={weekday.value}
-											className="border border-line px-2 py-2"
+											className={`border border-t-0 border-page-floor-outline px-2 py-2 ${weekday.value == 7 && "border-r-0"}`}
 										>
 											{weekday.label}
 										</th>
@@ -39,13 +39,13 @@ export default function GradeWeeklySchedule({
 							</thead>
 							<tbody>
 								<tr>
-									<th className="border border-line bg-page-surface-accent px-3 py-2 text-left font-normal text-text">
+									<th className="border border-l-0 border-page-floor-outline bg-page-floor-accent px-3 py-2 text-left font-normal text-text">
 										Aulas
 									</th>
 									{weekdays.map((weekday) => (
 										<td
 											key={weekday.value}
-											className="min-w-28 border border-line p-1 align-top"
+											className={`min-w-28 border border-line p-1 align-top ${weekday.value === 7 && "border-r-0"}`}
 										>
 											<LessonCell
 												weekday={weekday.value}

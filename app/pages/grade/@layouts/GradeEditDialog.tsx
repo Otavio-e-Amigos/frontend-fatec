@@ -4,6 +4,8 @@ import type {
 	GradeCreatePayload,
 	SavedGrade,
 } from "~/modules/grade/grade.service";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type GradeEditDialogProps = {
 	grade: SavedGrade;
@@ -61,14 +63,19 @@ export default function GradeEditDialog({
 
 	return (
 		<div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/50 p-4">
-			<section
-				role="dialog"
+			<GenericFloor
+				// role="dialog"
 				aria-modal="true"
 				aria-labelledby="grade-edit-title"
-				className="surface my-auto w-full max-w-xl rounded-card p-6 shadow-card"
+				className="my-auto w-full max-w-xl p-4 shadow-card"
+				header={
+					<div className="my-3 mx-4">
+						<FloorHeader title={"Editar Grade"} description={"Atualize o período letivo e as cargas horárias registradas."} />
+					</div>
+				}
 			>
-				<header className="mb-5 border-b border-line pb-3">
-					<h2
+				{/*<header className="mb-5 border-b border-line pb-3">*/}
+					{/*<h2
 						id="grade-edit-title"
 						className="text-xl font-semibold text-brand"
 					>
@@ -76,8 +83,8 @@ export default function GradeEditDialog({
 					</h2>
 					<p className="mt-1 text-sm text-text-muted">
 						Atualize o período letivo e as cargas horárias registradas.
-					</p>
-				</header>
+					</p>*/}
+				{/*</header>*/}
 
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 					<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
@@ -151,7 +158,7 @@ export default function GradeEditDialog({
 						</button>
 					</footer>
 				</form>
-			</section>
+			</GenericFloor>
 		</div>
 	);
 }

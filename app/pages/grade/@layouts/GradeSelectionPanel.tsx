@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import type { GradePageSelection } from "../@hooks/useGradePage";
 import { academicKey, periodLabel } from "../grade-page.utils";
 import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 /** Renders professor search and the period/grade selectors. */
 export default function GradeSelectionPanel({
@@ -29,153 +30,152 @@ export default function GradeSelectionPanel({
 	return (
 		<GenericFloor className="p-5">
 			{/*<section className="surface rounded-card border border-line p-5">*/}
-				<h2 className="font-semibold text-ink">Selecione os dados da grade</h2>
-				<p className="mt-1 text-sm text-text-muted">
-					Ao escolher um professor, a grade mais recente é carregada
-					automaticamente.
-				</p>
+			{/*<h2 className="font-semibold text-ink">Selecione os dados da grade</h2>
+			<p className="mt-1 text-sm text-text-muted">
+				Ao escolher um professor, a grade mais recente é carregada
+				automaticamente.
+			</p>*/}
+			<FloorHeader
+				title={"Selecione os dados da Grade"}
+				description={
+					"Ao escolher um professor, a grade mais recente é carregada automaticamente."
+				}
+			/>
 
-				<div className="mt-4 grid gap-3 md:grid-cols-3">
-					<div className="relative flex flex-col gap-1 text-xs font-medium text-text-muted">
-						Professor
-						<input
-							className="form-input w-full"
-							type="text"
-							autoComplete="off"
-							placeholder="Digite o nome do professor"
-							value={professorQuery}
-							aria-expanded={showProfessorSuggestions}
-							aria-controls="grade-professor-results"
-							onFocus={onProfessorFocus}
-							onBlur={onProfessorBlur}
-							onChange={(event) =>
-								onProfessorQueryChange(event.currentTarget.value)
-							}
-						/>
-						{showProfessorSuggestions && (
-							<div
-								id="grade-professor-results"
-								className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-page-surface shadow-lg"
-							>
-								{matchingProfessors.slice(0, 5).map((entry) => (
-									<button
-										key={entry.id}
-										type="button"
-										className="block w-full border-b border-line px-3 py-2 text-left text-sm text-text last:border-b-0 hover:bg-brand-soft focus:bg-brand-soft"
-										onMouseDown={(event) => event.preventDefault()}
-										onClick={() => onSelectProfessor(entry)}
-									>
-										{entry.name}
-									</button>
-								))}
-								{matchingProfessors.length > 5 && (
-									<p className="border-t border-line bg-page-surface-accent px-3 py-2 text-xs text-text">
-										Exibindo 5 de {matchingProfessors.length} professores.
-										Refine a busca.
-									</p>
-								)}
-								{!matchingProfessors.length && (
-									<p className="px-3 py-2 text-sm text-text-muted">
-										Nenhum professor encontrado.
-									</p>
-								)}
-							</div>
-						)}
-					</div>
-
-					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
-						Período letivo
-						<select
-							className="form-input w-full"
-							value={periodId}
-							onChange={(event) => onPeriodChange(event.currentTarget.value)}
-							disabled={!periodos.length}
+			<div className="mt-4 grid gap-3 md:grid-cols-3">
+				<div className="relative flex flex-col gap-1 text-xs font-medium text-text-muted">
+					Professor
+					<input
+						className="form-input w-full"
+						type="text"
+						autoComplete="off"
+						placeholder="Digite o nome do professor"
+						value={professorQuery}
+						aria-expanded={showProfessorSuggestions}
+						aria-controls="grade-professor-results"
+						onFocus={onProfessorFocus}
+						onBlur={onProfessorBlur}
+						onChange={(event) =>
+							onProfessorQueryChange(event.currentTarget.value)
+						}
+					/>
+					{showProfessorSuggestions && (
+						<div
+							id="grade-professor-results"
+							className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-page-floor-outline bg-page-floor shadow-lg"
 						>
-							<option value="">Selecione...</option>
-							{[...periodos]
-								.sort((a, b) => academicKey(b) - academicKey(a))
-								.map((period) => (
-									<option key={period.id} value={period.id}>
-										{periodLabel(period)}
-									</option>
-								))}
-						</select>
-					</label>
-
-					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
-						Grade
-						<select
-							className="form-input w-full"
-							value={gradeId}
-							onChange={(event) => onGradeChange(event.currentTarget.value)}
-							disabled={!gradesForPeriod.length || loadingGrades}
-						>
-							<option value="">
-								{loadingGrades ? "Carregando..." : "Selecione..."}
-							</option>
-							{gradesForPeriod.map((grade, index) => (
-								<option key={grade.id} value={grade.id}>
-									{index + 1}ª Grade — {periodLabel(selectedPeriod)}
-								</option>
+							{matchingProfessors.slice(0, 5).map((entry) => (
+								<button
+									key={entry.id}
+									type="button"
+									className="block w-full border-b border-page-floor-outline px-3 py-2 text-left text-sm text-text last:border-b-0 hover:bg-brand-soft focus:bg-brand-soft"
+									onMouseDown={(event) => event.preventDefault()}
+									onClick={() => onSelectProfessor(entry)}
+								>
+									{entry.name}
+								</button>
 							))}
-						</select>
-					</label>
+							{matchingProfessors.length > 5 && (
+								<p className="border-t-0 border-page-floor-outline bg-page-floor-accent px-3 py-2 text-xs text-text">
+									Exibindo 5 de {matchingProfessors.length} professores. Refine
+									a busca.
+								</p>
+							)}
+							{!matchingProfessors.length && (
+								<p className="px-3 py-2 text-sm text-text-muted">
+									Nenhum professor encontrado.
+								</p>
+							)}
+						</div>
+					)}
 				</div>
 
-				{professor && (
-					<dl className="mt-5 grid gap-x-6 gap-y-4 border-t border-line pt-4 sm:grid-cols-2 lg:grid-cols-4">
-						<ProfileField label="Professor" value={professor.name} />
-						<ProfileField label="Titulação" value={professor.title} />
-						<ProfileField label="Situação" value={professor.status} />
-						<ProfileField
-							label="Período selecionado"
-							value={periodLabel(selectedPeriod)}
-						/>
-						<ProfileField
-							label="Carga semanal cadastrada"
-							value={selectedGrade ? `${selectedGrade.semanal}h` : "—"}
-						/>
-					</dl>
-				)}
-
-				{!professor && (
-					<p className="mt-4 rounded-control bg-page-surface-accent p-3 text-sm text-text">
-						{professorNotFound
-							? "Professor não encontrado. Confira o nome ou cadastre o professor para continuar."
-							: "Pesquise e selecione um professor cadastrado para consultar a grade."}
-					</p>
-				)}
-				{professorNotFound && (
-					<Link
-						className="btn mt-3"
-						data-variant="outline"
-						to="/professor/add"
+				<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
+					Período letivo
+					<select
+						className="form-input w-full"
+						value={periodId}
+						onChange={(event) => onPeriodChange(event.currentTarget.value)}
+						disabled={!periodos.length}
 					>
-						Cadastrar professor
-					</Link>
-				)}
-				{gradesError && (
-					<p className="mt-3 text-sm text-danger-fg" role="alert">
-						Não foi possível carregar as grades: {gradesError}
+						<option value="">Selecione...</option>
+						{[...periodos]
+							.sort((a, b) => academicKey(b) - academicKey(a))
+							.map((period) => (
+								<option key={period.id} value={period.id}>
+									{periodLabel(period)}
+								</option>
+							))}
+					</select>
+				</label>
+
+				<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
+					Grade
+					<select
+						className="form-input w-full"
+						value={gradeId}
+						onChange={(event) => onGradeChange(event.currentTarget.value)}
+						disabled={!gradesForPeriod.length || loadingGrades}
+					>
+						<option value="">
+							{loadingGrades ? "Carregando..." : "Selecione..."}
+						</option>
+						{gradesForPeriod.map((grade, index) => (
+							<option key={grade.id} value={grade.id}>
+								{index + 1}ª Grade — {periodLabel(selectedPeriod)}
+							</option>
+						))}
+					</select>
+				</label>
+			</div>
+
+			{professor && (
+				<dl className="mt-5 grid gap-x-6 gap-y-4 border-t border-line pt-4 sm:grid-cols-2 lg:grid-cols-4">
+					<ProfileField label="Professor" value={professor.name} />
+					<ProfileField label="Titulação" value={professor.title} />
+					<ProfileField label="Situação" value={professor.status} />
+					<ProfileField
+						label="Período selecionado"
+						value={periodLabel(selectedPeriod)}
+					/>
+					<ProfileField
+						label="Carga semanal cadastrada"
+						value={selectedGrade ? `${selectedGrade.semanal}h` : "—"}
+					/>
+				</dl>
+			)}
+
+			{!professor && (
+				<p className="mt-4 rounded-control bg-page-floor-accent p-3 text-sm text-text">
+					{professorNotFound
+						? "Professor não encontrado. Confira o nome ou cadastre o professor para continuar."
+						: "Pesquise e selecione um professor cadastrado para consultar a grade."}
+				</p>
+			)}
+			{professorNotFound && (
+				<Link className="btn mt-3" data-variant="outline" to="/professor/add">
+					Cadastrar professor
+				</Link>
+			)}
+			{gradesError && (
+				<p className="mt-3 text-sm text-danger-fg" role="alert">
+					Não foi possível carregar as grades: {gradesError}
+				</p>
+			)}
+			{professor && !loadingGrades && !gradesError && (
+				<div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+					<p className="text-sm text-text-muted">
+						{gradesForPeriod.length
+							? `${gradesForPeriod.length} grade(s) encontrada(s) neste período.`
+							: `Este professor ainda não possui grade em ${periodLabel(selectedPeriod)}.`}
 					</p>
-				)}
-				{professor && !loadingGrades && !gradesError && (
-					<div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-						<p className="text-sm text-text-muted">
-							{gradesForPeriod.length
-								? `${gradesForPeriod.length} grade(s) encontrada(s) neste período.`
-								: `Este professor ainda não possui grade em ${periodLabel(selectedPeriod)}.`}
-						</p>
-						<Link
-							className="btn"
-							to={`/professor/${professor.id}/grades/new`}
-						>
-							{gradesForPeriod.length
-								? "Cadastrar outra grade"
-								: "Cadastrar grade"}
-						</Link>
-					</div>
-				)}
+					<Link className="btn" to={`/professor/${professor.id}/grades/new`}>
+						{gradesForPeriod.length
+							? "Cadastrar outra grade"
+							: "Cadastrar grade"}
+					</Link>
+				</div>
+			)}
 			{/*</section>*/}
 		</GenericFloor>
 	);
