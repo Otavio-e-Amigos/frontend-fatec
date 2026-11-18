@@ -17,7 +17,6 @@ import ToastProvider from "./components/toasts/ToastProvider";
 import { ThemeProvider } from "./components/themes/ThemeProvider";
 import { LoadingGeralWIP } from "./components/loaders/LoadingGeral.wip";
 
-// import VLibras from "@djpfs/react-vlibras/dist/types";
 export const links: Route.LinksFunction = () => [
 	{ rel: "preconnect", href: "https://fonts.googleapis.com" },
 	{
