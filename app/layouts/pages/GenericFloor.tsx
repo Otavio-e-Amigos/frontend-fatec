@@ -3,6 +3,7 @@ type GenericFloorProps = {
 	header?: any;
 	options?: GenericFloorOptions;
 	className?: string;
+	wrapperClassName?: string;
 };
 
 export type GenericFloorOptions = {
@@ -14,6 +15,7 @@ export default function GenericFloor({
 	header,
 	// options,
 	className,
+	wrapperClassName,
 }: GenericFloorProps) {
 	const headerChildren = header && (
 		<div className={`floor-accent rounded-b-none border-0 border-b`}>
@@ -22,7 +24,7 @@ export default function GenericFloor({
 	);
 
 	return (
-		<div className="floor flex flex-col" onClick={(e) => e.stopPropagation()}>
+		<div className={`floor flex flex-col ${wrapperClassName}`} onClick={(e) => e.stopPropagation()}>
 			{headerChildren}
 			<div className={className}>{children}</div>
 		</div>
