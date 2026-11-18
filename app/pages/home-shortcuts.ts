@@ -23,6 +23,12 @@ const homeShortcuts: HomeShortcut[] = [
 		image: "/home/professores.jpeg",
 	},
 	{
+		title: "Importar Grade",
+		description: "Importe dados existentes de uma grade para o sistema",
+		href: "/grade/importar",
+		image: "/home/professores.jpeg",
+	},
+	{
 		title: "Adicionar Disciplina",
 		description: "Cadastre uma disciplina para usar na criação das grades.",
 		href: "/disciplina?add=true",
