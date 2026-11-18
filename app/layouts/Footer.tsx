@@ -14,7 +14,7 @@ export default function Footer() {
 	function ThemeWidget() {
 		return (
 			<div className="flex flex-wrap gap-2 items-center">
-				<p className="text-xs">Esquema:</p>
+				<p className="text-xs">Filtro:</p>
 				<select
 					onChange={(e) => {
 						console.log("changing theme!", e.currentTarget.value);
