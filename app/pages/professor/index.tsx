@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FunctionComponent } from "react";
 import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
-import FormInput from "~/components/forms/FormInput";
+// import FormInput from "~/components/forms/FormInput";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
 import Header from "~/layouts/Header";
 import PageHeader from "~/layouts/pages/PageHeader";
@@ -10,9 +10,13 @@ import mapper from "./@mappers/professor-table.mapper";
 import filter from "./@filters/professor-table.filter";
 // import { Search } from "iconoir-react";
 import { Plus } from "iconoir-react";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+// import FloorHeader from "~/layouts/pages/FloorHeader";
+import SearchBarHeader from "~/layouts/pages/SearchBarHeader";
 
 export default function Page({ list }: { list: Professor[] }) {
 	const [term, setTerm] = useState("");
+	const [displayTerm, setDisplayTerm] = useState("");
 
 	const filtered = useMemo(() => {
 		if (!term) return list;
@@ -32,7 +36,7 @@ export default function Page({ list }: { list: Professor[] }) {
 	}, [filtered]);
 
 	return (
-		<div className="flex flex-col flex-1">
+		<div className="flex flex-1 flex-col">
 			<Header activeItem="Professores" />
 
 			<main className="mx-5 my-4 flex flex-1 flex-col gap-3">
@@ -49,24 +53,34 @@ export default function Page({ list }: { list: Professor[] }) {
 							data-size="sm"
 							to="add"
 						>
-							<Plus/>
+							<Plus />
 							<p>Novo Professor</p>
 						</Link>
 					}
 				/>
 
-				<section className="flex flex-row my-4 justify-end items-center gap-5">
-					<FormInput
-						type="search"
-						name={"search"}
-						placeholder="Pesquisar..."
-						onChange={(event: any) =>
-							setTerm(event.currentTarget.value.toLowerCase().trim())
-						}
-					/>
-				</section>
-
-				<ComplexTableModelView data={professorsTable} />
+				<GenericFloor
+					className="p-4 flex-1"
+					header={
+						<SearchBarHeader
+							title={
+								displayTerm
+									? `Resultados de: "${displayTerm}"`
+									: "Consulta de Docentes"
+							}
+							description={
+								professorsTable.getRows().length > 0
+									? `Listando: ${professorsTable.getRows().length} docentes`
+									: "Nenhum Professor encontrado."
+							}
+							termStateSetter={setTerm}
+							displayTermStateSetter={setDisplayTerm}
+						/>
+					}
+					wrapperClassName="flex-1"
+				>
+					<ComplexTableModelView data={professorsTable} />
+				</GenericFloor>
 			</main>
 		</div>
 	);

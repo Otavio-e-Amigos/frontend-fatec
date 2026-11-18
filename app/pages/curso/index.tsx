@@ -7,6 +7,7 @@ import mapper from "./@mappers/curso-table.mapper";
 import useWindow from "~/components/windows/useWindow";
 import SaveCursoForm from "./@layouts/SaveCursoForm";
 import { Plus } from "iconoir-react";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 
 export default function CursoIndexPage({ list, initial }: { list: Curso[], initial:any }) {
 	const window = useWindow({
@@ -50,7 +51,9 @@ export default function CursoIndexPage({ list, initial }: { list: Curso[], initi
 					/>
 				</section>
 				<section className="my-4">
-					<ComplexTableModelView data={table} />
+					<GenericFloor className="p-4">
+						<ComplexTableModelView data={table} />
+					</GenericFloor>
 				</section>
 			</main>
 		</div>

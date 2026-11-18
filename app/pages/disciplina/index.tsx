@@ -9,14 +9,23 @@ import SaveDisciplinaForm from "./@layouts/SaveDisciplinaForm";
 import useWindow from "~/components/windows/useWindow";
 import mapper from "./@mappers/discipline-table.mapper";
 import { Plus } from "iconoir-react";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import SearchBarHeader from "~/layouts/pages/SearchBarHeader";
 
-export default function DisciplinaIndexPage({ list, initial }: { list: Disciplina[], initial: any }) {
+export default function DisciplinaIndexPage({
+	list,
+	initial,
+}: {
+	list: Disciplina[];
+	initial: any;
+}) {
 	const [term, setTerm] = useState("");
+	const [displayTerm, setDisplayTerm] = useState("");
 	const window = useWindow({
 		wrapper: <SaveDisciplinaForm />,
 		initialData: {
-			dismissible: true
-		}
+			dismissible: true,
+		},
 	});
 
 	if (initial && initial.addResourceWindow) {
@@ -63,23 +72,33 @@ export default function DisciplinaIndexPage({ list, initial }: { list: Disciplin
 									window.show({ dismissible: true }, <SaveDisciplinaForm />);
 								}}
 							>
-								<Plus/>
+								<Plus />
 								<p>Nova Disciplina</p>
 							</button>
 						}
 					/>
 				</section>
-
-				<section className="flex flex-row my-4 justify-end">
-					<FormInput
-						type="search"
-						name="busca"
-						placeholder="Pesquisar..."
-						onChange={search}
-					/>
-				</section>
-
-				<ComplexTableModelView data={table} />
+				<GenericFloor
+					className="p-4"
+					header={
+						<SearchBarHeader
+							title={
+								displayTerm
+									? `Resultados de: "${displayTerm}"`
+									: "Consulta de Disciplinas"
+							}
+							description={
+								table.getRows().length > 0
+									? `Listando: ${table.getRows().length} disciplinas`
+									: "Nenhuma disciplina encontrada."
+							}
+							termStateSetter={setTerm}
+							displayTermStateSetter={setDisplayTerm}
+						/>
+					}
+				>
+					<ComplexTableModelView data={table} />
+				</GenericFloor>
 			</main>
 		</div>
 	);

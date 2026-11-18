@@ -8,15 +8,22 @@ import SavePeriodoForm from "./@layouts/SavePeriodoForm";
 import mapper from "./@mappers/periodo-letivo-table.mapper";
 import useWindow from "~/components/windows/useWindow";
 import { Plus } from "iconoir-react";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 
-export default function PeriodoIndex({ list, initial }: { list: PeriodoLetivo[], initial: any }) {
+export default function PeriodoIndex({
+	list,
+	initial,
+}: {
+	list: PeriodoLetivo[];
+	initial: any;
+}) {
 	const window = useWindow({
 		wrapper: <SavePeriodoForm />,
 		initialData: { dismissible: true },
 	});
 
 	if (initial && initial.addResourceWindow) {
-		window.show()
+		window.show();
 	}
 
 	const table = new DefaultTableModel(list.map(mapper), [
@@ -49,17 +56,18 @@ export default function PeriodoIndex({ list, initial }: { list: PeriodoLetivo[],
 									window.show();
 								}}
 							>
-								<Plus/>
+								<Plus />
 								<p>Novo Período Letivo</p>
 							</button>
 						}
 					/>
 				</section>
 				<section className="my-4">
-					<ComplexTableModelView data={table} />
+					<GenericFloor className="p-4">
+						<ComplexTableModelView data={table} />
+					</GenericFloor>
 				</section>
 			</main>
-
 		</div>
 	);
 }

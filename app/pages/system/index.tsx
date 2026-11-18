@@ -13,6 +13,7 @@ import GenericFloor from "~/layouts/pages/GenericFloor";
 import ChartCard from "~/components/charts/ChartCard";
 import { BarraSimples } from "~/components/charts/Charts";
 import type { CadastroTotal } from "~/modules/estatisticas/estatisticas.service";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 // No sistema, quem administra é o perfil "TI". "RESPONSAVEL" não acessa a Gestão.
 const ADMIN_PROFILE = "TI";
@@ -79,17 +80,27 @@ export default function Page({
 						</Link>
 					}
 				/>
-				<GenericFloor className="p-4">
-					<ChartCard
-						title="Cadastros do sistema"
-						description="Quantidade de itens em cada cadastro. Muda ao incluir ou excluir registros."
+				<GenericFloor
+					className="p-4 flex flex-col gap-5"
+					header={
+						<FloorHeader
+							title={"Recursos"}
+							description={"Recursos cadastrados no Appointer"}
+						/>
+					}
+				>
+					{/*<ChartCard
+						title="Recursos"
+						description="Recursos cadastrados no Appointer"
 						empty={cadastros.length === 0}
 						emptyMessage="Não foi possível carregar os totais."
 					>
-						<BarraSimples data={cadastros} label="Cadastrados" />
-					</ChartCard>
+					</ChartCard>*/}
+					<BarraSimples data={cadastros} label="Cadastrados" />
 				</GenericFloor>
-				<ComplexTableModelView data={usersTable} actionsColumn />
+				<GenericFloor className="p-4">
+					<ComplexTableModelView data={usersTable} actionsColumn />
+				</GenericFloor>
 			</main>
 		</div>
 	);
