@@ -3,6 +3,7 @@ import type AbstractQueryObject from "../api/base/AbstractQueryObject";
 import DefaultAPIData from "../api/modules/default/DefaultAPIData";
 import User from "../user/user.class";
 import EventoCalendario from "./calendario.class";
+import type { StatusAtualizacao } from "./calendario.atualizacao";
 import mapper from "./api/calendario.mapper";
 import calendarioAPIRoutes from "./api/calendario.routes";
 import { FormValidationError } from "~/classes/errors/ValidationError";
@@ -71,5 +72,32 @@ export default class CalendarioService {
 			}
 			throw error;
 		}
+	}
+
+	/** Situação da confirmação anual do calendário de um ano. */
+	static async statusAtualizacao(ano: number, auth: User): Promise<StatusAtualizacao> {
+		const req: AbstractQueryObject = {
+			...this.routes.STATUS_ATUALIZACAO,
+			path: ["calendario", "atualizacao", ano],
+			credentials: auth,
+		};
+		const res = await this.module.request(req);
+		return res.rawData.dados ?? res.rawData;
+	}
+
+	/** Registra que o calendário do ano foi revisado (encerra os lembretes do ano). */
+	static async confirmarAtualizacao(
+		ano: number,
+		observacao: string,
+		auth: User,
+	): Promise<StatusAtualizacao> {
+		const req: AbstractQueryObject = {
+			...this.routes.CONFIRMAR_ATUALIZACAO,
+			path: ["calendario", "atualizacao", ano, "confirmar"],
+			body: { observacao: observacao.trim() || undefined },
+			credentials: auth,
+		};
+		const res = await this.module.request(req);
+		return res.rawData.dados ?? res.rawData;
 	}
 }
