@@ -20,32 +20,32 @@ const homeShortcuts: HomeShortcut[] = [
 		title: "Adicionar Professor",
 		description: "Cadastre um novo docente e o tipo de contrato.",
 		href: "/professor/add",
-		image: "/home/professores.jpeg",
+		image: "/home/professor.jpeg",
 	},
 	{
 		title: "Adicionar Disciplina",
 		description: "Cadastre uma disciplina para usar na criação das grades.",
 		href: "/disciplina?add=true",
-		image: "/home/disciplinas.jpeg",
+		image: "/home/disciplina.jpeg",
 	},
 	{
 		title: "Adicionar Curso",
 		description: "Cadastre um novo curso no sistema.",
 		href: "/curso?add=true",
-		image: "/home/cursos.jpeg",
+		image: "/home/curso.jpeg",
 	},
 	{
 		title: "Adicionar Período Letivo",
 		description: "Cadastre um novo período letivo.",
 		href: "/periodo-letivo?add=true",
-		image: "/home/periodos.jpeg",
+		image: "/home/periodo_letivo.jpeg",
 	},
 
 	{
 		title: "Gerenciar Folhas de Ponto",
 		description: "Gerencie as Folhas de Ponto.",
 		href: "/folha-ponto",
-		image: "/home/gestao.jpeg",
+		image: "/home/folha_de_ponto.jpeg",
 	},
 	{
 		title: "Gestão",
@@ -59,7 +59,7 @@ const homeShortcuts: HomeShortcut[] = [
 		description: "Cadastre um novo usuário do sistema.",
 		href: "/system/user/add",
 		profiles: ["TI"],
-		image: "/home/gestao.jpeg",
+		image: "/home/add_usuario.jpeg",
 	},
 ];
 
