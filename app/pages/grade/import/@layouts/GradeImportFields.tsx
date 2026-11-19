@@ -10,7 +10,7 @@ type FieldProps = {
 
 export function Field({ label, error, required, children }: FieldProps) {
 	return (
-		<label className="flex min-w-0 flex-col gap-1 text-sm font-medium text-ink-muted">
+		<label className="flex min-w-0 flex-col gap-1 text-sm font-medium text-text-muted">
 			<span>
 				{label}
 				{required && " *"}
@@ -22,7 +22,7 @@ export function Field({ label, error, required, children }: FieldProps) {
 }
 
 const inputClass = (error?: string) =>
-	`form-input${error ? " border-danger-fg" : ""}`;
+	`form-input${error ? " border-hint-alert-fg" : ""}`;
 
 export function TextInput({
 	value, onChange, error, type = "text", maxLength,
@@ -93,7 +93,7 @@ export function SelectInput({
 
 export function Pill({ registered }: { registered: boolean }) {
 	return registered ? (
-		<span className="rounded-full bg-ok-bg px-2 py-0.5 text-xs font-medium text-ok-fg">
+		<span className="rounded-full bg-hint-success-dot px-2 py-0.5 text-xs font-medium text-hint-success-fg">
 			Já cadastrado
 		</span>
 	) : (

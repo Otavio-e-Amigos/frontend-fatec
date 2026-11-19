@@ -36,7 +36,7 @@ export default function GradeImportDisciplineCard({
 	const merged = mergeLessons(item.aulas);
 
 	return (
-		<div className="flex flex-col gap-3 rounded-lg border border-line p-4">
+		<div className="flex flex-col gap-3 rounded-lg border border-page-floor-outline p-4">
 			<div className={grid}>
 				<Field label="Disciplina" required error={e[`${base}.nome`]}>
 					<TextInput value={item.nome} error={e[`${base}.nome`]}
@@ -88,7 +88,7 @@ export default function GradeImportDisciplineCard({
 			)}
 
 			<div className="flex flex-col gap-2">
-				<p className="text-sm font-medium text-ink-muted">Horários</p>
+				<p className="text-sm font-medium text-text-muted">Horários</p>
 				{item.aulas.map((lesson, lessonIndex) => {
 					const path = `${base}.aulas.${lessonIndex}`;
 					return (
@@ -114,7 +114,7 @@ export default function GradeImportDisciplineCard({
 					);
 				})}
 				{merged.length > 0 && (
-					<p className="text-xs text-ink-muted">
+					<p className="text-xs text-text-muted">
 						Será salvo como:{" "}
 						{merged.map((lesson) => `${weekdayLabel(lesson.diaSemana)} ${lesson.horaInicio}–${lesson.horaFim}`).join(" · ")}
 					</p>

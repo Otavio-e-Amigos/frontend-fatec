@@ -4,6 +4,8 @@ import { CONTRACT_OPTIONS, TITLE_OPTIONS } from "~/modules/grade/extraction/grad
 import type { GradeImportState } from "../@hooks/useGradeImport";
 import GradeImportDisciplineCard from "./GradeImportDisciplineCard";
 import { Field, NumberInput, Pill, SelectInput, TextInput } from "./GradeImportFields";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 const grid = "grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4";
 
@@ -36,16 +38,23 @@ export default function GradeImportForm({ state }: { state: GradeImportState }) 
 	const periodExists = !!findPeriod(registry, data);
 
 	return (
-		<section className="surface flex flex-col gap-6 rounded-card p-5 shadow-card">
-			<header>
+		<GenericFloor className="flex flex-col gap-6 rounded-card p-5 shadow-card"
+			header={<div className="mx-4 my-3">
+				<FloorHeader
+					title={"Revisão dos dados"}
+					description={"Confira e corrija os dados extraídos. Campos em vermelho precisam de ajuste."}
+				/>
+			</div>}
+		>
+			{/*<header>
 				<h2 className="text-xl font-semibold text-brand">Revisão dos dados</h2>
-				<p className="text-sm text-ink-muted">
+				<p className="text-sm text-text-muted">
 					Confira e corrija os dados extraídos. Campos em vermelho precisam de ajuste.
 				</p>
-			</header>
+			</header>*/}
 
 			{(data.avisos.length > 0 || errors.general.length > 0) && (
-				<ul className="list-disc rounded-lg border border-line p-3 pl-8 text-sm text-danger-fg" role="alert">
+				<ul className="list-disc rounded-lg border border-page-floor-outline p-3 pl-8 text-sm text-hint-alert-fg" role="alert">
 					{[...data.avisos, ...errors.general].map((message, i) => (
 						<li key={i}>{message}</li>
 					))}
@@ -84,7 +93,7 @@ export default function GradeImportForm({ state }: { state: GradeImportState }) 
 					)}
 				</div>
 				{!periodExists && (
-					<p className="text-xs text-ink-muted">
+					<p className="text-xs text-text-muted">
 						A grade traz só a validade dela, não as datas do período letivo. Informe-as para cadastrar o período.
 					</p>
 				)}
@@ -154,6 +163,6 @@ export default function GradeImportForm({ state }: { state: GradeImportState }) 
 					</button>
 				</div>
 			</Block>
-		</section>
+		</GenericFloor>
 	);
 }
