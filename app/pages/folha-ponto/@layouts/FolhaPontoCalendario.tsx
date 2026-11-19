@@ -23,6 +23,8 @@ import { MESES } from "../folha-ponto-page.utils";
 import CalendarioConfirmacaoAnual from "./CalendarioConfirmacaoAnual";
 import useWindow from "~/components/windows/useWindow";
 import ShadowCenter from "~/layouts/containers/ShadowCenter";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type FolhaPontoCalendarioProps = {
 	/** Ano do filtro da folha: o calendário abre nele. */
@@ -49,11 +51,11 @@ function MiniMonth({ year, month, byDate, selected, onSelect }: MiniMonthProps) 
 	const total = new Date(year, month + 1, 0).getDate();
 
 	return (
-		<div className="rounded-control border border-line p-2">
-			<p className="mb-1 text-xs font-semibold text-ink">{MESES[month]}</p>
+		<div className="rounded-control border border-page-floor-outline bg-page-floor-accent/20 p-2">
+			<p className="mb-1 text-xs font-semibold text-text">{MESES[month]}</p>
 			<div className="grid grid-cols-7 gap-px text-center text-[10px]">
 				{WEEK.map((name, index) => (
-					<span key={index} className="text-ink-muted">
+					<span key={index} className="text-text-muted">
 						{name}
 					</span>
 				))}
@@ -72,12 +74,12 @@ function MiniMonth({ year, month, byDate, selected, onSelect }: MiniMonthProps) 
 
 					const tone =
 						(event ? event.semAula : Boolean(fixed))
-							? "bg-brand-soft font-semibold text-ink"
+							? "bg-brand-soft font-semibold text-text"
 							: event
-								? "border border-brand text-ink"
+								? "border border-brand text-text"
 								: isSunday
-									? "text-ink-muted"
-									: "text-ink hover:bg-surface-sunken";
+									? "text-text-muted"
+									: "text-text hover:bg-surface-sunken";
 
 					return (
 						<button
@@ -245,14 +247,14 @@ export default function FolhaPontoCalendario({
 
 	return (
 		<ShadowCenter onClick={() => calendarWindow.hide()}>
-			<section
-				role="dialog"
+			<GenericFloor
+				// role="dialog"
 				aria-label="Calendário acadêmico"
-				className="floor flex max-h-[90vh] w-full max-w-5xl flex-col gap-3 overflow-y-auto rounded-card p-5 shadow-card"
-				onClick={(event) => event.stopPropagation()}
-			>
-				<header className="flex items-center justify-between gap-3">
-					<h2 className="text-xl font-semibold text-ink">Calendário acadêmico</h2>
+				className="flex max-h-[90vh] w-full max-w-5xl flex-col gap-3 overflow-y-auto rounded-card p-5 shadow-card"
+				wrapperClassName="max-h-[90vh] w-full max-w-5xl"
+				// onClick={(event) => event.stopPropagation()}
+				header={<div className="flex flex-row items-center justify-between mx-4 my-3">
+					<FloorHeader title={"Calendário Acadêmico"} />
 					<button
 						type="button"
 						className="btn"
@@ -262,7 +264,11 @@ export default function FolhaPontoCalendario({
 					>
 						Fechar
 					</button>
-				</header>
+				</div>}
+			>
+				{/*<header className="flex items-center justify-between gap-3">*/}
+					{/*<h2 className="text-xl font-semibold text-text">Calendário acadêmico</h2>*/}
+				{/*</header>*/}
 
 				<div className="flex flex-wrap items-center justify-between gap-2">
 					<div className="flex items-center gap-2">
@@ -270,7 +276,7 @@ export default function FolhaPontoCalendario({
 							onClick={() => setYear((current) => current - 1)}>
 							‹
 						</button>
-						<span className="min-w-12 text-center text-sm font-semibold text-ink">{year}</span>
+						<span className="min-w-12 text-center text-sm font-semibold text-text">{year}</span>
 						<button type="button" className="btn" data-variant="outline" data-size="sm"
 							onClick={() => setYear((current) => current + 1)}>
 							›
@@ -302,32 +308,34 @@ export default function FolhaPontoCalendario({
 
 				<CalendarioConfirmacaoAnual year={year} eventsCount={events.length} />
 
-				<p className="text-[11px] text-ink-muted">
+				<CalendarioConfirmacaoAnual year={year} eventsCount={events.length} />
+
+				<p className="text-[11px] text-text-muted">
 					Clique em um dia para atribuir um feriado. Em rosa: dia sem aula (feriado fixo ou
 					evento). Contorno: evento que mantém as aulas.
 				</p>
 
 				{selected && (
-					<div className="flex flex-col gap-2 rounded-control bg-surface-sunken p-3">
-						<p className="text-xs font-medium text-ink">
+					<div className="flex flex-col gap-2 rounded-control bg-page-floor-accent/50 p-3">
+						<p className="text-xs font-medium text-text">
 							{formatDate(selected)} ({existing ? "editar evento" : "novo evento"})
 						</p>
 
 						{fixedReason && (
-							<p className="text-[11px] text-ink-muted">
+							<p className="text-[11px] text-text-muted">
 								Feriado fixo: {fixedReason}. Para reabri-lo como dia letivo, salve com
 								"Suspende as aulas?" = Não.
 							</p>
 						)}
 
 						<div className="grid gap-2 sm:grid-cols-4">
-							<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted sm:col-span-2">
+							<label className="flex flex-col gap-1 text-[11px] font-medium text-text-muted sm:col-span-2">
 								Descrição
 								<input className="form-input w-full" value={descricao}
 									onChange={(event) => setDescricao(event.currentTarget.value)} />
 							</label>
 
-							<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted">
+							<label className="flex flex-col gap-1 text-[11px] font-medium text-text-muted">
 								Tipo
 								<select className="form-input w-full" value={tipo}
 									onChange={(event) => setTipo(event.currentTarget.value)}>
@@ -337,7 +345,7 @@ export default function FolhaPontoCalendario({
 								</select>
 							</label>
 
-							<label className="flex flex-col gap-1 text-[11px] font-medium text-ink-muted">
+							<label className="flex flex-col gap-1 text-[11px] font-medium text-text-muted">
 								Suspende as aulas?
 								<select className="form-input w-full" value={semAula}
 									onChange={(event) => setSemAula(event.currentTarget.value)}>
@@ -361,7 +369,7 @@ export default function FolhaPontoCalendario({
 
 							{existing && confirmRemoval && (
 								<>
-									<span className="text-[11px] text-ink-muted">
+									<span className="text-[11px] text-text-muted">
 										Remover? Se for um feriado fixo, volta ao padrão do sistema.
 									</span>
 									<button type="button" className="btn" data-variant="outline" data-size="sm"
@@ -380,9 +388,9 @@ export default function FolhaPontoCalendario({
 				)}
 
 				{error && (
-					<p className="text-xs text-danger-fg" role="alert">{error}</p>
+					<p className="text-xs text-hint-alert-fg" role="alert">{error}</p>
 				)}
-				{info && <p className="text-xs text-ink-muted">{info}</p>}
+				{info && <p className="text-xs text-text-muted">{info}</p>}
 
 				<div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
 					{Array.from({ length: 12 }, (_, month) => (
@@ -390,7 +398,7 @@ export default function FolhaPontoCalendario({
 							selected={selected} onSelect={select} />
 					))}
 				</div>
-			</section>
+			</GenericFloor>
 		</ShadowCenter>
 	);
 }

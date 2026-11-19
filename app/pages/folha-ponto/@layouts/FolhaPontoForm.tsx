@@ -6,6 +6,7 @@ import { MESES } from "../folha-ponto-page.utils";
 import FolhaPontoCalendario from "./FolhaPontoCalendario";
 import RelatorioJanela from "~/pages/relatorio/@layouts/RelatorioJanela";
 import { dataDoMes } from "~/pages/relatorio/relatorio-page.utils";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 type FolhaPontoFormProps = FolhaPontoFormState & { professores: Professor[] };
 
 /** Filtros da folha: professor, mês e ano. */
@@ -42,13 +43,15 @@ export default function FolhaPontoForm({
 		);
 	}
 	return (
-		<GenericFloor className="p-5">
-			<h2 className="font-semibold text-ink">Dados da folha</h2>
+		<GenericFloor className="p-5" header={<div className="mx-4 my-3">
+			<FloorHeader title={"Dados da folha"} description={"A grade do semestre correspondente ao mês é usada automaticamente."} />
+		</div>}>
+			{/*<h2 className="font-semibold text-ink">Dados da folha</h2>
 			<p className="mt-1 text-sm text-ink-muted">
 				A grade do semestre correspondente ao mês é usada automaticamente.
-			</p>
+			</p>*/}
 
-			<div className="mt-4 grid gap-3 md:grid-cols-4">
+			<div className="grid gap-3 md:grid-cols-4">
 				<label className="flex flex-col gap-1 text-xs font-medium text-ink-muted md:col-span-2">
 					Professor
 					<select
@@ -94,7 +97,7 @@ export default function FolhaPontoForm({
 			</div>
 
 			{error && (
-				<p className="mt-3 text-sm text-danger-fg" role="alert">
+				<p className="mt-3 text-sm text-hint-alert-fg" role="alert">
 					{error}
 				</p>
 			)}

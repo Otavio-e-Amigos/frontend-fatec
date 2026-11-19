@@ -9,6 +9,7 @@ import {
 	buildScheduleCells,
 	cellKey,
 } from "../folha-ponto-page.utils";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type FolhaPontoPreviewProps = {
 	data: FolhaPontoPreviewData;
@@ -35,12 +36,17 @@ export default function FolhaPontoPreview({
 			className="flex flex-col gap-5 p-5"
 			header={
 				<div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
-					<div>
+					<FloorHeader title={"Prévia"} description={data.titulo} />
+					{/*<div className="flex flex-col">*/}
+					{/*<h2 className="font-semibold text-text"></h2>*/}
+
+					{/*</div>*/}
+					{/*<div>
 						<p className="text-xs font-semibold uppercase tracking-wide text-brand">
 							Prévia
 						</p>
-						<h2 className="font-semibold text-ink">{data.titulo}</h2>
-					</div>
+						<h2 className="font-semibold text-text">{data.titulo}</h2>
+					</div>*/}
 					<button
 						type="button"
 						className="btn"
@@ -67,7 +73,7 @@ export default function FolhaPontoPreview({
 
 			{/* Avisos do calendário acadêmico */}
 			{data.avisos.length > 0 && (
-				<ul className="list-disc rounded-control bg-brand-soft p-3 pl-7 text-sm text-ink">
+				<ul className="list-disc rounded-control bg-brand-soft p-3 pl-7 text-sm text-text">
 					{data.avisos.map((aviso) => (
 						<li key={aviso}>{aviso}</li>
 					))}
@@ -76,10 +82,10 @@ export default function FolhaPontoPreview({
 
 			{/* Grade horária */}
 			<section>
-				<h3 className="mb-2 text-sm font-semibold text-ink">Grade horária</h3>
+				<h3 className="mb-2 text-sm font-semibold text-text">Grade horária</h3>
 				<div className="overflow-x-auto">
-					<table className="w-full border-collapse text-[11px]">
-						<thead className="bg-surface-sunken">
+					<table className="w-full border border-page-floor-outline text-[11px]">
+						<thead className="bg-page-floor-accent">
 							<tr>
 								<th className={cell} rowSpan={2} />
 								{SHIFTS.map((shift) => (
@@ -98,7 +104,7 @@ export default function FolhaPontoPreview({
 										<th key={`${shift.turno}-${index}`} className={cell}>
 											{index + 1}º
 											<br />
-											<span className="font-normal text-ink-muted">
+											<span className="font-normal text-text-muted">
 												{start}
 											</span>
 										</th>
@@ -109,7 +115,7 @@ export default function FolhaPontoPreview({
 						<tbody>
 							{WEEKDAYS.map((weekday) => (
 								<tr key={weekday.value}>
-									<th className={`${cell} bg-surface-sunken`}>
+									<th className={`${cell} bg-page-floor-accent`}>
 										{weekday.label}
 									</th>
 									{SHIFTS.flatMap((shift) =>
@@ -130,7 +136,7 @@ export default function FolhaPontoPreview({
 					</table>
 				</div>
 				{data.gradeHoraria.length === 0 && (
-					<p className="mt-2 text-sm text-ink-muted">
+					<p className="mt-2 text-sm text-text-muted">
 						A grade não possui aulas de segunda a sábado.
 					</p>
 				)}
@@ -138,12 +144,12 @@ export default function FolhaPontoPreview({
 
 			{/* Frequência mensal */}
 			<section>
-				<h3 className="mb-2 text-sm font-semibold text-ink">
+				<h3 className="mb-2 text-sm font-semibold text-text">
 					Frequência mensal
 				</h3>
 				<div className="overflow-x-auto">
 					<table className="w-full border-collapse text-[11px]">
-						<thead className="bg-surface-sunken">
+						<thead className="bg-page-floor-accent">
 							<tr>
 								<th className={cell} rowSpan={2}>
 									Dia
@@ -181,7 +187,7 @@ export default function FolhaPontoPreview({
 									<tr
 										key={dia.dia}
 										className={
-											dia.domingo ? "bg-line" : noClass ? "bg-brand-soft" : ""
+											dia.domingo ? "bg-page-floor-outline/20" : noClass ? "bg-brand-soft" : ""
 										}
 									>
 										<td className={`${cell} font-semibold`}>
@@ -191,7 +197,7 @@ export default function FolhaPontoPreview({
 										{noClass ? (
 											<td
 												colSpan={FREQUENCY_COLUMNS}
-												className={`${cell} text-left text-ink-muted`}
+												className={`${cell} text-left text-text-muted`}
 											>
 												{dia.motivo || "Sem aula"}
 											</td>
@@ -214,10 +220,10 @@ export default function FolhaPontoPreview({
 function Field({ label, value }: { label: string; value?: string }) {
 	return (
 		<div>
-			<dt className="text-[10px] font-semibold uppercase tracking-wide text-ink-muted">
+			<dt className="text-[10px] font-semibold uppercase tracking-wide text-text-muted">
 				{label}
 			</dt>
-			<dd className="mt-1 text-sm font-medium text-ink">{value || "—"}</dd>
+			<dd className="mt-1 text-sm font-medium text-text">{value || "—"}</dd>
 		</div>
 	);
 }
