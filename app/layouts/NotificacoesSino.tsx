@@ -172,21 +172,21 @@ export default function NotificacoesSino() {
 				<div
 					role="dialog"
 					aria-label="Últimas notificações"
-					className="absolute right-0 top-full z-20 mt-2 flex max-h-[28rem] w-[22rem] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-xl border border-line/60 bg-white shadow-lg shadow-black/5"
+					className="absolute right-0 top-full z-20 mt-2 flex max-h-[28rem] w-[22rem] max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden rounded-xl border border-page-floor-outline/60 bg-page-floor shadow-lg shadow-black/5"
 				>
 					{/* Cabeçalho */}
 					<div className="flex items-baseline justify-between gap-2 px-5 pb-1 pt-4">
-						<h2 className="text-sm font-semibold text-ink">
+						<h2 className="text-sm font-semibold text-text">
 							Notificações
 							{count > 0 && (
-								<span className="ml-2 text-xs font-normal text-ink-muted">
+								<span className="ml-2 text-xs font-normal text-text-muted">
 									{count} {count === 1 ? "nova" : "novas"}
 								</span>
 							)}
 						</h2>
 						<button
 							type="button"
-							className="text-xs text-ink-muted transition-colors hover:text-brand disabled:cursor-default disabled:opacity-40 disabled:hover:text-ink-muted"
+							className="text-xs text-text-muted transition-colors hover:text-brand disabled:cursor-default disabled:opacity-40 disabled:hover:text-text-muted"
 							disabled={count === 0}
 							onClick={readAll}
 						>
@@ -209,8 +209,8 @@ export default function NotificacoesSino() {
 								aria-selected={filtro === value}
 								className={`rounded-md px-2.5 py-1 text-xs transition-colors ${
 									filtro === value
-										? "bg-surface-sunken font-medium text-ink"
-										: "text-ink-muted hover:text-ink"
+										? "bg-surface-sunken font-medium text-text"
+										: "text-text-muted hover:text-text"
 								}`}
 								onClick={() => setFiltro(value)}
 							>
@@ -237,8 +237,8 @@ export default function NotificacoesSino() {
 
 						{!loading && !error && visible.length === 0 && (
 							<div className="px-5 py-10 text-center">
-								<p className="text-sm text-ink">Tudo em dia</p>
-								<p className="mt-1 text-xs text-ink-muted">
+								<p className="text-sm text-text">Tudo em dia</p>
+								<p className="mt-1 text-xs text-text-muted">
 									{filtro === "nao-lidas"
 										? "Você não tem notificações não lidas."
 										: "Os avisos do sistema aparecerão aqui."}
@@ -264,18 +264,18 @@ export default function NotificacoesSino() {
 
 											<span className="flex min-w-0 flex-1 flex-col gap-0.5">
 												<span
-													className={`text-sm leading-snug text-ink ${
+													className={`text-sm leading-snug text-text ${
 														item.lida ? "font-normal" : "font-medium"
 													}`}
 												>
 													{item.titulo}
 												</span>
 
-												<span className="line-clamp-2 text-xs text-ink-muted">
+												<span className="line-clamp-2 text-xs text-text-muted">
 													{item.mensagem}
 												</span>
 
-												<span className="mt-0.5 flex items-center gap-1.5 text-[11px] text-ink-muted/80">
+												<span className="mt-0.5 flex items-center gap-1.5 text-[11px] text-text-muted/80">
 													{dot && <span aria-hidden className={`size-1.5 rounded-full ${dot}`} />}
 													{CATEGORIAS[item.categoria] ?? "Sistema"} · {quando(item.criadaEm)}
 													{item.pendente && !item.resolvidaEm && (
