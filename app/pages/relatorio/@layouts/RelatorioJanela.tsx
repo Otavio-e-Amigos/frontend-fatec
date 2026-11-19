@@ -10,6 +10,8 @@ import useRelatorio, { type RelatorioInitial } from "../@hooks/useRelatorio";
 import RelatorioExtracaoGradeView from "./RelatorioExtracaoGrade";
 import RelatorioFiltros from "./RelatorioFiltros";
 import RelatorioFolhaPontoView from "./RelatorioFolhaPonto";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 const TITULOS: Record<TipoRelatorio, { titulo: string; descricao: string }> = {
 	EXTRACAO_GRADE: {
@@ -42,15 +44,28 @@ export default function RelatorioJanela({
 
 	return (
 		<ShadowCenter onClick={() => window.dismissible && window.hide()}>
-			<section
-				role="dialog"
-				className="floor flex max-h-[90vh] w-full max-w-5xl flex-col rounded-card shadow-card"
-				onClick={(event) => event.stopPropagation()}
+			<GenericFloor
+				// role="dialog"
+				className="flex flex-col shadow-card overflow-y-hidden"
+				wrapperClassName="max-h-[90vh] w-full max-w-5xl"
+				header={<div className="mx-4 my-3 flex flex-row justify-between items-center">
+					<FloorHeader title={titulo} description={descricao} />
+					<button
+						type="button"
+						className="btn"
+						data-variant="outline"
+						data-size="sm"
+						onClick={() => window.hide()}
+					>
+						Fechar
+					</button>
+				</div>}
+				// onClick={(event) => event.stopPropagation()}
 			>
-				<header className="floor-accent flex items-start justify-between gap-3 rounded-b-none border-x-0 border-t-0 px-5 py-3">
+				{/*<header className="floor-accent flex items-start justify-between gap-3 rounded-b-none border-x-0 border-t-0 px-5 py-3">
 					<div>
-						<h2 className="text-lg font-semibold text-ink">{titulo}</h2>
-						<p className="text-xs text-ink-muted">{descricao}</p>
+						<h2 className="text-lg font-semibold text-text">{titulo}</h2>
+						<p className="text-xs text-text-muted">{descricao}</p>
 					</div>
 					<button
 						type="button"
@@ -61,24 +76,24 @@ export default function RelatorioJanela({
 					>
 						Fechar
 					</button>
-				</header>
+				</header>*/}
 
-				<div className="flex flex-1 flex-col gap-4 overflow-y-auto p-5">
+				<div className="flex flex-1 flex-col gap-4 overflow-y-scroll p-5">
 					<RelatorioFiltros {...state.filtros} />
 
 					{state.error && (
-						<p className="text-sm text-danger-fg" role="alert">
+						<p className="text-sm text-hint-alert-fg" role="alert">
 							{state.error}
 						</p>
 					)}
 
-					{state.loading && <p className="text-sm text-ink-muted">Gerando relatório...</p>}
+					{state.loading && <p className="text-sm text-text-muted">Gerando relatório...</p>}
 
 					{periodo && (
-						<p className="text-sm font-medium text-ink">
+						<p className="text-sm font-medium text-text">
 							{periodo.descricao}
 							{periodo.emAndamento && (
-								<span className="ml-2 text-xs font-normal text-ink-muted">
+								<span className="ml-2 text-xs font-normal text-text-muted">
 									(período em andamento: dados parciais)
 								</span>
 							)}
@@ -93,12 +108,12 @@ export default function RelatorioJanela({
 					)}
 
 					{!state.resultado && !state.loading && !state.error && (
-						<p className="text-sm text-ink-muted">Escolha os filtros e gere o relatório.</p>
+						<p className="text-sm text-text-muted">Escolha os filtros e gere o relatório.</p>
 					)}
 				</div>
 
-				<footer className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-5 py-3">
-					<p className="text-[11px] text-ink-muted">
+				<footer className="flex flex-wrap items-center justify-between gap-2 border-t border-page-floor-outline px-5 py-3">
+					<p className="text-[11px] text-text-muted">
 						Só há dados a partir da atualização do sistema que passou a registrar extrações e folhas.
 					</p>
 					<div className="flex gap-2">
@@ -117,7 +132,7 @@ export default function RelatorioJanela({
 						))}
 					</div>
 				</footer>
-			</section>
+			</GenericFloor>
 		</ShadowCenter>
 	);
 }

@@ -11,10 +11,10 @@ export function Indicador({
 	hint?: string;
 }) {
 	return (
-		<div className="rounded-control border border-line bg-surface-sunken p-3">
-			<p className="text-[11px] font-medium text-ink-muted">{label}</p>
-			<p className="mt-1 text-xl font-semibold text-ink">{value}</p>
-			{hint && <p className="mt-0.5 text-[11px] text-ink-muted">{hint}</p>}
+		<div className="rounded-control border border-page-floor-outline bg-page-floor-accent/20 p-3">
+			<p className="text-[11px] font-medium text-text-muted">{label}</p>
+			<p className="mt-1 text-xl font-semibold text-text">{value}</p>
+			{hint && <p className="mt-0.5 text-[11px] text-text-muted">{hint}</p>}
 		</div>
 	);
 }
@@ -35,7 +35,7 @@ export function Secao({
 }) {
 	return (
 		<section className="flex flex-col gap-2">
-			<h3 className="text-sm font-semibold text-ink">{titulo}</h3>
+			<h3 className="text-sm font-semibold text-text">{titulo}</h3>
 			{children}
 		</section>
 	);
@@ -59,7 +59,7 @@ export function RelatorioTabela({
 	nota?: string;
 }) {
 	if (linhas.length === 0) {
-		return <p className="text-sm text-ink-muted">{vazio}</p>;
+		return <p className="text-sm text-text-muted">{vazio}</p>;
 	}
 
 	return (
@@ -88,7 +88,7 @@ export function RelatorioTabela({
 					</tbody>
 					{totais && (
 						<tfoot>
-							<tr className="border-t-2 border-line font-semibold text-ink">
+							<tr className="border-t-2 border-line font-semibold text-text">
 								{totais.map((cell, idx) => (
 									<td key={idx} className="table-cell">
 										{cell}
@@ -99,7 +99,7 @@ export function RelatorioTabela({
 					)}
 				</table>
 			</div>
-			{nota && <p className="text-[11px] text-ink-muted">{nota}</p>}
+			{nota && <p className="text-[11px] text-text-muted">{nota}</p>}
 		</div>
 	);
 }
