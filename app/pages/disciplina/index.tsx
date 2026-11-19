@@ -41,9 +41,9 @@ export default function DisciplinaIndexPage({
 		);
 	}, [list, term]);
 
-	function search(event: ChangeEvent<HTMLInputElement>) {
-		setTerm(event.currentTarget.value.toLowerCase().trim());
-	}
+	// function search(event: ChangeEvent<HTMLInputElement>) {
+	// 	setTerm(event.currentTarget.value.toLowerCase().trim());
+	// }
 
 	const table = useMemo(() => {
 		const rows = filtered.map(mapper);

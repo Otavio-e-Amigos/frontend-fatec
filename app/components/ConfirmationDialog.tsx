@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 
 type ConfirmationDialogProps = {
 	title: string;
@@ -56,15 +57,15 @@ export default function ConfirmationDialog({
 				if (!isSubmitting) onCancel();
 			}}
 		>
-			<section
-				role="alertdialog"
+			<GenericFloor
+				// role="alertdialog"
 				aria-modal="true"
 				aria-labelledby="confirmation-title"
 				aria-describedby="confirmation-description"
-				className="surface w-full max-w-md rounded-card p-6 shadow-card"
-				onClick={(event) => event.stopPropagation()}
+				className="w-full max-w-md p-4 shadow-card"
+				// onClick={(event) => event.stopPropagation()}
 			>
-				<h2 id="confirmation-title" className="text-xl font-semibold text-ink">
+				<h2 id="confirmation-title" className="text-xl font-semibold text-text">
 					{title}
 				</h2>
 				<p id="confirmation-description" className="mt-2 text-sm text-text-muted">
@@ -96,7 +97,7 @@ export default function ConfirmationDialog({
 						{isSubmitting ? "Processando..." : confirmLabel}
 					</button>
 				</div>
-			</section>
+			</GenericFloor>
 		</div>
 	);
 }

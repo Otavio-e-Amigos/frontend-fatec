@@ -22,5 +22,6 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 export default function DisciplinaIndexRoute({
   loaderData,
 }: Route.ComponentProps) {
+	console.log(loaderData.disciplinas)
   return <Page list={loaderData.disciplinas} initial={loaderData.initial} />;
 }
