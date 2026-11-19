@@ -20,6 +20,7 @@ export default class DisciplinaService {
 		const req: AbstractQueryObject = {
 			...route,
 			path: [...route.path],
+			arguments: [{param: "size", value: 200}],
 			credentials: auth,
 		};
 
