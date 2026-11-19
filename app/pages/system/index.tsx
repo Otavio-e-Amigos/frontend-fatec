@@ -83,10 +83,13 @@ export default function Page({
 				<GenericFloor
 					className="p-4 flex flex-col gap-5"
 					header={
-						<FloorHeader
-							title={"Recursos"}
-							description={"Recursos cadastrados no Appointer"}
-						/>
+						<div className="mx-4 my-3">
+							<FloorHeader
+								title={"Recursos"}
+								description={"Recursos cadastrados no Appointer"}
+							/>
+
+						</div>
 					}
 				>
 					{/*<ChartCard
