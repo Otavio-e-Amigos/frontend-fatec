@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router";
 import DefaultTableModel from "~/classes/TableModels/DefaultTableModel";
 import ComplexTableModelView from "~/components/tables/ComplexTableView";
@@ -36,6 +36,9 @@ export default function Page({
 			"Apenas usuários do perfil TI podem acessar a gestão do sistema.",
 	});
 
+	const [activeTab, setActiveTab] = useState(0);
+	const [tabElement, setTabElement] = useState(<></>);
+
 	const usersTable = useMemo(() => {
 		const rows = (users ?? []).map(mapper);
 
@@ -58,10 +61,23 @@ export default function Page({
 		);
 	}
 
+	function TabItem({ label, tabIndex }: { label: string; tabIndex: number }) {
+		return (
+			<button
+				className={`surface p-2 ${tabIndex == activeTab ? "bg-page-surface-outline/20" :  "hover:bg-page-surface-accent"} active:bg-page-surface-outline/20`}
+				onClick={() => {
+					setActiveTab(tabIndex);
+				}}
+			>
+				{label}
+			</button>
+		);
+	}
+
 	return (
 		<div className="flex flex-1 flex-col">
 			<Header />
-			<main className="mx-5 my-4 flex flex-col gap-5">
+			<main className="mx-5 my-4 flex flex-1 flex-col gap-5">
 				<PageHeader
 					title={"Sistema"}
 					subTitle={"Gestão do Sistema"}
@@ -80,30 +96,59 @@ export default function Page({
 						</Link>
 					}
 				/>
-				<GenericFloor
-					className="p-4 flex flex-col gap-5"
-					header={
-						<div className="mx-4 my-3">
-							<FloorHeader
-								title={"Recursos"}
-								description={"Recursos cadastrados no Appointer"}
-							/>
+				<div className="grid grid-cols-4 flex-1 grid-rows-2 gap-5">
+					<GenericFloor className="flex flex-col gap-3 p-3 max-h-fit">
+						<FloorHeader title={"Seções"}/>
+						<TabItem label={"Usuários"} tabIndex={0} />
+						<TabItem label={"Estatísticas"} tabIndex={1} />
+					</GenericFloor>
+					<div className="col-span-3 row-span-2">
+						{activeTab == 1 && (
+							<GenericFloor
+								className="p-4 flex flex-col gap-5"
+								header={
+									<div className="mx-4 my-3">
+										<FloorHeader
+											title={"Estatísticas"}
+											description={"Análise e estatísticas dos recursos do Appointer"}
+										/>
+									</div>
+								}
+							>
+								{/*<ChartCard
+									title="Recursos"
+									description="Recursos cadastrados no Appointer"
+									empty={cadastros.length === 0}
+									emptyMessage="Não foi possível carregar os totais."
+								>
+								</ChartCard>*/}
+								<FloorHeader
+									title={"Recursos"}
+									description={"Recursos cadastrados no sistema"}
+								/>
+								<BarraSimples data={cadastros} label="Cadastrados" />
+							</GenericFloor>
+						)}
 
-						</div>
-					}
-				>
-					{/*<ChartCard
-						title="Recursos"
-						description="Recursos cadastrados no Appointer"
-						empty={cadastros.length === 0}
-						emptyMessage="Não foi possível carregar os totais."
-					>
-					</ChartCard>*/}
-					<BarraSimples data={cadastros} label="Cadastrados" />
-				</GenericFloor>
-				<GenericFloor className="p-4">
-					<ComplexTableModelView data={usersTable} actionsColumn />
-				</GenericFloor>
+						{activeTab == 0 && (
+							<GenericFloor className="p-4"
+								header={
+									<div className="mx-4 my-3">
+										<FloorHeader
+											title={"Usuários"}
+											description={"Consulta dos usuários registrados no Appointer"}
+										/>
+									</div>
+								}
+							>
+								<ComplexTableModelView data={usersTable} actionsColumn />
+							</GenericFloor>
+						)}
+					</div>
+				</div>
+
+
+
 			</main>
 		</div>
 	);
