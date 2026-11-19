@@ -1,12 +1,10 @@
 import formatTurno from "~/modules/curso/format-turno";
 import type { GradeLessonPayload } from "~/modules/grade/grade.service";
 import type Grade from "~/modules/grade/grade.class";
-import {
-	getAllocatedBlocks,
-	itemColors,
-	weekDays,
-} from "./grade-wizard.utils";
+import { getAllocatedBlocks, itemColors, weekDays } from "./grade-wizard.utils";
 import GradeWizardScheduleGrid from "./GradeWizardScheduleGrid";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type GradeWizardScheduleStepProps = {
 	items: Grade[];
@@ -59,27 +57,40 @@ export default function GradeWizardScheduleStep({
 	onRemoveLesson,
 }: GradeWizardScheduleStepProps) {
 	return (
-		<section className="surface flex flex-col gap-4 rounded-card p-5">
-			<header className="flex flex-wrap items-start justify-between gap-2 border-b border-line pb-3">
+		<GenericFloor
+			className="flex flex-col gap-4 p-4"
+			header={
+				<div className="mx-4 my-3 flex flex-row">
+					<FloorHeader
+						title={"Grade Horária"}
+						description={`Digite horários flexíveis manualmente ou selecione os blocos oficiais na grade. Cada bloco equivale a 50 minutos e intervalos não precisam ser cadastrados.`}
+						className="w-3/4"
+					/>
+					<p className="text-sm text-text-muted w-1/4 flex justify-end">
+						{items.reduce((count, item) => count + getAllocatedBlocks(item), 0)}{" "}
+						bloco(s) alocado(s)
+					</p>
+				</div>
+			}
+		>
+			{/*<header className="flex flex-wrap items-start justify-between gap-2 border-b border-line pb-3">
 				<div>
 					<h1 className="text-lg font-semibold text-brand">Grade Horária</h1>
 					<p className="mt-1 text-sm text-text-muted">
 						Digite horários flexíveis manualmente ou selecione os blocos
-						oficiais na grade. Cada bloco equivale a 50 minutos e intervalos
-						não precisam ser cadastrados.
+						oficiais na grade. Cada bloco equivale a 50 minutos e intervalos não
+						precisam ser cadastrados.
 					</p>
 				</div>
-				<p className="text-sm text-text-muted">
-					{items.reduce((count, item) => count + getAllocatedBlocks(item), 0)}{" "}
-					bloco(s) alocado(s)
-				</p>
-			</header>
+
+			</header>*/}
 
 			<ActiveDisciplineSelector
 				items={items}
 				selectedItemKey={selectedItemKey}
 				onSelectItem={onSelectItem}
 			/>
+
 			<ManualLessonForm
 				items={items}
 				selectedItemKey={selectedItemKey}
@@ -124,7 +135,7 @@ export default function GradeWizardScheduleStep({
 					{scheduleError}
 				</p>
 			)}
-		</section>
+		</GenericFloor>
 	);
 }
 
@@ -161,8 +172,8 @@ function ActiveDisciplineSelector({
 						aria-pressed={selectedItemKey === item.key}
 						onClick={() => onSelectItem(item.key)}
 					>
-						{item.disciplina} ({getAllocatedBlocks(item)}/
-						{item.quantidadeAulas})
+						{item.disciplina} ({getAllocatedBlocks(item)}/{item.quantidadeAulas}
+						)
 					</button>
 				);
 			})}
@@ -189,10 +200,10 @@ function ManualLessonForm({
 }: ManualLessonFormProps) {
 	return (
 		<fieldset
-			className="grid gap-3 rounded-control border border-line bg-page-surface-accent p-4 sm:grid-cols-2 lg:grid-cols-5"
+			className="grid gap-3 rounded-control border border-page-floor-outline bg-page-floor-accent p-4 sm:grid-cols-2 lg:grid-cols-5"
 			disabled={hasPersistedData || !items.length}
 		>
-			<legend className="px-1 text-xs font-semibold text-text-muted">
+			<legend className="px-1 text-xs font-semibold text-page-floor-outline">
 				Adicionar horário manualmente
 			</legend>
 			<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
@@ -270,15 +281,17 @@ function ScheduledLessons({
 	if (!items.length) return null;
 
 	return (
-		<div className="overflow-x-auto rounded-control border border-line">
+		<div className="overflow-x-auto rounded-control border border-page-floor-outline">
 			<table className="w-full min-w-[620px] text-left text-sm">
-				<thead className="bg-page-surface-accent text-xs text-text-muted">
+				<thead className="bg-page-floor-accent text-xs text-text-muted">
 					<tr>
-						{["Disciplina", "Dia", "Horário", "Turno", "Ação"].map((heading) => (
-							<th key={heading} className="px-3 py-2">
-								{heading}
-							</th>
-						))}
+						{["Disciplina", "Dia", "Horário", "Turno", "Ação"].map(
+							(heading) => (
+								<th key={heading} className="px-3 py-2">
+									{heading}
+								</th>
+							),
+						)}
 					</tr>
 				</thead>
 				<tbody>
@@ -286,7 +299,7 @@ function ScheduledLessons({
 						item.aulas.map((lesson) => (
 							<tr
 								key={`${item.key}-${lesson.diaSemana}-${lesson.horaInicio}`}
-								className="border-t border-line"
+								className="border-t border-page-floor-outline"
 							>
 								<td className="px-3 py-2">{item.disciplina}</td>
 								<td className="px-3 py-2">
@@ -303,7 +316,7 @@ function ScheduledLessons({
 								<td className="px-3 py-2">
 									<button
 										type="button"
-										className="text-danger-fg hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+										className="text-hint-alert-fg hover:underline disabled:cursor-not-allowed disabled:opacity-50"
 										aria-label={`Remover horário de ${item.disciplina}`}
 										disabled={hasPersistedData}
 										onClick={() => onRemoveLesson(item.key, lesson)}

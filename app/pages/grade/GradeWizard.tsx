@@ -396,7 +396,7 @@ export default function GradeWizard({
 	          onSave={saveGrade}
 	        />
 
-				<GenericFloor>
+				<div>
 	        {step === 1 && (
 	          <GradeWizardDisciplineStep
 	            professor={professor}
@@ -447,7 +447,7 @@ export default function GradeWizard({
 	            hasPersistedData={hasPersistedData}
 	          />
 	        )}
-	      </GenericFloor>
+	      </div>
       </main>
     </div>
   );

@@ -1,4 +1,6 @@
 import { useState, type FormEvent } from "react";
+import FloorHeader from "~/layouts/pages/FloorHeader";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 import type {
 	GradeLessonPayload,
 	SavedGradeLesson,
@@ -43,7 +45,9 @@ export default function GradeLessonEditDialog({
 	async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		if (horaFim <= horaInicio) {
-			setValidationError("O horário final deve ser posterior ao horário inicial.");
+			setValidationError(
+				"O horário final deve ser posterior ao horário inicial.",
+			);
 			return;
 		}
 		setValidationError("");
@@ -56,14 +60,21 @@ export default function GradeLessonEditDialog({
 
 	return (
 		<div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/50 p-4">
-			<section
-				role="dialog"
+			<GenericFloor
+				// role="dialog"
 				aria-modal="true"
 				aria-labelledby="grade-lesson-edit-title"
-				className="surface my-auto w-full max-w-xl overflow-hidden rounded-card shadow-card"
+				className="my-auto w-full max-w-xl overflow-hidden shadow-card p-4"
+				header={
+					<div className="mx-4 my-3">
+						<FloorHeader title={"Grade Horária"} description="Editar Horário" />
+						<p className="mt-1 text-sm text-text-muted">{disciplineName}</p>
+					</div>
+				}
 			>
-				<header className="border-b border-line bg-brand-soft/40 px-6 py-5">
-					<p className="text-xs font-semibold uppercase tracking-wide text-brand">
+				{/*<header className="border-b border-line bg-brand-soft/40 px-4 py-3">*/}
+
+				{/*<p className="text-xs font-semibold uppercase tracking-wide text-brand">
 						Grade horária
 					</p>
 					<h2
@@ -71,16 +82,15 @@ export default function GradeLessonEditDialog({
 						className="mt-1 text-xl font-semibold text-ink"
 					>
 						Editar horário
-					</h2>
-					<p className="mt-1 text-sm text-text-muted">{disciplineName}</p>
-					{isLoading && (
-						<p className="mt-3 text-sm text-text-muted" role="status">
-							Carregando os dados atuais do horário...
-						</p>
-					)}
-				</header>
+					</h2>*/}
+				{/*</header>*/}
+				{isLoading && (
+					<p className="mt-3 text-sm text-text-muted" role="status">
+						Carregando os dados atuais do horário...
+					</p>
+				)}
 
-				<form className="flex flex-col gap-5 p-6" onSubmit={handleSubmit}>
+				<form className="flex flex-col gap-5" onSubmit={handleSubmit}>
 					<label className="flex flex-col gap-1 text-sm font-medium text-text-muted">
 						Dia da semana
 						<select
@@ -98,7 +108,7 @@ export default function GradeLessonEditDialog({
 						</select>
 					</label>
 
-					<fieldset className="rounded-control border border-line p-4">
+					<fieldset className="rounded-control border border-page-floor-outline p-4">
 						<legend className="px-1 text-sm font-medium text-text-muted">
 							Intervalo da aula
 						</legend>
@@ -109,9 +119,7 @@ export default function GradeLessonEditDialog({
 									className="form-input"
 									type="time"
 									value={horaInicio}
-									onChange={(event) =>
-										setHoraInicio(event.currentTarget.value)
-									}
+									onChange={(event) => setHoraInicio(event.currentTarget.value)}
 									disabled={isSaving || isLoading}
 									required
 								/>
@@ -131,12 +139,12 @@ export default function GradeLessonEditDialog({
 					</fieldset>
 
 					{(validationError || errorMessage) && (
-						<p className="text-sm text-danger-fg" role="alert">
+						<p className="text-sm text-hint-alert-dot" role="alert">
 							{validationError || errorMessage}
 						</p>
 					)}
 
-					<footer className="flex justify-end gap-2 border-t border-line pt-4">
+					<footer className="flex justify-end gap-2 pt-2">
 						<button
 							type="button"
 							className="btn"
@@ -146,7 +154,11 @@ export default function GradeLessonEditDialog({
 						>
 							Cancelar
 						</button>
-						<button type="submit" className="btn" disabled={isSaving || isLoading}>
+						<button
+							type="submit"
+							className="btn"
+							disabled={isSaving || isLoading}
+						>
 							{isLoading
 								? "Carregando..."
 								: isSaving
@@ -155,7 +167,7 @@ export default function GradeLessonEditDialog({
 						</button>
 					</footer>
 				</form>
-			</section>
+			</GenericFloor>
 		</div>
 	);
 }

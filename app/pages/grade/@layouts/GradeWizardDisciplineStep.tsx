@@ -10,6 +10,8 @@ import {
 	itemColors,
 	shifts,
 } from "./grade-wizard.utils";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type GradeWizardDisciplineStepProps = {
 	professor: Professor;
@@ -139,23 +141,22 @@ export default function GradeWizardDisciplineStep({
 	}
 
 	return (
-		<section className="surface flex flex-col gap-5 rounded-card p-5">
-			<header className="flex flex-wrap items-start justify-between gap-2 border-b border-line pb-3">
-				<div>
-					<h1 className="text-lg font-semibold text-brand">
-						Histórico de Grades
-					</h1>
-					<p className="mt-1 text-sm text-text-muted">
-						Professor: {professor.name}
+		<GenericFloor className="flex flex-col gap-5 p-4" header={
+			<div className="flex flex-row mx-4 my-3">
+
+				<FloorHeader title={"Histórico de Grades"} description={`Professor: ${professor.name}`} className="w-1/4" />
+				<div className="w-3/4 flex flex-col items-end">
+					<p className="text-sm text-text-muted">
+						{items.length} disciplina(s) adicionada(s)
 					</p>
+
 				</div>
-				<p className="text-sm text-text-muted">
-					{items.length} disciplina(s) adicionada(s)
-				</p>
-			</header>
+			</div>
+		}>
+
 
 			{!periodos.length && (
-				<p className="rounded-control border border-warn-dot/30 bg-warn-bg p-3 text-sm text-warn-fg">
+				<p className="rounded-control border border-hint-alert-dot/30 bg-hint-alert p-3 text-sm text-hint-alert-fg">
 					Nenhum período letivo está cadastrado.{" "}
 					<Link className="font-semibold underline" to="/periodo-letivo/add">
 						Cadastre um período letivo
@@ -164,7 +165,7 @@ export default function GradeWizardDisciplineStep({
 				</p>
 			)}
 			{(!cursos.length || !disciplinas.length) && (
-				<p className="rounded-control border border-warn-dot/30 bg-warn-bg p-3 text-sm text-warn-fg">
+				<p className="rounded-control border border-hint-alert-dot/30 bg-hint-alert p-3 text-sm text-hint-alert-fg">
 					{!cursos.length && !disciplinas.length
 						? "Não há cursos nem disciplinas cadastrados."
 						: !cursos.length
@@ -174,10 +175,11 @@ export default function GradeWizardDisciplineStep({
 				</p>
 			)}
 
-			<div className="rounded-control border border-line bg-page-surface-accent p-4">
-				<p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
+			<div className="rounded-control border border-page-floor-outline bg-page-floor-accent p-4">
+				{/*<p className=" text-xs font-semibold uppercase tracking-wide text-text-muted">
 					Adicionar disciplina
-				</p>
+				</p>*/}
+				<FloorHeader title={"Adicionar Disciplina"} className="mb-3"/>
 				<div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
 					<label className="flex flex-col gap-1 text-xs font-medium text-text-muted">
 						Período letivo
@@ -221,7 +223,7 @@ export default function GradeWizardDisciplineStep({
 						{showDisciplineSuggestions && !hasPersistedData && (
 							<div
 								id="grade-discipline-results"
-								className="absolute inset-x-0 top-full z-20 mt-1 overflow-hidden rounded-control border border-line bg-page-surface shadow-lg"
+								className="absolute inset-x-0 top-13 z-20 mt-1 overflow-hidden rounded-control border border-page-floor-outline bg-page-floor shadow-lg"
 							>
 								{matchingDisciplines.slice(0, 5).map((discipline) => (
 									<button
@@ -333,7 +335,7 @@ export default function GradeWizardDisciplineStep({
 							))}
 						</datalist>
 					</label>
-					<div className="flex items-end">
+					<div className="flex items-end sm:col-span-2 lg:col-span-4">
 						<button
 							type="button"
 							className="btn w-full"
@@ -411,7 +413,7 @@ export default function GradeWizardDisciplineStep({
 						return (
 							<li
 								key={item.key}
-								className="flex flex-wrap items-center gap-3 rounded-control border border-line px-3 py-2"
+								className="flex flex-wrap items-center gap-3 rounded-control border border-page-floor-outline px-3 py-2"
 								style={{ borderLeftWidth: 3, borderLeftColor: color }}
 							>
 								<strong className="text-sm text-ink">{item.disciplina}</strong>
@@ -445,10 +447,10 @@ export default function GradeWizardDisciplineStep({
 					})}
 				</ul>
 			) : (
-				<p className="rounded-control border border-dashed border-page-line-strong px-4 py-8 text-center text-sm text-text-muted">
+				<p className="rounded-control border border-dashed border-page-floor-outline px-4 py-8 text-center text-sm text-text-muted">
 					Adicione disciplinas para montar a grade horária.
 				</p>
 			)}
-		</section>
+		</GenericFloor>
 	);
 }

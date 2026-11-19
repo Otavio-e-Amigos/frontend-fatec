@@ -2,11 +2,9 @@ import type PeriodoLetivo from "~/modules/periodo-letivo/periodo-letivo.class";
 import type Professor from "~/modules/professor/professor.class";
 import formatTurno from "~/modules/curso/format-turno";
 import type Grade from "~/modules/grade/grade.class";
-import {
-	formatHours,
-	getItemsTotals,
-	itemColors,
-} from "./grade-wizard.utils";
+import { formatHours, getItemsTotals, itemColors } from "./grade-wizard.utils";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type SummaryTotals = {
 	lessons: number;
@@ -38,16 +36,22 @@ export default function GradeWizardSummary({
 	hasPersistedData,
 }: GradeWizardSummaryProps) {
 	return (
-		<section className="surface flex flex-col gap-5 rounded-card p-5">
-			<header className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+		<GenericFloor
+			className="flex flex-col gap-5 p-5"
+			header={<div className="mx-4 my-3 flex flex-row">
+				<FloorHeader title={"Resumo de Horas"} description={`Período ${selectedPeriod.ano}/${selectedPeriod.semestre}`} className="w-1/4" />
+				<p className="w-3/4 text-right text-sm text-text-muted">Professor: {professor.name}</p>
+			</div>}
+		>
+			{/*<header className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
 				<div>
-					<h1 className="text-lg font-semibold text-brand">Resumo de Horas</h1>
+					<h1 className="text-lg font-semibold text-brand"></h1>
 					<p className="mt-1 text-sm text-text-muted">
-						Período {selectedPeriod.ano}/{selectedPeriod.semestre}
+
 					</p>
 				</div>
-				<p className="text-sm text-text-muted">Professor: {professor.name}</p>
-			</header>
+
+			</header>*/}
 
 			<div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 				<SummaryCard
@@ -78,14 +82,16 @@ export default function GradeWizardSummary({
 
 			<div className="flex flex-col gap-2">
 				<div className="flex flex-wrap items-center justify-between gap-2">
-					<h2 className="font-semibold text-ink">Detalhamento por disciplina</h2>
+					<h2 className="font-semibold text-text">
+						Detalhamento por disciplina
+					</h2>
 					<span className="text-xs text-text-muted">
 						Período {selectedPeriod.ano}/{selectedPeriod.semestre}
 					</span>
 				</div>
-				<div className="overflow-x-auto rounded-control border border-line">
+				<div className="overflow-x-auto rounded-control border border-page-floor-outline">
 					<table className="w-full min-w-[1050px] border-collapse text-left text-xs">
-						<thead className="bg-page-surface-accent text-text-muted">
+						<thead className="bg-page-floor-accent text-text-muted">
 							<tr>
 								{[
 									"Disciplina",
@@ -124,8 +130,12 @@ export default function GradeWizardSummary({
 										<td className="px-3 py-3">{item.semestreCurso}º</td>
 										<td className="px-3 py-3">{formatTurno(item.periodo)}</td>
 										<td className="px-3 py-3">{item.quantidadeAulas}</td>
-										<td className="px-3 py-3">{formatHours(itemTotals.weekly)}</td>
-										<td className="px-3 py-3">{formatHours(itemTotals.monthly)}</td>
+										<td className="px-3 py-3">
+											{formatHours(itemTotals.weekly)}
+										</td>
+										<td className="px-3 py-3">
+											{formatHours(itemTotals.monthly)}
+										</td>
 										<td className="px-3 py-3 text-warn-fg">
 											{formatHours(itemTotals.activity)}
 										</td>
@@ -139,7 +149,7 @@ export default function GradeWizardSummary({
 								);
 							})}
 						</tbody>
-						<tfoot className="bg-page-surface-accent font-semibold text-ink">
+						<tfoot className="bg-page-floor-accent font-semibold text-text">
 							<tr>
 								<td className="px-3 py-3" colSpan={4}>
 									Total geral · {items.length} disciplina(s)
@@ -151,14 +161,14 @@ export default function GradeWizardSummary({
 								<td className="px-3 py-3 text-brand">
 									{formatHours(totals.monthlyTotal)}
 								</td>
-								<td className="px-3 py-3 text-warn-fg">
+								<td className="px-3 py-3 text-hint-alert-fg">
 									{formatHours(totals.semester)}
 								</td>
 							</tr>
 						</tfoot>
 					</table>
 				</div>
-				<p className="rounded-control border border-line bg-page-surface-accent p-3 text-xs leading-relaxed text-text-muted">
+				<p className="rounded-control border border-page-floor-outline bg-page-floor-accent p-3 text-xs leading-relaxed text-text-muted">
 					Cálculo: cada aula equivale a 50 minutos; hora-aula mensal = horas
 					semanais × 4 semanas; hora atividade = 50% da hora-aula mensal; total
 					mensal = hora-aula mensal + hora atividade; total semestral = total
@@ -168,10 +178,12 @@ export default function GradeWizardSummary({
 
 			{saveError && (
 				<div
-					className="rounded-control border border-danger-dot/30 bg-danger-bg p-3 text-sm text-danger-fg"
+					className="rounded-control border border-hint-alert-dot/30 bg-hint-alert p-3 text-sm text-hint-alert-fg"
 					role="alert"
 				>
-					<p className="font-semibold">Não foi possível concluir o salvamento.</p>
+					<p className="font-semibold">
+						Não foi possível concluir o salvamento.
+					</p>
 					<p className="mt-1">{saveError}</p>
 					{hasPersistedData && (
 						<p className="mt-1 text-xs">
@@ -182,7 +194,7 @@ export default function GradeWizardSummary({
 					)}
 				</div>
 			)}
-		</section>
+		</GenericFloor>
 	);
 }
 
@@ -199,8 +211,8 @@ function SummaryCard({
 	tone: "brand" | "warn";
 }) {
 	const styles = {
-		brand: "border-brand/25 bg-brand-soft text-brand",
-		warn: "border-warn-dot/30 bg-warn-bg text-warn-fg",
+		brand: "border-page-floor-outline bg-page-floor-accent text-text",
+		warn: "border-hint-alert-dot/30 bg-hint-alert text-hint-alert-fg",
 	};
 
 	return (

@@ -8,6 +8,8 @@ import type {
 	SavedGradeLesson,
 } from "~/modules/grade/grade.service";
 import { getLessonBlocks, shifts } from "./grade-wizard.utils";
+import GenericFloor from "~/layouts/pages/GenericFloor";
+import FloorHeader from "~/layouts/pages/FloorHeader";
 
 type EditableGradeDiscipline = SavedGradeDiscipline & {
 	lessons: SavedGradeLesson[];
@@ -43,7 +45,9 @@ export default function GradeDisciplineEditDialog({
 	const [quantidadeAulas, setQuantidadeAulas] = useState(
 		String(discipline.quantidadeAulas),
 	);
-	const [op, setOp] = useState(discipline.op == null ? "" : String(discipline.op));
+	const [op, setOp] = useState(
+		discipline.op == null ? "" : String(discipline.op),
+	);
 	const [status, setStatus] = useState(discipline.status);
 
 	const selectedCourse = cursos.find((course) => String(course.id) === cursoId);
@@ -53,8 +57,7 @@ export default function GradeDisciplineEditDialog({
 	);
 	const allocatedBlocks = currentShift
 		? discipline.lessons.reduce(
-				(total, lesson) =>
-					total + getLessonBlocks(currentShift, lesson).length,
+				(total, lesson) => total + getLessonBlocks(currentShift, lesson).length,
 				0,
 			)
 		: discipline.lessons.length;
@@ -105,13 +108,22 @@ export default function GradeDisciplineEditDialog({
 
 	return (
 		<div className="fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-black/50 p-4">
-			<section
-				role="dialog"
+			<GenericFloor
+				// role="dialog"
 				aria-modal="true"
 				aria-labelledby="grade-discipline-edit-title"
-				className="surface my-auto w-full max-w-2xl rounded-card p-6 shadow-card"
+				className="my-auto w-full max-w-2xl p-4 shadow-card"
+				header={
+					<div className="mx-4 my-3">
+						<FloorHeader
+							title={"Editar disciplina da grade"}
+							description="Os horários já cadastrados não são alterados por este formulário."
+						/>
+
+					</div>
+				}
 			>
-				<header className="mb-5 border-b border-line pb-3">
+				{/*<header className="mb-5 border-b border-line pb-3">
 					<h2
 						id="grade-discipline-edit-title"
 						className="text-xl font-semibold text-brand"
@@ -121,7 +133,7 @@ export default function GradeDisciplineEditDialog({
 					<p className="mt-1 text-sm text-text-muted">
 						Os horários já cadastrados não são alterados por este formulário.
 					</p>
-				</header>
+				</header>*/}
 
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit}>
 					<div className="grid gap-3 sm:grid-cols-2">
@@ -130,9 +142,7 @@ export default function GradeDisciplineEditDialog({
 							<select
 								className="form-input"
 								value={disciplinaId}
-								onChange={(event) =>
-									setDisciplinaId(event.currentTarget.value)
-								}
+								onChange={(event) => setDisciplinaId(event.currentTarget.value)}
 								required
 							>
 								<option value="">Selecione...</option>
@@ -260,7 +270,7 @@ export default function GradeDisciplineEditDialog({
 						</button>
 					</footer>
 				</form>
-			</section>
+			</GenericFloor>
 		</div>
 	);
 }

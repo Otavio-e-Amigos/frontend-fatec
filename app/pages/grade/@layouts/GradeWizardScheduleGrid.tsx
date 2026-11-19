@@ -83,8 +83,8 @@ function ShiftScheduleTable({
   onRemoveLesson: (itemKey: string, lesson: GradeLessonPayload) => void;
 }) {
   return (
-    <section className="overflow-hidden rounded-control border border-line">
-      <h2 className="border-b border-line bg-page-surface-accent px-3 py-2 text-sm font-semibold text-brand">
+    <section className="overflow-hidden rounded-control border border-page-floor-outline">
+      <h2 className="border-line bg-page-floor-accent px-3 py-2 text-sm font-semibold text-brand">
         {shift.label}
         {selectedItem && selectedItem.periodo !== shift.value && (
           <span className="ml-2 text-xs font-normal text-text-muted">
@@ -96,14 +96,14 @@ function ShiftScheduleTable({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[760px] border-collapse text-xs">
           <thead>
-            <tr className="bg-page-surface-accent text-text-muted">
-              <th className="w-28 border border-line px-2 py-2 text-left">
+            <tr className="bg-page-floor-accent text-text-muted">
+              <th className="w-28 border border-page-floor-outline border-l-0 px-2 py-2 text-left">
                 Horário
               </th>
               {weekDays.slice(0, 6).map((weekday) => (
                 <th
                   key={weekday.value}
-                  className="border border-line px-2 py-2"
+                  className={`border border-page-floor-outline border-l-0 px-2 py-2 ${weekday.value == 6 && "border-r-0"}`}
                 >
                   {weekday.label}
                 </th>
@@ -113,7 +113,7 @@ function ShiftScheduleTable({
           <tbody>
             {shift.slots.map((slot, slotIndex) => (
               <tr key={slot.start}>
-                <th className="border border-line bg-page-surface-accent px-2 py-2 text-left font-normal text-text-muted">
+                <th className="border border-page-floor-outline bg-page-floor-accent border-l-0 px-2 py-2 text-left font-normal text-text-muted">
                   {slot.start}–{slot.end}
                 </th>
                 {weekDays.slice(0, 6).map((weekday) => (
@@ -202,7 +202,7 @@ function ScheduleCell({
     <td className="h-10 border border-line p-0">
       <button
         type="button"
-        className="grid h-full min-h-10 w-full place-items-center px-1 text-center disabled:cursor-not-allowed disabled:bg-page-surface-accent/40"
+        className="grid h-full min-h-10 w-full place-items-center px-1 text-center disabled:cursor-not-allowed disabled:bg-page-floor-accent/20"
         style={
           color
             ? {

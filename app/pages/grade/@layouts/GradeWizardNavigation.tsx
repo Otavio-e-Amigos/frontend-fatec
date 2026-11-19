@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import GenericFloor from "~/layouts/pages/GenericFloor";
 
 type GradeWizardNavigationProps = {
 	step: number;
@@ -21,9 +22,9 @@ export default function GradeWizardNavigation({
 	onSave,
 }: GradeWizardNavigationProps) {
 	return (
-		<nav
+		<GenericFloor
 			aria-label="Etapas da grade horária"
-			className="surface flex flex-wrap items-center justify-between gap-3 rounded-card px-4 py-3"
+			className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
 		>
 			<ol className="flex flex-wrap items-center gap-2 text-sm">
 				{["Minhas disciplinas", "Grade horária", "Resumo de horas"].map(
@@ -40,24 +41,24 @@ export default function GradeWizardNavigation({
 								<span
 									className={`grid size-7 place-items-center rounded-full text-xs font-semibold ${
 										complete
-											? "bg-ok-bg text-ok-fg"
+											? "bg-hint-success text-hint-success-fg"
 											: active
 												? "bg-brand text-white"
-												: "bg-page-surface-accent text-text-muted"
+												: "bg-page-floor-accent text-text-muted"
 									}`}
 								>
 									{complete ? "✓" : stepNumber}
 								</span>
 								<span
 									className={
-										active ? "font-semibold text-ink" : "text-text-muted"
+										active ? "font-semibold text-text" : "text-text-muted"
 									}
 								>
 									{label}
 								</span>
 								{index < 2 && (
 									<span
-										className="mx-1 h-px w-6 bg-page-line-strong"
+										className="mx-1 h-px w-6 bg-page-floor-outline"
 										aria-hidden
 									/>
 								)}
@@ -104,6 +105,6 @@ export default function GradeWizardNavigation({
 					</button>
 				)}
 			</div>
-		</nav>
+		</GenericFloor>
 	);
 }
