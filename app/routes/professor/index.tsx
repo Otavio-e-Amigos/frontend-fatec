@@ -9,7 +9,7 @@ export function meta() {
 
 export async function clientLoader() {
 	const auth = AuthService.getUserToken();
-	const professors = await ProfessorService.get(auth);
+	const professors = await ProfessorService.get(auth, [{param: "size", value: 200}]);
 
 	return { professors };
 }
