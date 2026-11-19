@@ -4,6 +4,7 @@ import BrandMark from "~/components/BrandMark";
 import NotificacoesSino from "./NotificacoesSino";
 import AuthService from "~/modules/user/auth.service";
 import User from "~/modules/user/user.class";
+import { HomeUser, UserBag, UserCircle } from "iconoir-react";
 
 const staticLinks = [
 	{ label: "Gestão", href: "/system", allowed: ["TI"] },
@@ -28,10 +29,11 @@ function HeaderLink({
 		<Link
 			to={href}
 			aria-current={active ? "page" : undefined}
-			className={`inline-flex h-8 items-center rounded-control px-2.5 text-sm font-medium transition-colors ${active
+			className={`inline-flex h-8 items-center rounded-control px-2.5 text-sm font-medium transition-colors ${
+				active
 					? "bg-brand-soft text-brand"
 					: "text-text-muted hover:bg-brand-soft hover:text-brand-hover"
-				}`}
+			}`}
 		>
 			{label}
 		</Link>
@@ -74,6 +76,7 @@ export function HeaderBrand({ noRedirect }: { noRedirect?: boolean }) {
 export default function Header({ activeItem }: { activeItem?: string }) {
 	const [currentUser, setCurrentUser] = useState(nonLoggedUser);
 	const { pathname } = useLocation();
+	const [userHovered, setUserHovered] = useState(false);
 
 	useEffect(() => {
 		setCurrentUser(
@@ -136,21 +139,52 @@ export default function Header({ activeItem }: { activeItem?: string }) {
 
 				{/* Direita: usuário */}
 				<div className="flex flex-1 basis-0 items-center justify-end gap-4">
-					<Link
-						to="/login"
-						className="link inline-flex h-8 items-center text-sm"
-					>
-						Login
-					</Link>
+
 
 					{isLogged && <NotificacoesSino />}
 
 					{isLogged ? (
-						<div className="flex h-8 items-center gap-2">
-							<p className="text-sm font-medium text-ink">{currentUser.name}</p>
+						<div
+							onMouseOver={() => setUserHovered(true)}
+							onMouseOut={() => setUserHovered(false)}
+						>
+							<div
+								className="flex flex-col h-8 gap-2 hover:bg-slate-800/10 rounded-card px-2"
+								onMouseOver={() => setUserHovered(true)}
+								onMouseOut={() => setUserHovered(false)}
+							>
+								<div className="flex flex-row gap-2 items-center h-8">
+									<UserCircle />
+									<p className="text-sm font-medium text-ink">
+										{currentUser.name}
+									</p>
+								</div>
+
+								{userHovered && (
+									<div className="bg-white fixed top-11 right-3 w-40 rounded-card">
+										<div className="p-2">
+											<Link
+												to="/login"
+												className="link inline-flex h-8 items-center text-sm"
+											>
+												Login
+											</Link>
+										</div>
+										<div aria-hidden className="h-0.75 bg-brand/45" />
+										</div>
+								)}
+							</div>
 						</div>
 					) : (
-						<p className="text-sm text-amber-700">Não logado</p>
+							<div className="flex flex-row gap-2">
+								<Link
+									to="/login"
+									className="link inline-flex h-8 items-center text-sm"
+								>
+									Login
+								</Link>
+								<p className="text-sm text-amber-700">Não logado</p>
+							</div>
 					)}
 				</div>
 			</div>
